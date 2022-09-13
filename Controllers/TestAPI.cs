@@ -1,5 +1,6 @@
 ﻿using WebAPI.Entity;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Service;
 
 namespace WebAPI.Controllers
 {
@@ -17,6 +18,8 @@ namespace WebAPI.Controllers
 
             TestReturn[0].Age = id;
             TestReturn[1].Name = name;
+
+            TestService.SugarTest();
             return TestReturn;
         }
     }

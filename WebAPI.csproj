@@ -16,4 +16,10 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.9" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.2.9" />
+  </ItemGroup>
+
 </Project>
