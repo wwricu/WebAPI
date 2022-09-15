@@ -29,7 +29,7 @@ namespace WebAPI.Entity
 
         [Navigate(typeof(StudentOfferingMapping),
                   nameof(StudentOfferingMapping.CourseOfferingID),
-                  nameof(StudentOfferingMapping.StudentID))]
+                  nameof(StudentOfferingMapping.SysUserID))]
         public List<CourseOffering>? StudentList { get; set; }
 
         public int AssessmentID { get; set; }

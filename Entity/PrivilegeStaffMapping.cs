@@ -7,6 +7,6 @@ namespace WebAPI.Entity
         [SugarColumn(IsPrimaryKey = true)]
         public int PrivilegeID { get; set; }
         [SugarColumn(IsPrimaryKey = true)]
-        public int StaffID { get; set; }
+        public int SysUserID { get; set; }
     }
 }

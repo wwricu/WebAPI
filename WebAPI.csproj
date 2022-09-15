@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\WeatherForecastController.cs" />
+    <Compile Remove="Entity\sysRole.cs" />
     <Compile Remove="Startup.cs" />
     <Compile Remove="WeatherForecast.cs" />
   </ItemGroup>

@@ -23,7 +23,7 @@ namespace WebAPI.Entity
 
         [Navigate(typeof(PrivilegeStaffMapping),
           nameof(PrivilegeStaffMapping.PrivilegeID),
-          nameof(PrivilegeStaffMapping.StaffID))]
+          nameof(PrivilegeStaffMapping.SysUserID))]
         public List<Staff>? StaffList { get; set; }
     }
 }
