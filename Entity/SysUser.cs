@@ -6,6 +6,10 @@ namespace WebAPI.Entity
 {
     public class PublicInfoModel
     {
+        public PublicInfoModel()
+        {
+            UserName = new string[3];
+        }
         [SqlSugar.SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)]
         public string[]? UserName { get; set; }
         public string? UserNumber { get; set; }
@@ -16,6 +20,10 @@ namespace WebAPI.Entity
 
     public class PrivateInfoModel : PublicInfoModel
     {
+        public PrivateInfoModel()
+        {
+            Addresses = new string[3];
+        }
         [SqlSugar.SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)]
         public string[]? Addresses { get; set; }
         public string? Phone { get; set; }

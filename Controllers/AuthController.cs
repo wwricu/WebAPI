@@ -42,12 +42,14 @@ namespace WebAPI.Controllers
         public ResponseModel Post([FromBody] SysUser Credential)
         {
             PrivateInfoModel User = GetSessionInfo();
+            string msg = "Session Success";
 
             if (GetSessionInfo().Permission > 0) goto SuccessLogin;
             try
             {
                 User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);
                 SetSessionInfo(User);
+                msg = "Password success";
             }
             catch (Exception e)
             {
@@ -59,7 +61,7 @@ namespace WebAPI.Controllers
 SuccessLogin:
             return new SuccessResponseModel()
             {
-                Message = "Success Login",
+                Message = msg,
                 obj = new PublicInfoModel()
                 {
                     UserName = User.UserName,
