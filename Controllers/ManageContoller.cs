@@ -4,6 +4,7 @@ using WebAPI.Service;
 using System.Dynamic;
 using System.Diagnostics;
 using SqlSugar;
+using WebAPI.Model;
 
 namespace WebAPI.Controllers
 {
@@ -12,46 +13,41 @@ namespace WebAPI.Controllers
     public class ManageController : ControllerBase
     {
         [HttpPost]
-        public ExpandoObject Post([FromBody] SysUser NewUser)
+        public ResponseModel Post([FromBody] CredentialInfoModel NewUser)
         {
-            dynamic response = new ExpandoObject();
-            response.status = "failure";
-
             // authorization
             if (NewUser.Permission < 0)
             {
-                response.msg = "invalid parameter";
+                return new FailureResponseModel()
+                {
+                    Message = "invalid permission",
+                };
             }
 
             try
             {
                 ManageService.AddUser(NewUser);
 
-                response.status = "success";
-                response.permission = NewUser.Permission;
-                response.MemberNumber = NewUser.MemberNumber;
-                response.MemberName = new String[]
+                return new SuccessResponseModel()
                 {
-                    NewUser.Firstname,
-                    NewUser.Middlename,
-                    NewUser.Lastname,
-                };
-                response.birthDate = NewUser.Birthdate;
-                response.phone = NewUser.Phone;
-                response.addresses = new String[]
-                {
-                    NewUser.AddressLine1,
-                    NewUser.AddressLine2,
-                    NewUser.AddressLine3,
+                    Message = "Success Added",
+                    obj = new PublicInfoModel()
+                    {
+                        UserNumber = NewUser.UserNumber,
+                        UserName = NewUser.UserName,
+                        Email = NewUser.Email,
+                        Permission = 0,
+                        Academic = NewUser.Academic,
+                    },
                 };
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                response.msg = ex.Message;
-                return response;
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
             }
-
-            return response;
         }
 
         [HttpGet]

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service;
 using System.Dynamic;
 using Microsoft.AspNetCore.Http;
+using WebAPI.Model;
+using SqlSugar.Extensions;
 
 namespace WebAPI.Controllers
 {
@@ -11,36 +13,39 @@ namespace WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost]
-        public ExpandoObject Post([FromForm] string Email, [FromForm] string PasswordHash)
+        public ResponseModel Post([FromBody] PasswordLoginModel Credential)
         {
-            dynamic response = new ExpandoObject();
             try
             {
-                SysUser User = AuthenticationService.Login(Email, PasswordHash);
+                SysUser User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);
                 HttpContext.Session.SetInt32("Permission", User.Permission);
-                response.memberNumber = User.MemberNumber;
-                response.memberName = new string[]
+
+                return new SuccessResponseModel()
                 {
-                    User.Firstname,
-                    User.Middlename,
-                    User.Lastname,
+                    Message = "Success Login",
+                    obj = new PublicInfoModel()
+                    {
+                        UserName = new string[]
+                        {
+                            User.Firstname,
+                            User.Middlename,
+                            User.Lastname,
+                        },
+                        UserNumber = User.MemberNumber,
+                        Email = User.Email,
+                        Permission = User.Permission,
+                    },
                 };
-                response.Permission = User.Permission;
-                response.status = "success";
             }
             catch (Exception e)
             {
-                response.status = "failure";
-                response.msg = e.Message;
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
             }
-
-            return response;
         }
+    }
 
-    }
-    class LoginModel
-    {
-        public string UserEmail { get; set; }
-        public string PasswordHash { get; set; }
-    }
 }
+

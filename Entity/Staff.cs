@@ -1,27 +1,27 @@
 ﻿using SqlSugar;
+using WebAPI.Model;
 
 namespace WebAPI.Entity
 {
     public class Staff : SysUser
     {
         public Staff() { Faculty = "Default Faculty"; }
-        public Staff(SysUser sysUser)
+        public Staff(CredentialInfoModel sysUser)
         {
-            SysUserID = sysUser.SysUserID;
             PasswordHash = sysUser.PasswordHash;
             Salt = sysUser.Salt;
             Permission = sysUser.Permission;
-            MemberNumber = sysUser.MemberNumber;
-            Firstname = sysUser.Firstname;
-            Middlename = sysUser.Middlename;
-            Lastname = sysUser.Lastname;
+            MemberNumber = sysUser.UserNumber;
+            Firstname = sysUser.UserName[0];
+            Middlename = sysUser.UserName[1];
+            Lastname = sysUser.UserName[2];
             Birthdate = sysUser.Birthdate;
-            AddressLine1 = sysUser.AddressLine1;
-            AddressLine2 = sysUser.AddressLine2;
-            AddressLine3 = sysUser.AddressLine3;
+            AddressLine1 = sysUser.Addresses[0];
+            AddressLine2 = sysUser.Addresses[1];
+            AddressLine3 = sysUser.Addresses[2];
             Phone = sysUser.Phone;
             Email = sysUser.Email;
-            Faculty = "Default Faculty";
+            Faculty = sysUser.Academic;
         }
         public string? Faculty { get; set; }
 
