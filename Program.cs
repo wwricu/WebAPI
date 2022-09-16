@@ -5,6 +5,10 @@ using WebAPI.Entity;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(120);//You can set Time   
+});
 builder.Services.AddControllers();
 SysConfig.Configuration = builder.Configuration;
 
@@ -24,5 +28,5 @@ app.UseCors(options => options
          .AllowAnyMethod()               // 确保策略允许任何方法
          .SetIsOriginAllowed(o => true)  // 设置指定的isOriginAllowed为基础策略
          .AllowCredentials());
-
+app.UseSession();
 app.Run();

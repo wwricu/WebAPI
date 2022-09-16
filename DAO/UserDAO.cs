@@ -31,5 +31,13 @@ namespace WebAPI.DAO
             int id = db.Insertable(user).ExecuteCommand();
             return id;
         }
+        public List<Staff> QueryStaffByEmail(String Email)
+        {
+            return db.Queryable<Staff>().Where(it => it.Email == Email).ToList();
+        }
+        public List<Student> QueryStudentByEmail(String Email)
+        {
+            return db.Queryable<Student>().Where(it => it.Email == Email).ToList();
+        }
     }
 }
