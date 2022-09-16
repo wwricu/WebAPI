@@ -16,12 +16,6 @@ namespace WebAPI.Service
             });
 
             db.DbMaintenance.CreateDatabase();
-            db.CodeFirst.SetStringDefaultLength(200).InitTables(typeof(ColumnTest));
-
-            db.Insertable<ColumnTest>(new ColumnTest()
-            {
-                Address = new string[] { "test", "test" },
-            }).ExecuteCommand();
         }
     }
 }

@@ -16,26 +16,38 @@ namespace WebAPI.Controllers
         {
             HttpContext.Session.SetInt32("Permission", UserInfo.Permission);
             HttpContext.Session.SetString("Email", UserInfo.Email);
-
+            if (UserInfo.UserName[0] != null)
+                HttpContext.Session.SetString("Firstname", UserInfo.UserName[0]);
+            if (UserInfo.UserName[2] != null)
+                HttpContext.Session.SetString("Lastname", UserInfo.UserName[2]);
         }
-        [HttpPost]
-        public ResponseModel Post([FromBody] PasswordLoginModel Credential)
+
+        public PrivateInfoModel GetSessionInfo()
         {
+            PrivateInfoModel info = new PrivateInfoModel();
             try
             {
-                SysUser User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);
-                HttpContext.Session.SetInt32("Permission", User.Permission);
-                return new SuccessResponseModel()
-                {
-                    Message = "Success Login",
-                    obj = new PublicInfoModel()
-                    {
-                        UserName = User.UserName,
-                        UserNumber = User.UserNumber,
-                        Email = User.Email,
-                        Permission = User.Permission,
-                    },
-                };
+                info.Permission = (int)HttpContext.Session.GetInt32("Permission");
+                info.Email = HttpContext.Session.GetString("Email");
+                info.UserName[0] = HttpContext.Session.GetString("Firstname");
+                info.UserName[1] = HttpContext.Session.GetString("Lastname");
+                return info;
+            }
+            catch
+            {
+                return info;
+            }
+        }
+        [HttpPost]
+        public ResponseModel Post([FromBody] SysUser Credential)
+        {
+            PrivateInfoModel User = GetSessionInfo();
+
+            if (GetSessionInfo().Permission > 0) goto SuccessLogin;
+            try
+            {
+                User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);
+                SetSessionInfo(User);
             }
             catch (Exception e)
             {
@@ -44,6 +56,18 @@ namespace WebAPI.Controllers
                     Message = e.Message,
                 };
             }
+SuccessLogin:
+            return new SuccessResponseModel()
+            {
+                Message = "Success Login",
+                obj = new PublicInfoModel()
+                {
+                    UserName = User.UserName,
+                    UserNumber = User.UserNumber,
+                    Email = User.Email,
+                    Permission = User.Permission,
+                },
+            };
         }
     }
 
