@@ -1,4 +1,6 @@
-﻿namespace WebAPI.Model
+﻿using WebAPI.Entity;
+
+namespace WebAPI.Model
 {
     public class PasswordLoginModel
     {
@@ -6,8 +8,13 @@
         public string? PasswordHash { get; set; }
     }
 
-    public class TokenLoginModel
+    public class JWTModel
     {
-        public string? Token { get; set; }
+        public string? iss { get; set; }
+        public string? exp { get; set; }
+        public string? sub { get; set; }
+        public PublicInfoModel? aud { get; set; }
+        public string? iat { get; set; }
     }
+
 }

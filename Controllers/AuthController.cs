@@ -9,28 +9,36 @@ using SqlSugar.Extensions;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class AuthController : ControllerBase
     {
-        public void SetSessionInfo(PrivateInfoModel UserInfo)
+        public void SetSessionInfo(PublicInfoModel UserInfo)
         {
-            HttpContext.Session.SetInt32("Permission", UserInfo.Permission);
-            HttpContext.Session.SetString("Email", UserInfo.Email);
-            if (UserInfo.UserName[0] != null)
+            try
+            {
+                HttpContext.Session.SetInt32("Permission", UserInfo.Permission);
+                HttpContext.Session.SetString("Email", UserInfo.Email);
                 HttpContext.Session.SetString("Firstname", UserInfo.UserName[0]);
-            if (UserInfo.UserName[2] != null)
+                HttpContext.Session.SetString("Middlename", UserInfo.UserName[1]);
                 HttpContext.Session.SetString("Lastname", UserInfo.UserName[2]);
+            }
+            catch
+            { }
         }
 
-        public PrivateInfoModel GetSessionInfo()
+        public PublicInfoModel GetSessionInfo()
         {
-            PrivateInfoModel info = new PrivateInfoModel();
+            PublicInfoModel info = new PublicInfoModel();
             try
             {
                 info.Permission = (int)HttpContext.Session.GetInt32("Permission");
                 info.Email = HttpContext.Session.GetString("Email");
-                info.UserName[0] = HttpContext.Session.GetString("Firstname");
-                info.UserName[1] = HttpContext.Session.GetString("Lastname");
+                info.UserName = new string[3]
+                {
+                    HttpContext.Session.GetString("Firstname"),
+                    HttpContext.Session.GetString("Middlename"),
+                    HttpContext.Session.GetString("Lastname"),
+                };
                 return info;
             }
             catch
@@ -39,9 +47,9 @@ namespace WebAPI.Controllers
             }
         }
         [HttpPost]
-        public ResponseModel Post([FromBody] SysUser Credential)
+        public ResponseModel Password([FromBody] SysUser Credential)
         {
-            PrivateInfoModel User = GetSessionInfo();
+            PublicInfoModel User = GetSessionInfo();
             string msg = "Session Success";
 
             if (GetSessionInfo().Permission > 0) goto SuccessLogin;
@@ -58,18 +66,47 @@ namespace WebAPI.Controllers
                     Message = e.Message,
                 };
             }
-SuccessLogin:
+        SuccessLogin:
+            PublicInfoModel PublicInfo = new PublicInfoModel()
+            {
+                UserName = User.UserName,
+                UserNumber = User.UserNumber,
+                Email = User.Email,
+                Permission = User.Permission,
+            };
             return new SuccessResponseModel()
             {
                 Message = msg,
-                obj = new PublicInfoModel()
+                obj = new object[2]
                 {
-                    UserName = User.UserName,
-                    UserNumber = User.UserNumber,
-                    Email = User.Email,
-                    Permission = User.Permission,
-                },
+                    PublicInfo,
+                    SecurityService.CreateJWT(PublicInfo),
+                }
             };
+        }
+        public ResponseModel Token([FromBody] string token)
+        {
+            try
+            {
+                PublicInfoModel PublicInfo = SecurityService.ValidateJWT(token);
+                SetSessionInfo(PublicInfo);
+                return new SuccessResponseModel()
+                {
+                    Message = "Success Token Login",
+                    obj = new object[2]
+                    {
+                        PublicInfo,
+                        SecurityService.CreateJWT(PublicInfo),
+                    }
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
         }
     }
 

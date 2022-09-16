@@ -22,6 +22,7 @@ namespace WebAPI.Entity
     {
         public PrivateInfoModel()
         {
+            UserName = new string[3];
             Addresses = new string[3];
         }
         [SqlSugar.SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)]

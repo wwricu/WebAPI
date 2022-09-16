@@ -9,6 +9,10 @@ using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Encodings.Web;
 using System;
+using JWT.Builder;
+using WebAPI.Entity;
+using System.Diagnostics;
+using WebAPI.Model;
 
 namespace WebAPI.Service
 {
@@ -21,34 +25,39 @@ namespace WebAPI.Service
         static IDateTimeProvider provider = new UtcDateTimeProvider();
         const string secret = "8888888888888888888888888888888888888888";
 
-        public static string CreateJWT(Dictionary<string, object> payload)
+        public static string CreateJWT(PublicInfoModel info)
         {
+            var payload = new Dictionary<string, object>
+            {
+                { "iss","wwr"},
+                { "exp", UnixTimeStampUTC(DateTime.Now.AddHours(48))},
+                { "sub", "TOKEN LOGIN" },
+                { "aud", info },
+                { "iat", DateTime.Now.ToString() }
+            };
             IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
             return encoder.Encode(payload, secret);
         }
-        public static bool ValidateJWT(string token, out string payload, out string message)
+        public static PublicInfoModel ValidateJWT(string token)
         {
-            bool isValidated = false;
-            payload = "";
+            PublicInfoModel publicInfo = new PublicInfoModel();
             try
             {
                 IJwtValidator validator = new JwtValidator(serializer, provider);
                 IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder, algorithm);
-                payload = decoder.Decode(token, secret, verify: true);
- 
-                isValidated = true;
- 
-                message = "token pass";
+                string payload = decoder.Decode(token, secret, verify: true);
+                Debug.WriteLine(payload);
+                publicInfo = serializer.Deserialize<JWTModel>(payload).aud;
             }
             catch (TokenExpiredException ex)
             {
-                message = "token expired";
+                throw ex;
             }
             catch (SignatureVerificationException ex)
             {
-                message = "token failed";
+                throw ex;
             }
-            return isValidated;
+            return publicInfo;
         }
         public static long UnixTimeStampUTC(DateTime dateTime)
         {
