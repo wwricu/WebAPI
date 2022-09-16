@@ -22,5 +22,10 @@ namespace WebAPI.Controllers
             TestService.SugarTest();
             return TestReturn;
         }
+        [HttpPost]
+        public TestEntity Post([FromBody] TestEntity entity)
+        {
+            return entity;
+        }
     }
 }

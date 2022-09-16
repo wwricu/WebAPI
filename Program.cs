@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+SysConfig.Configuration = builder.Configuration;
 
 var app = builder.Build();
 
@@ -16,5 +17,12 @@ app.UseStaticFiles();
 app.UseAuthorization();
 
 app.MapControllers();
+
+builder.Services.AddCors();
+app.UseCors(options => options
+         .AllowAnyHeader()               // 确保策略允许任何标头
+         .AllowAnyMethod()               // 确保策略允许任何方法
+         .SetIsOriginAllowed(o => true)  // 设置指定的isOriginAllowed为基础策略
+         .AllowCredentials());
 
 app.Run();

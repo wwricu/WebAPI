@@ -24,5 +24,17 @@ namespace WebAPI.Service
 
             return builder.ToString();
         }
+
+        public static string GeneratePassword()
+        {
+            StringBuilder builder = new StringBuilder();
+            return builder.ToString();
+        }
+
+        public static string GenerateSalt()
+        {
+            StringBuilder builder = new StringBuilder();
+            return builder.ToString();
+        }
     }
 }
