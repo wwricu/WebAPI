@@ -9,11 +9,11 @@ using WebAPI.Model;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class ManageController : ControllerBase
     {
         [HttpPost]
-        public ResponseModel Post([FromBody] SysUser NewUser)
+        public ResponseModel AddUser([FromBody] SysUser NewUser)
         {
             // authorization
             if (NewUser.Permission < 0)
@@ -51,19 +51,19 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public void Get()
+        public void QueryUsers([FromBody] PrivateInfoModel PrivateInfo)
         {
 
         }
 
         [HttpPut]
-        public void Put()
+        public void UpdateUsers()
         {
 
         }
 
         [HttpDelete]
-        public void Delete()
+        public void DeleteUsers()
         {
 
         }

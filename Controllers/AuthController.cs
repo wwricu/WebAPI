@@ -12,51 +12,17 @@ namespace WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class AuthController : ControllerBase
     {
-        public void SetSessionInfo(PublicInfoModel UserInfo)
-        {
-            try
-            {
-                HttpContext.Session.SetInt32("Permission", UserInfo.Permission);
-                HttpContext.Session.SetString("Email", UserInfo.Email);
-                HttpContext.Session.SetString("Firstname", UserInfo.UserName[0]);
-                HttpContext.Session.SetString("Middlename", UserInfo.UserName[1]);
-                HttpContext.Session.SetString("Lastname", UserInfo.UserName[2]);
-            }
-            catch
-            { }
-        }
-
-        public PublicInfoModel GetSessionInfo()
-        {
-            PublicInfoModel info = new PublicInfoModel();
-            try
-            {
-                info.Permission = (int)HttpContext.Session.GetInt32("Permission");
-                info.Email = HttpContext.Session.GetString("Email");
-                info.UserName = new string[3]
-                {
-                    HttpContext.Session.GetString("Firstname"),
-                    HttpContext.Session.GetString("Middlename"),
-                    HttpContext.Session.GetString("Lastname"),
-                };
-                return info;
-            }
-            catch
-            {
-                return info;
-            }
-        }
         [HttpPost]
         public ResponseModel Password([FromBody] SysUser Credential)
         {
-            PublicInfoModel User = GetSessionInfo();
+            PublicInfoModel User = SessionService.GetSessionInfo(HttpContext.Session);
             string msg = "Session Success";
 
-            if (GetSessionInfo().Permission > 0) goto SuccessLogin;
+            if (SessionService.GetSessionInfo(HttpContext.Session).Permission > 0) goto SuccessLogin;
             try
             {
                 User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);
-                SetSessionInfo(User);
+                SessionService.SetSessionInfo(HttpContext.Session,User);
                 msg = "Password success";
             }
             catch (Exception e)
@@ -89,7 +55,7 @@ namespace WebAPI.Controllers
             try
             {
                 PublicInfoModel PublicInfo = SecurityService.ValidateJWT(token);
-                SetSessionInfo(PublicInfo);
+                SessionService.SetSessionInfo(HttpContext.Session,PublicInfo);
                 return new SuccessResponseModel()
                 {
                     Message = "Success Token Login",
