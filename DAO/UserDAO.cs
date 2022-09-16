@@ -32,10 +32,17 @@ namespace WebAPI.DAO
             return db.Queryable<SysUser>().Where(it => it.Email == Email).ToList();
         }
 
-        public List<SysUser> QueryUsers(PrivateInfoModel info)
+        public List<SysUser> QueryUsers(PrivateInfoModel info,
+                                        int PageNumber,
+                                        int PageSize)
         {
             var res = db.Queryable<SysUser>().
                          Where(it => it.Permission == info.Permission);
+            if (PageNumber > 0 && PageSize > 0)
+            {
+                int TotalCount;
+                res = res.ToPageList(PageNumber, PageSize, TotalCount);
+            }
             if (info.Email != null)
             {
                 res = res.Where(it => it.Email == info.Email);
@@ -63,6 +70,7 @@ namespace WebAPI.DAO
                        IgnoreColumns(it => it.CourseOfferingList).
                        IgnoreColumns(it => it.Salt).ToList();
         }
+
 
         public bool UpdateUser(SysUser UserInfo)
         {

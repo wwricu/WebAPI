@@ -22,7 +22,7 @@ namespace WebAPI.Service
 
         public static List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
         {
-            return new UserDAO().QueryUsers(PrivateInfo);
+            return new UserDAO().QueryUsers(PrivateInfo, 0, 0);
         }
 
         public static bool UpdateUser(SysUser UserInfo)
