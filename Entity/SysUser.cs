@@ -29,6 +29,16 @@ namespace WebAPI.Entity
         public string[]? Addresses { get; set; }
         public string? Phone { get; set; }
         public string? Birthdate { get; set; }
+
+        [Navigate(typeof(StudentOfferingMapping),
+          nameof(StudentOfferingMapping.SysUserID),
+          nameof(StudentOfferingMapping.CourseOfferingID))]
+        public List<CourseOffering>? CourseOfferingList { get; set; }
+
+        [Navigate(typeof(PrivilegeStaffMapping),
+          nameof(PrivilegeStaffMapping.SysUserID),
+          nameof(PrivilegeStaffMapping.PrivilegeID))]
+        public List<Privilege>? PrivilegeList { get; set; }
     }
 
     public class SysUser : PrivateInfoModel
@@ -37,15 +47,5 @@ namespace WebAPI.Entity
         public int SysUserID { get; set; }
         public string? PasswordHash { get; set; }
         public string? Salt { get; set; }
-
-        [Navigate(typeof(StudentOfferingMapping),
-                  nameof(StudentOfferingMapping.SysUserID),
-                  nameof(StudentOfferingMapping.CourseOfferingID))]
-        public List<CourseOffering>? CourseOfferingList { get; set; }
-
-        [Navigate(typeof(PrivilegeStaffMapping),
-          nameof(PrivilegeStaffMapping.SysUserID),
-          nameof(PrivilegeStaffMapping.PrivilegeID))]
-        public List<Privilege>? PrivilegeList { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace WebAPI.Controllers
                         UserNumber = NewUser.UserNumber,
                         UserName = NewUser.UserName,
                         Email = NewUser.Email,
-                        Permission = 0,
+                        Permission = NewUser.Permission,
                         Academic = NewUser.Academic,
                     },
                 };
@@ -51,8 +51,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public void QueryUsers([FromBody] PrivateInfoModel PrivateInfo)
+        public ResponseModel QueryUsers([FromBody] PrivateInfoModel PrivateInfo)
         {
+            // AdjustAuthorization(HttpContext.Session, PrivateInfo);
+            return new SuccessResponseModel();
 
         }
 

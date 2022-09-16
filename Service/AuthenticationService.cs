@@ -25,5 +25,18 @@ namespace WebAPI.Service
                 throw new Exception("Wrong Password");
             }
         }
+
+        public static void AdjustAuthorization(ISession session, PublicInfoModel UserInfo)
+        {
+            try
+            {
+                int Permission = (int)session.GetInt32("Permission");
+                UserInfo.Permission = Math.Min(Permission, UserInfo.Permission);
+            }
+            catch
+            {
+                UserInfo.Permission = 0;
+            }
+        }
     }
 }

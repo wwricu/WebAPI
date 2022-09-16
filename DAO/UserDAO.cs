@@ -31,5 +31,12 @@ namespace WebAPI.DAO
         {
             return db.Queryable<SysUser>().Where(it => it.Email == Email).ToList();
         }
+
+/*        public List<PrivateInfoModel> QueryUsers(PrivateInfoModel info)
+        {
+            return
+                db.Queryable<SysUser>().
+                   Where(it => it.Email == Email).ToList();
+        }*/
     }
 }
