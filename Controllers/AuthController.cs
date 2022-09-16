@@ -108,6 +108,12 @@ namespace WebAPI.Controllers
                 };
             }
         }
+
+        [HttpGet]
+        public void Logout()
+        {
+            HttpContext.Session.Clear();
+        }
     }
 
 }
