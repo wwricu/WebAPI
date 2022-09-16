@@ -63,5 +63,39 @@ namespace WebAPI.DAO
                        IgnoreColumns(it => it.CourseOfferingList).
                        IgnoreColumns(it => it.Salt).ToList();
         }
+
+        public bool UpdateUser(SysUser UserInfo)
+        {
+            UserInfo.SysUserID = db.Queryable<SysUser>()
+                       .Select(it => it.SysUserID)
+                       .First();
+            var res = db.Updateable(UserInfo);
+            if (UserInfo.Addresses[0] == null
+             && UserInfo.Addresses[1] == null
+             && UserInfo.Addresses[2] == null)
+            {
+                res = res.IgnoreColumns(it => new {it.Addresses});
+            }
+            if (UserInfo.UserName[0] == null
+             && UserInfo.UserName[1] == null
+             && UserInfo.UserName[2] == null)
+            {
+                res = res.IgnoreColumns(it => new { it.UserName });
+            }
+
+            return res.IgnoreColumns(ignoreAllNullColumns: true)
+                      .ExecuteCommandHasChange();
+        }
+
+        public bool DeleteUser(String Email)
+        {
+            SysUser UserInfo = db.Queryable<SysUser>()
+                              .First(it => it.Email == Email);
+            UserInfo.Permission = 0;
+
+            return db.Updateable(UserInfo)
+                        .IgnoreColumns(ignoreAllNullColumns: true)
+                        .ExecuteCommandHasChange();
+        }
     }
 }

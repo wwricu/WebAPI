@@ -24,5 +24,10 @@ namespace WebAPI.Service
         {
             return new UserDAO().QueryUsers(PrivateInfo);
         }
+
+        public static bool UpdateUser(SysUser UserInfo)
+        {
+            return new UserDAO().UpdateUser(UserInfo);
+        }
     }
 }
