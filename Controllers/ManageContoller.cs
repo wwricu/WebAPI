@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
     public class ManageController : ControllerBase
     {
         [HttpPost]
-        public ResponseModel Post([FromBody] CredentialInfoModel NewUser)
+        public ResponseModel Post([FromBody] SysUser NewUser)
         {
             // authorization
             if (NewUser.Permission < 0)

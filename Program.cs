@@ -10,7 +10,7 @@ builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(120);//You can set Time   
 });
 builder.Services.AddControllers();
-SysConfig.Configuration = builder.Configuration;
+SysConfigModel.Configuration = builder.Configuration;
 
 var app = builder.Build();
 

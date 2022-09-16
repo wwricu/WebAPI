@@ -8,24 +8,12 @@ namespace WebAPI.Service
         public static SysUser Login(string Email, string Password)
         {
             UserDAO UserDAO = new UserDAO();
-            SysUser User;
-            var StaffList = UserDAO.QueryStaffByEmail(Email);
-            if (StaffList.Count() == 0)
+            var UserList = UserDAO.QueryUserByEmail(Email);
+            if (UserList.Count() == 0)
             {
-                var StudentList = UserDAO.QueryStudentByEmail(Email);
-                if (StudentList.Count() == 0)
-                {
-                    throw new Exception("NO member found");
-                }
-                else
-                {
-                    User = StudentList[0];
-                }
+                throw new Exception("NO member found");
             }
-            else
-            {
-                User = StaffList[0];
-            }
+            SysUser User = UserList[0];
 
             if (User.PasswordHash 
                 == SecurityService.GetMD5Hash(User.Salt + Password))

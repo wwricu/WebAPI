@@ -1,5 +1,6 @@
 ﻿using SqlSugar;
 using WebAPI.Entity;
+using WebAPI.Model;
 
 namespace WebAPI.DAO
 {
@@ -10,34 +11,25 @@ namespace WebAPI.DAO
         {
             db = new SqlSugarClient(new ConnectionConfig()
             {
-                ConnectionString = SysConfig.
+                ConnectionString = SysConfigModel.
                                    Configuration.
                                    GetConnectionString("DefaultConnection"),
                 DbType = DbType.SqlServer,
                 IsAutoCloseConnection = true,
                 InitKeyType = InitKeyType.Attribute
             });
-            db.CodeFirst.SetStringDefaultLength(200).InitTables(typeof(Student));
-            db.CodeFirst.SetStringDefaultLength(200).InitTables(typeof(Staff));
+            db.CodeFirst.SetStringDefaultLength(200).InitTables(typeof(SysUser));
         }
 
-        public int Insert(Student user)
+        public int Insert(SysUser user)
         {
             int id = db.Insertable(user).ExecuteCommand();
             return id;
         }
-        public int Insert(Staff user)
+
+        public List<SysUser> QueryUserByEmail(String Email)
         {
-            int id = db.Insertable(user).ExecuteCommand();
-            return id;
-        }
-        public List<Staff> QueryStaffByEmail(String Email)
-        {
-            return db.Queryable<Staff>().Where(it => it.Email == Email).ToList();
-        }
-        public List<Student> QueryStudentByEmail(String Email)
-        {
-            return db.Queryable<Student>().Where(it => it.Email == Email).ToList();
+            return db.Queryable<SysUser>().Where(it => it.Email == Email).ToList();
         }
     }
 }

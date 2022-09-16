@@ -19,4 +19,9 @@ namespace WebAPI.Entity
         public string Name { get; set; }
         public int Age { get; set; }
     }
+    class ColumnTest
+    {
+        [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
+        public string[] Address { get; set; }
+    }
 }

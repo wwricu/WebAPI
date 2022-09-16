@@ -1,6 +1,6 @@
 ﻿namespace WebAPI.Entity
 {
-    public class SysConfig
+    public class SysConfigModel
     {
         public static IConfiguration? Configuration { get; set; }
     }

@@ -21,7 +21,7 @@ namespace WebAPI.Entity
 
         public int StudentID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(StudentID))]
-        public Student? Student { get; set; }
+        public SysUser? Student { get; set; }
 
         public int AssessmentID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(AssessmentID))]

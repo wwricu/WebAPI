@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\WeatherForecastController.cs" />
-    <Compile Remove="Entity\sysRole.cs" />
+    <Compile Remove="Model\Staff.cs" />
+    <Compile Remove="Model\Student.cs" />
+    <Compile Remove="Model\sysRole.cs" />
+    <Compile Remove="Model\SysUser1.cs" />
     <Compile Remove="Startup.cs" />
     <Compile Remove="WeatherForecast.cs" />
   </ItemGroup>

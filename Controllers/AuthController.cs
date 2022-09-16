@@ -12,6 +12,12 @@ namespace WebAPI.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
+        public void SetSessionInfo(PrivateInfoModel UserInfo)
+        {
+            HttpContext.Session.SetInt32("Permission", UserInfo.Permission);
+            HttpContext.Session.SetString("Email", UserInfo.Email);
+
+        }
         [HttpPost]
         public ResponseModel Post([FromBody] PasswordLoginModel Credential)
         {
@@ -19,19 +25,13 @@ namespace WebAPI.Controllers
             {
                 SysUser User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);
                 HttpContext.Session.SetInt32("Permission", User.Permission);
-
                 return new SuccessResponseModel()
                 {
                     Message = "Success Login",
                     obj = new PublicInfoModel()
                     {
-                        UserName = new string[]
-                        {
-                            User.Firstname,
-                            User.Middlename,
-                            User.Lastname,
-                        },
-                        UserNumber = User.MemberNumber,
+                        UserName = User.UserName,
+                        UserNumber = User.UserNumber,
                         Email = User.Email,
                         Permission = User.Permission,
                     },
