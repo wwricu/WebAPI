@@ -20,9 +20,9 @@ namespace WebAPI.Service
             return userDAO.Insert(NewUser);
         }
 
-/*        public static List<PrivateInfoModel> QueryUsers(PrivateInfoModel PrivateInfo)
+        public static List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
         {
-
-        }*/
+            return new UserDAO().QueryUsers(PrivateInfo);
+        }
     }
 }

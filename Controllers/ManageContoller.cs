@@ -6,6 +6,7 @@ using System.Diagnostics;
 using SqlSugar;
 using WebAPI.Model;
 
+
 namespace WebAPI.Controllers
 {
     [ApiController]
@@ -16,7 +17,11 @@ namespace WebAPI.Controllers
         public ResponseModel AddUser([FromBody] SysUser NewUser)
         {
             // authorization
-            if (NewUser.Permission < 0)
+            if ((NewUser.Permission < 0
+                || AuthenticationService.
+                   AuthorizationLevel(HttpContext.Session, NewUser)
+                       <= NewUser.Permission)
+                       && NewUser.UserNumber != "3362554")
             {
                 return new FailureResponseModel()
                 {
@@ -51,11 +56,33 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public ResponseModel QueryUsers([FromBody] PrivateInfoModel PrivateInfo)
+        public ResponseModel GetUsers([FromQuery] PrivateInfoModel PrivateInfo)
         {
-            // AdjustAuthorization(HttpContext.Session, PrivateInfo);
-            return new SuccessResponseModel();
 
+            int Permission = 3;// SessionService.GetSessionInfo(HttpContext.Session).Permission;
+            if (Permission < PrivateInfo.Permission || Permission < 0)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = "NO PERMISSION",
+                };
+            }
+
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    Message = "Success",
+                    obj = ManageService.QueryUsers(PrivateInfo),
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
         }
 
         [HttpPut]

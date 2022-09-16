@@ -26,16 +26,16 @@ namespace WebAPI.Service
             }
         }
 
-        public static void AdjustAuthorization(ISession session, PublicInfoModel UserInfo)
+        public static int AuthorizationLevel(ISession session, PublicInfoModel UserInfo)
         {
             try
             {
                 int Permission = (int)session.GetInt32("Permission");
-                UserInfo.Permission = Math.Min(Permission, UserInfo.Permission);
+                return Math.Min(Permission, UserInfo.Permission);
             }
             catch
             {
-                UserInfo.Permission = 0;
+                return 0;
             }
         }
     }

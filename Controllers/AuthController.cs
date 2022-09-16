@@ -17,8 +17,10 @@ namespace WebAPI.Controllers
         {
             PublicInfoModel User = SessionService.GetSessionInfo(HttpContext.Session);
             string msg = "Session Success";
+            var CurrentUser = SessionService.GetSessionInfo(HttpContext.Session);
 
-            if (SessionService.GetSessionInfo(HttpContext.Session).Permission > 0) goto SuccessLogin;
+            if (CurrentUser.Permission > 0
+                && CurrentUser.Email == Credential.Email) goto SuccessLogin;
             try
             {
                 User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);

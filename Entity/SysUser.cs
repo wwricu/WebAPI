@@ -11,9 +11,9 @@ namespace WebAPI.Entity
             UserName = new string[3];
         }
         [SqlSugar.SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)]
-        public string[]? UserName { get; set; }
+        public string[] UserName { get; set; }
         public string? UserNumber { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public int Permission { get; set; }
         public string? Academic { get; set; }
     }
@@ -26,7 +26,7 @@ namespace WebAPI.Entity
             Addresses = new string[3];
         }
         [SqlSugar.SugarColumn(ColumnDataType = "varchar(4000)", IsJson = true)]
-        public string[]? Addresses { get; set; }
+        public string[] Addresses { get; set; }
         public string? Phone { get; set; }
         public string? Birthdate { get; set; }
 
