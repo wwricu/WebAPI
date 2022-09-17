@@ -103,7 +103,7 @@ namespace WebAPI.Controllers
             {
                 var cur = SessionService.GetSessionInfo(HttpContext.Session);
                 if (UserInfo.PasswordHash != null
-                    && cur.Email != UserInfo.Email
+                    && cur.UserNumber != UserInfo.UserNumber
                     && cur.Permission < 3)
                 { // only own can modify the password.
                     UserInfo.PasswordHash = null;

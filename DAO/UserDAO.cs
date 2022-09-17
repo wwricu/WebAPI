@@ -27,9 +27,11 @@ namespace WebAPI.DAO
             return id;
         }
 
-        public List<SysUser> QueryUserByEmail(String Email)
+        public List<SysUser> QueryUserByNumber(string UserNumber)
         {
-            return db.Queryable<SysUser>().Where(it => it.Email == Email).ToList();
+            return db.Queryable<SysUser>()
+                     .Where(it => it.UserNumber == UserNumber)
+                     .ToList();
         }
 
         public List<SysUser> QueryUsers(PrivateInfoModel info,
@@ -40,8 +42,8 @@ namespace WebAPI.DAO
                          Where(it => it.Permission == info.Permission);
             if (PageNumber > 0 && PageSize > 0)
             {
-                int TotalCount;
-                res = res.ToPageList(PageNumber, PageSize, TotalCount);
+                int TotalCount = 0;
+                res.ToPageList(PageNumber, PageSize, ref TotalCount);
             }
             if (info.Email != null)
             {
@@ -95,10 +97,10 @@ namespace WebAPI.DAO
                       .ExecuteCommandHasChange();
         }
 
-        public bool DeleteUser(String Email)
+        public bool DeleteUser(String UserNumber)
         {
             SysUser UserInfo = db.Queryable<SysUser>()
-                              .First(it => it.Email == Email);
+                              .First(it => it.UserNumber == UserNumber);
             UserInfo.Permission = 0;
 
             return db.Updateable(UserInfo)

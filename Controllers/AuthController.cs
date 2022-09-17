@@ -20,10 +20,10 @@ namespace WebAPI.Controllers
             var CurrentUser = SessionService.GetSessionInfo(HttpContext.Session);
 
             if (CurrentUser.Permission > 0
-                && CurrentUser.Email == Credential.Email) goto SuccessLogin;
+                && CurrentUser.UserNumber == Credential.UserNumber) goto SuccessLogin;
             try
             {
-                User = AuthenticationService.Login(Credential.Email, Credential.PasswordHash);
+                User = AuthenticationService.Login(Credential.UserNumber, Credential.PasswordHash);
                 SessionService.SetSessionInfo(HttpContext.Session,User);
                 msg = "Password success";
             }

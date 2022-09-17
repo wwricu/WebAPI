@@ -5,10 +5,10 @@ namespace WebAPI.Service
 {
     public class AuthenticationService
     {
-        public static SysUser Login(string Email, string Password)
+        public static SysUser Login(string UserNumber, string Password)
         {
             UserDAO UserDAO = new UserDAO();
-            var UserList = UserDAO.QueryUserByEmail(Email);
+            var UserList = UserDAO.QueryUserByNumber(UserNumber);
             if (UserList.Count() == 0)
             {
                 throw new Exception("NO member found");
