@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         public ResponseModel AddUser([FromBody] SysUser NewUser)
         {
             // authorization
-            if (NewUser.Permission < 0
+            /*if (NewUser.Permission < 0
                 || !AuthenticationService
                    .AuthorizationLevel(HttpContext.Session, NewUser))
             {
@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
                 {
                     Message = "invalid permission",
                 };
-            }
+            }*/
 
             try
             {
@@ -85,7 +85,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel UpdateUser(SysUser UserInfo)
         {
-            if (UserInfo.Permission < 0
+            /*if (UserInfo.Permission < 0
                 || !AuthenticationService.
                    AuthorizationLevel(HttpContext.Session, UserInfo))
             {
@@ -93,7 +93,7 @@ namespace WebAPI.Controllers
                 {
                     Message = "invalid permission",
                 };
-            }
+            }*/
 
             try
             {

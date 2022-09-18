@@ -22,6 +22,7 @@ namespace WebAPI.Service
 
         public static List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
         {
+            if (PrivateInfo.Permission <= 0) PrivateInfo.Permission = 1;
             return new UserDAO().QueryUsers(PrivateInfo, 0, 0);
         }
 

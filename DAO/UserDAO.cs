@@ -1,4 +1,5 @@
 ﻿using SqlSugar;
+using System.Diagnostics;
 using WebAPI.Entity;
 using WebAPI.Model;
 
@@ -77,6 +78,7 @@ namespace WebAPI.DAO
         public bool UpdateUser(SysUser UserInfo)
         {
             UserInfo.SysUserID = db.Queryable<SysUser>()
+                       .Where(it => it.UserNumber == UserInfo.UserNumber)
                        .Select(it => it.SysUserID)
                        .First();
             var res = db.Updateable(UserInfo);
@@ -92,6 +94,10 @@ namespace WebAPI.DAO
             {
                 res = res.IgnoreColumns(it => new { it.UserName });
             }
+
+            /*Debug.WriteLine(Convert.ToString(UserInfo.SysUserID));
+            Debug.WriteLine(UserInfo.UserNumber);
+            Debug.WriteLine(UserInfo.Permission);*/
 
             return res.IgnoreColumns(ignoreAllNullColumns: true)
                       .ExecuteCommandHasChange();
