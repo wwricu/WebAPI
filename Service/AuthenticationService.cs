@@ -31,13 +31,10 @@ namespace WebAPI.Service
         {
             try
             {
-                Debug.WriteLine(UserInfo.UserNumber);
-                int Permission = (int)session.GetInt32("Permission");
-                return Permission > UserInfo.Permission;
+                return (int)session.GetInt32("Permission") > UserInfo.Permission;
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine(ex.Message);
                 return false;
             }
         }
