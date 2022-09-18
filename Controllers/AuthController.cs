@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
             try
             {
                 User = AuthenticationService.Login(Credential.UserNumber, Credential.PasswordHash);
-                SessionService.SetSessionInfo(HttpContext.Session,User);
+                SessionService.SetSessionInfo(HttpContext.Session, User);
                 msg = "Password success";
             }
             catch (Exception e)

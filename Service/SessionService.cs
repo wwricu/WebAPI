@@ -1,4 +1,5 @@
-﻿using WebAPI.Entity;
+﻿using System.Diagnostics;
+using WebAPI.Entity;
 
 namespace WebAPI.Service
 {
@@ -9,14 +10,15 @@ namespace WebAPI.Service
             try
             {
                 session.SetInt32("Permission", UserInfo.Permission);
-                session.SetString("Email", UserInfo.Email);
-                session.SetString("UserNumber", UserInfo.UserNumber);
-                session.SetString("Firstname", UserInfo.UserName[0]);
-                session.SetString("Middlename", UserInfo.UserName[1]);
-                session.SetString("Lastname", UserInfo.UserName[2]);
+                if (UserInfo.Email != null)
+                    session.SetString("Email", UserInfo.Email);
+                if (UserInfo.UserNumber != null)
+                    session.SetString("UserNumber", UserInfo.UserNumber);
             }
-            catch
-            { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
         }
 
         public static PublicInfoModel GetSessionInfo(ISession session)
@@ -24,19 +26,15 @@ namespace WebAPI.Service
             PublicInfoModel info = new PublicInfoModel();
             try
             {
-                info.Permission = (int)session.GetInt32("Permission");
+                var Permission = session.GetInt32("Permission");
+                info.Permission = Permission == null ? 0 : (int)Permission;
                 info.Email = session.GetString("Email");
                 info.UserNumber = session.GetString("UserNumber");
-                info.UserName = new string[3]
-                {
-                    session.GetString("Firstname"),
-                    session.GetString("Middlename"),
-                    session.GetString("Lastname"),
-                };
                 return info;
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 return info;
             }
         }
