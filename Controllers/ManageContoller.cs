@@ -17,11 +17,9 @@ namespace WebAPI.Controllers
         public ResponseModel AddUser([FromBody] SysUser NewUser)
         {
             // authorization
-            if ((NewUser.Permission < 0
-                || AuthenticationService.
-                   AuthorizationLevel(HttpContext.Session, NewUser)
-                       <= NewUser.Permission)
-                       && NewUser.UserNumber != "3362554")
+            if (NewUser.Permission < 0
+                || !AuthenticationService
+                   .AuthorizationLevel(HttpContext.Session, NewUser))
             {
                 return new FailureResponseModel()
                 {
@@ -87,11 +85,9 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel UpdateUser(SysUser UserInfo)
         {
-            if ((UserInfo.Permission < 0
-                || AuthenticationService.
-                   AuthorizationLevel(HttpContext.Session, UserInfo)
-                       <= UserInfo.Permission)
-                       && UserInfo.UserNumber != "3362554")
+            if (UserInfo.Permission < 0
+                || !AuthenticationService.
+                   AuthorizationLevel(HttpContext.Session, UserInfo))
             {
                 return new FailureResponseModel()
                 {
@@ -114,11 +110,11 @@ namespace WebAPI.Controllers
                     obj = ManageService.UpdateUser(UserInfo),
                 };
             }
-            catch
+            catch (Exception e)
             {
                 return new FailureResponseModel()
                 {
-                    Message = "Failed",
+                    Message = e.Message,
                 };
             }
         }

@@ -5,6 +5,7 @@ using System.Dynamic;
 using Microsoft.AspNetCore.Http;
 using WebAPI.Model;
 using SqlSugar.Extensions;
+using System.Diagnostics;
 
 namespace WebAPI.Controllers
 {
@@ -17,10 +18,9 @@ namespace WebAPI.Controllers
         {
             PublicInfoModel User = SessionService.GetSessionInfo(HttpContext.Session);
             string msg = "Session Success";
-            var CurrentUser = SessionService.GetSessionInfo(HttpContext.Session);
 
-            if (CurrentUser.Permission > 0
-                && CurrentUser.UserNumber == Credential.UserNumber) goto SuccessLogin;
+            if (User.Permission > 0
+                && User.UserNumber == Credential.UserNumber) goto SuccessLogin;
             try
             {
                 User = AuthenticationService.Login(Credential.UserNumber, Credential.PasswordHash);

@@ -1,4 +1,5 @@
-﻿using WebAPI.DAO;
+﻿using System.Diagnostics;
+using WebAPI.DAO;
 using WebAPI.Entity;
 
 namespace WebAPI.Service
@@ -26,16 +27,18 @@ namespace WebAPI.Service
             }
         }
 
-        public static int AuthorizationLevel(ISession session, PublicInfoModel UserInfo)
+        public static bool AuthorizationLevel(ISession session, PublicInfoModel UserInfo)
         {
             try
             {
+                Debug.WriteLine(UserInfo.UserNumber);
                 int Permission = (int)session.GetInt32("Permission");
-                return Math.Min(Permission, UserInfo.Permission);
+                return Permission > UserInfo.Permission;
             }
-            catch
+            catch (Exception ex)
             {
-                return 0;
+                Debug.WriteLine(ex.Message);
+                return false;
             }
         }
     }
