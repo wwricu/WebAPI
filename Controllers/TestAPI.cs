@@ -1,6 +1,7 @@
 ﻿using WebAPI.Entity;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service;
+using WebAPI.DAO;
 
 namespace WebAPI.Controllers
 {
@@ -10,17 +11,18 @@ namespace WebAPI.Controllers
     {
         private static readonly TestEntity[] TestReturn = new TestEntity[3];
         [HttpGet]
-        public TestEntity[] Get(int id, string name)
+        public string Get()
         {
-            TestReturn[0] = new TestEntity();
-            TestReturn[1] = new TestEntity();
-            TestReturn[2] = new TestEntity();
-
-            TestReturn[0].Age = id;
-            TestReturn[1].Name = name;
-
-            TestService.SugarTest();
-            return TestReturn;
+            try
+            {
+                var StaticDAO = new StaticDAO();
+                StaticDAO.GenerateStaticData();
+                return "success";
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
         [HttpPost]
         public TestEntity Post([FromBody] TestEntity entity)

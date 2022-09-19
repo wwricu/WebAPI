@@ -14,8 +14,8 @@ namespace WebAPI.Entity
         [SugarColumn(ColumnDataType = "varchar(100)")]
         public string Name { get; set; }
         public string Type { get; set; }
-        public DateTime beginDate;
-        public DateTime endDate;
+        public string? beginDate;
+        public string? endDate;
         public int Status { get; set; }
         
         public int CourseOfferingID { get; set; }

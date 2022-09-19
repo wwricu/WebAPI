@@ -18,9 +18,11 @@ namespace WebAPI.Entity
         [SugarColumn(ColumnDataType = "varchar(100)")]
         public string Semester { get; set; }
         [SugarColumn(ColumnDataType = "varchar(100)")]
-        public string Year { get; set; }
-        public DateTime beginDate;
-        public DateTime endDate;
+        public string? Year { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public string? BeginDate { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public string? EndDate { get; set; }
 
         [Navigate(typeof(PrivilegeOfferingMapping),
                   nameof(PrivilegeOfferingMapping.CourseOfferingID),
@@ -30,10 +32,9 @@ namespace WebAPI.Entity
         [Navigate(typeof(StudentOfferingMapping),
                   nameof(StudentOfferingMapping.CourseOfferingID),
                   nameof(StudentOfferingMapping.SysUserID))]
-        public List<CourseOffering>? StudentList { get; set; }
+        public List<SysUser>? StudentList { get; set; }
 
-        public int AssessmentID { get; set; }
-        [Navigate(NavigateType.OneToMany, nameof(Assessment.AssessmentID))]//BookA表中的studenId
-        public List<Assessment> AssessmentList { get; set; }//注意禁止给books手动赋值
+        [Navigate(NavigateType.OneToMany, nameof(Assessment.AssessmentID))]
+        public List<Assessment> AssessmentList { get; set; }
     }
 }
