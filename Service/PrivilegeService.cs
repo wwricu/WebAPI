@@ -24,7 +24,7 @@ namespace WebAPI.Service
         }
 
         public static void AttachCourseOffering(Privilege Privilege,
-                                                CourseOffering courseOffering)
+                                                CourseOffering CourseOffering)
         {
 
         }

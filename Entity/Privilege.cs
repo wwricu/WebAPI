@@ -8,9 +8,9 @@ namespace WebAPI.Entity
         {
             PrivilegeName = "Defaule Privilege Name";
         }
-
-        /*public int PrivilegeID { get; set; }*/
-        [SugarColumn(IsPrimaryKey = true, ColumnDataType = "varchar(100)")]
+        [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
+        public int PrivilegeID { get; set; }
+        [SugarColumn(ColumnDataType = "varchar(100)")]
         public string PrivilegeName { get; set; }
         [SugarColumn(ColumnDataType = "varchar(1000)", IsNullable = true)]
         public string? Description { get; set; }
