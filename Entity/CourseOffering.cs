@@ -24,10 +24,10 @@ namespace WebAPI.Entity
         [SugarColumn(IsNullable = true)]
         public string? EndDate { get; set; }
 
-        [Navigate(typeof(PrivilegeOfferingMapping),
-                  nameof(PrivilegeOfferingMapping.CourseOfferingID),
-                  nameof(PrivilegeOfferingMapping.PrivilegeID))]
-        public List<Privilege>? PrivilegeList { get; set; }
+        [Navigate(typeof(StaffOfferingMapping),
+                  nameof(StaffOfferingMapping.CourseOfferingID),
+                  nameof(StaffOfferingMapping.SysUserID))]
+        public List<SysUser>? StaffList { get; set; }
 
         [Navigate(typeof(StudentOfferingMapping),
                   nameof(StudentOfferingMapping.CourseOfferingID),

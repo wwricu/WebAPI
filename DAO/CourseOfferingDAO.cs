@@ -46,7 +46,7 @@ namespace WebAPI.DAO
         }
         public List<CourseOffering> Query(CourseOffering Course,
                                   int AssessmentID,
-                                  string PrivilegeName,
+                                  string StaffNumber,
                                   string StudentNumber)
         {
             var res = db.Queryable<CourseOffering>();
@@ -63,11 +63,11 @@ namespace WebAPI.DAO
                          .Where(x => x.AssessmentList
                                       .Any(z => z.AssessmentID == AssessmentID));
             }
-            if (PrivilegeName != null)
+            if (StaffNumber != null)
             {
-                res = res.Includes(x => x.PrivilegeList)
-                         .Where(x => x.PrivilegeList
-                                      .Any(z => z.PrivilegeName == PrivilegeName));
+                res = res.Includes(x => x.StaffList)
+                         .Where(x => x.StaffList
+                                      .Any(z => z.UserNumber == StaffNumber));
             }
             if (StudentNumber != null)
             {

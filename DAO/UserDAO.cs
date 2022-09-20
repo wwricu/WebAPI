@@ -68,7 +68,6 @@ namespace WebAPI.DAO
 
             return res.IgnoreColumns(it => it.PasswordHash).
                        IgnoreColumns(it => it.SysUserID).
-                       IgnoreColumns(it => it.PrivilegeList).
                        IgnoreColumns(it => it.CourseOfferingList).
                        IgnoreColumns(it => it.Salt).ToList();
         }

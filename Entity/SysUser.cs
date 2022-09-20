@@ -35,10 +35,10 @@ namespace WebAPI.Entity
           nameof(StudentOfferingMapping.CourseOfferingID))]
         public List<CourseOffering>? CourseOfferingList { get; set; }
 
-        [Navigate(typeof(PrivilegeStaffMapping),
-          nameof(PrivilegeStaffMapping.SysUserID),
-          nameof(PrivilegeStaffMapping.PrivilegeID))]
-        public List<Privilege>? PrivilegeList { get; set; }
+        [Navigate(typeof(StaffOfferingMapping),
+          nameof(StaffOfferingMapping.SysUserID),
+          nameof(StaffOfferingMapping.CourseOfferingID))]
+        public List<CourseOffering>? StaffOfferingList { get; set; }
     }
 
     public class SysUser : PrivateInfoModel

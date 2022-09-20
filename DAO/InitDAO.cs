@@ -25,13 +25,9 @@ namespace WebAPI.DAO
                         .InitTables(typeof(CourseOffering));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(Assessment));
-            db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(typeof(Privilege));
 
             db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(typeof(PrivilegeStaffMapping));
-            db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(typeof(PrivilegeOfferingMapping));
+            .InitTables(typeof(StaffOfferingMapping));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(StudentOfferingMapping));
 
@@ -39,34 +35,6 @@ namespace WebAPI.DAO
             {
                 GenerateStaticData();
             }
-        }
-
-        public List<Privilege> QueryPrivilege(Privilege Privilege,
-                                              int StaffID,
-                                              int CourseOfferingID)
-        {
-            var res = db.Queryable<Privilege>();
-
-            if (Privilege.PrivilegeName != null)
-                res = res.Where(it => it.PrivilegeName
-                                        .Contains(Privilege.PrivilegeName));
-            if (Privilege.Description != null)
-                res = res.Where(it => it.Description
-                                        .Contains(Privilege.Description));
-            if (StaffID > 0)
-            {
-                res = res.Includes(x => x.StaffList)
-                         .Where(x => x.StaffList
-                                      .Any(z => z.SysUserID == StaffID));
-            }
-            if (CourseOfferingID > 0)
-            {
-                res = res.Includes(x => x.CourseOfferingList)
-                         .Where(x => x.CourseOfferingList
-                         .Any(z => z.CourseOfferingID == CourseOfferingID));
-            }
-
-            return res.ToList();
         }
 
         // Generate CourseOffering, Assessment and Location

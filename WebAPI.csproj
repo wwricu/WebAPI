@@ -9,10 +9,15 @@
   <ItemGroup>
     <Compile Remove="Controllers\ApplicationController.cs" />
     <Compile Remove="Controllers\WeatherForecastController.cs" />
+    <Compile Remove="DAO\PrivilegeDAO.cs" />
+    <Compile Remove="Entity\Privilege.cs" />
+    <Compile Remove="Entity\PrivilegeOfferingMapping.cs" />
+    <Compile Remove="Entity\PrivilegeStaffMapping.cs" />
     <Compile Remove="Model\Staff.cs" />
     <Compile Remove="Model\Student.cs" />
     <Compile Remove="Model\sysRole.cs" />
     <Compile Remove="Model\SysUser1.cs" />
+    <Compile Remove="Service\PrivilegeService.cs" />
     <Compile Remove="Startup.cs" />
     <Compile Remove="WeatherForecast.cs" />
   </ItemGroup>
