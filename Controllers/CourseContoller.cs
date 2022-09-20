@@ -2,22 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service;
 using WebAPI.Model;
+using System.Diagnostics;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class StaticController : ControllerBase
+    public class CourseController : ControllerBase
     {
-        [HttpPost]
-        public ResponseModel Course([FromQuery] CourseOffering Course)
+        [HttpGet]
+        public ResponseModel Get([FromQuery] CourseOffering Course,
+                                 [FromQuery] SysUser user,
+                                 [FromQuery] Assessment assessment)
         {
             try
             {
                 return new SuccessResponseModel()
                 {
                     Message = "Success",
-                    obj = StaticService.Query(Course),
+                    obj = CourseService.Query(Course, user, assessment),
                 };
             }
             catch (Exception e)

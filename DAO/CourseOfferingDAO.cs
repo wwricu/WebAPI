@@ -1,4 +1,5 @@
 ﻿using SqlSugar;
+using System.Diagnostics;
 using WebAPI.Entity;
 using WebAPI.Service;
 
@@ -45,35 +46,55 @@ namespace WebAPI.DAO
             return res.ToList();
         }
         public List<CourseOffering> Query(CourseOffering Course,
-                                  int AssessmentID,
-                                  string StaffNumber,
-                                  string StudentNumber)
+                                          SysUser user,
+                                          Assessment assessment)
         {
             var res = db.Queryable<CourseOffering>();
 
-            if (Course.CourseName != null)
-                res = res.Where(it => it.CourseName.Contains(Course.CourseName));
-            if (Course.Year != null)
-                res = res.Where(it => it.Year == Course.Year);
-            if (Course.Semester != null)
-                res = res.Where(it => it.Semester == Course.Semester);
-            if (AssessmentID > 0)
+            if (Course != null)
+            {
+                if (Course.CourseName != null)
+                    res = res.Where(it => it.CourseName.Contains(Course.CourseName));
+                if (Course.Year != null)
+                    res = res.Where(it => it.Year == Course.Year);
+                if (Course.Semester != null)
+                    res = res.Where(it => it.Semester == Course.Semester);
+            }
+            if (assessment != null && assessment.AssessmentID != 0)
             {
                 res = res.Includes(x => x.AssessmentList)
                          .Where(x => x.AssessmentList
-                                      .Any(z => z.AssessmentID == AssessmentID));
+                         .Any(z => z.AssessmentID
+                             == assessment.AssessmentID));
             }
-            if (StaffNumber != null)
+            if (user != null)
             {
-                res = res.Includes(x => x.StaffList)
-                         .Where(x => x.StaffList
-                                      .Any(z => z.UserNumber == StaffNumber));
-            }
-            if (StudentNumber != null)
-            {
-                res = res.Includes(x => x.StudentList)
-                         .Where(x => x.StudentList
-                                      .Any(z => z.UserNumber == StudentNumber));
+                if (user.Permission > 1)
+                {
+                    if (user.UserNumber != null)
+                        res = res.Includes(x => x.StaffList)
+                                 .Where(x => x.StaffList
+                                 .Any(z => z.UserNumber
+                                      == user.UserNumber));
+                    if (user.UserName != null)
+                        res = res.Includes(x => x.StaffList)
+                                 .Where(x => x.StaffList
+                                 .Any(z => z.UserName
+                                            .Contains(user.UserName)));
+                }
+                else
+                {
+                    if (user.UserNumber != null)
+                        res = res.Includes(x => x.StudentList)
+                             .Where(x => x.StudentList
+                             .Any(z => z.UserNumber
+                                  == user.UserNumber));
+                    if (user.UserName != null)
+                        res = res.Includes(x => x.StudentList)
+                                 .Where(x => x.StudentList
+                                 .Any(z => z.UserName
+                                      == user.UserName));
+                }
             }
 
             return res.ToList();
