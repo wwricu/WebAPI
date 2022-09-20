@@ -7,7 +7,7 @@ namespace WebAPI.Service
     {
         static public List<CourseOffering> Query(CourseOffering Course)
         {
-            return null; // new StaticDAO.Query(Course);
+            return new CourseOfferingDAO().Query(Course);
         }
     }
 }
