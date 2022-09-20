@@ -1,4 +1,5 @@
-﻿using SqlSugar;
+﻿using Microsoft.AspNet.Identity;
+using SqlSugar;
 using System.Collections;
 using System.Collections.Generic;
 using WebAPI.Entity;
@@ -14,13 +15,91 @@ namespace WebAPI.DAO
             db = UtilService.GetDBClient();
         }
 
-        public void RelateStudentCourse(SysUser Student, CourseOffering Course)
+        public void Insert(SysUser User, List<CourseOffering> courseOfferings)
         {
-            db.Insertable(new StudentOfferingMapping()
+            if (User.Permission == 1)
             {
-                SysUserID = Student.SysUserID,
-                CourseOfferingID = Course.CourseOfferingID,
-            });
+                var list = new List<StudentOfferingMapping>();
+                for (int i = 0; i < courseOfferings.Count; i++)
+                {
+                    list.Add(new StudentOfferingMapping()
+                    {
+                        SysUserID = User.SysUserID,
+                        CourseOfferingID = courseOfferings[i].CourseOfferingID,
+                    });
+                }
+                db.Insertable(list).ExecuteCommand();
+            }
+            else
+            {
+                var list = new List<StaffOfferingMapping>();
+                for (int i = 0; i < courseOfferings.Count; i++)
+                {
+                    list.Add(new StaffOfferingMapping()
+                    {
+                        SysUserID = User.SysUserID,
+                        CourseOfferingID = courseOfferings[i].CourseOfferingID,
+                    });
+                }
+                db.Insertable(list).ExecuteCommand();
+            }
+        }
+
+        public void Insert(CourseOffering courseOffering,
+                           List<SysUser> users)
+        {
+            var studentList = new List<StudentOfferingMapping>();
+            var staffList = new List<StaffOfferingMapping>();
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                if (users[i].Permission == 1)
+                {
+                    studentList.Add(new StudentOfferingMapping()
+                    {
+                        SysUserID = users[i].SysUserID,
+                        CourseOfferingID = courseOffering.CourseOfferingID,
+                    });
+                }
+                else
+                {
+                    staffList.Add(new StaffOfferingMapping()
+                    {
+                        SysUserID = users[i].SysUserID,
+                        CourseOfferingID = courseOffering.CourseOfferingID,
+                    });
+                }
+            }
+            db.Insertable(studentList).ExecuteCommand();
+            db.Insertable(staffList).ExecuteCommand();
+        }
+
+        public void Delete(SysUser Staff, List<CourseOffering> courseOfferings)
+        {
+            var list = new List<StaffOfferingMapping>();
+            for (int i = 0; i < courseOfferings.Count; i++)
+            {
+                list.Add(new StaffOfferingMapping()
+                {
+                    SysUserID = Staff.SysUserID,
+                    CourseOfferingID = courseOfferings[i].CourseOfferingID,
+                });
+            }
+            db.Deleteable<StaffOfferingMapping>(list).ExecuteCommand();
+        }
+
+        public void Delete(CourseOffering courseOffering, List<SysUser> staffs)
+        {
+            var list = new List<StaffOfferingMapping>();
+            for (int i = 0; i < staffs.Count; i++)
+            {
+                list.Add(new StaffOfferingMapping()
+                {
+                    SysUserID = staffs[i].SysUserID,
+                    CourseOfferingID = courseOffering.CourseOfferingID,
+                });
+            }
+            db.Deleteable<StaffOfferingMapping>(list).ExecuteCommand();
         }
     }
 }

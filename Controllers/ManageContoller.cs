@@ -124,5 +124,43 @@ namespace WebAPI.Controllers
         {
 
         }
+
+        [HttpPost]
+        public ResponseModel Relation([FromBody] RelationModel relationModel)
+        {
+            try
+            {
+                if (relationModel.User != null
+                 && relationModel.CourseAddList != null
+                 && relationModel.CourseRemoveList != null)
+                {
+                    RelationService.UpdateRelation(
+                                    relationModel.User,
+                                    relationModel.CourseAddList,
+                                    relationModel.CourseRemoveList);
+                }
+                if (relationModel.CourseOffering != null
+                 && relationModel.UserAddList != null
+                 && relationModel.UserRemoveList != null)
+                {
+                    RelationService.UpdateRelation(
+                                    relationModel.CourseOffering,
+                                    relationModel.UserAddList,
+                                    relationModel.UserRemoveList);
+                }
+
+                return new SuccessResponseModel()
+                {
+                    Message = "success",
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
     }
 }
