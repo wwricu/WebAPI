@@ -45,6 +45,16 @@ namespace WebAPI.DAO
 
             return res.ToList();
         }
+        public List<CourseOffering> TestQuery()
+        {
+            return db.Queryable<CourseOffering>()
+                        .Includes(x => x.StaffList)
+                                 .Where(x => x.StaffList
+                                 .Any(z => z.UserNumber
+                                      == "04014525")).ToList();
+
+        }
+
         public List<CourseOffering> Query(CourseOffering Course,
                                           SysUser user,
                                           Assessment assessment)
@@ -54,14 +64,24 @@ namespace WebAPI.DAO
             if (Course != null)
             {
                 if (Course.CourseName != null)
+                {
+                    Debug.WriteLine("search course by name");
                     res = res.Where(it => it.CourseName.Contains(Course.CourseName));
+                }
                 if (Course.Year != null)
+                {
+                    Debug.WriteLine("search course by year");
                     res = res.Where(it => it.Year == Course.Year);
+                }
                 if (Course.Semester != null)
+                {
+                    Debug.WriteLine("search course by semester");
                     res = res.Where(it => it.Semester == Course.Semester);
+                }
             }
             if (assessment != null && assessment.AssessmentID != 0)
             {
+                Debug.WriteLine("search course by assessement");
                 res = res.Includes(x => x.AssessmentList)
                          .Where(x => x.AssessmentList
                          .Any(z => z.AssessmentID
@@ -72,28 +92,42 @@ namespace WebAPI.DAO
                 if (user.Permission > 1)
                 {
                     if (user.UserNumber != null)
+                    {
+                        Debug.WriteLine("search course by staff Number");
                         res = res.Includes(x => x.StaffList)
                                  .Where(x => x.StaffList
                                  .Any(z => z.UserNumber
                                       == user.UserNumber));
+                    }
+
                     if (user.UserName != null)
+                    {
+                        Debug.WriteLine("search course by staff name");
                         res = res.Includes(x => x.StaffList)
                                  .Where(x => x.StaffList
                                  .Any(z => z.UserName
                                             .Contains(user.UserName)));
+                    }
+
                 }
                 else
                 {
                     if (user.UserNumber != null)
+                    {
+                        Debug.WriteLine("search course by student Number");
                         res = res.Includes(x => x.StudentList)
-                             .Where(x => x.StudentList
-                             .Any(z => z.UserNumber
-                                  == user.UserNumber));
+                                                 .Where(x => x.StudentList
+                                                 .Any(z => z.UserNumber
+                                                      == user.UserNumber));
+                    }
+
                     if (user.UserName != null)
+                    {
+                        Debug.WriteLine("search course by student name");
                         res = res.Includes(x => x.StudentList)
-                                 .Where(x => x.StudentList
-                                 .Any(z => z.UserName
-                                      == user.UserName));
+                                     .Where(x => x.StudentList
+                                     .Any(z => z.UserName == user.UserName));
+                    }
                 }
             }
 

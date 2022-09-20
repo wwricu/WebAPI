@@ -11,6 +11,7 @@ namespace WebAPI.Service
                                                  SysUser user,
                                                  Assessment assessment)
         {
+            /*return new CourseOfferingDAO().TestQuery();*/
             return new CourseOfferingDAO().Query(Course, user, assessment);
         }
     }

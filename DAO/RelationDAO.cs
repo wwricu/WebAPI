@@ -2,6 +2,7 @@
 using SqlSugar;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using WebAPI.Entity;
 using WebAPI.Service;
 
@@ -17,6 +18,8 @@ namespace WebAPI.DAO
 
         public void Insert(SysUser User, List<CourseOffering> courseOfferings)
         {
+            if (courseOfferings == null || courseOfferings.Count == 0) return;
+
             if (User.Permission == 1)
             {
                 var list = new List<StudentOfferingMapping>();
@@ -29,6 +32,12 @@ namespace WebAPI.DAO
                     });
                 }
                 db.Insertable(list).ExecuteCommand();
+                /*var userList = new List<SysUser>
+                {
+                    User
+                };
+                db.UpdateNav(userList).Include(z1 => z1.CourseOfferingList)
+                    .ExecuteCommand();*/
             }
             else
             {
@@ -76,6 +85,7 @@ namespace WebAPI.DAO
 
         public void Delete(SysUser Staff, List<CourseOffering> courseOfferings)
         {
+            if (courseOfferings == null || courseOfferings.Count == 0) return;
             var list = new List<StaffOfferingMapping>();
             for (int i = 0; i < courseOfferings.Count; i++)
             {

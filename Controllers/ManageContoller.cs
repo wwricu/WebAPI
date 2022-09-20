@@ -132,8 +132,8 @@ namespace WebAPI.Controllers
             try
             {
                 if (relationModel.User != null
-                 && relationModel.CourseAddList != null
-                 && relationModel.CourseRemoveList != null)
+                    && (relationModel.CourseAddList != null
+                        || relationModel.CourseRemoveList != null))
                 {
                     RelationService.UpdateRelation(
                                     relationModel.User,
@@ -141,8 +141,8 @@ namespace WebAPI.Controllers
                                     relationModel.CourseRemoveList);
                 }
                 if (relationModel.CourseOffering != null
-                 && relationModel.UserAddList != null
-                 && relationModel.UserRemoveList != null)
+                     && (relationModel.UserAddList != null
+                        || relationModel.UserRemoveList != null))
                 {
                     RelationService.UpdateRelation(
                                     relationModel.CourseOffering,

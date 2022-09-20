@@ -1,4 +1,5 @@
-﻿using WebAPI.DAO;
+﻿using System.Diagnostics;
+using WebAPI.DAO;
 using WebAPI.Entity;
 
 namespace WebAPI.Service
@@ -9,6 +10,7 @@ namespace WebAPI.Service
                                           List<CourseOffering> CourseAddList,
                                           List<CourseOffering> CourseRemoveList)
         {
+            Staff.SysUserID = new UserDAO().QueryUserByNumber(Staff.UserNumber)[0].SysUserID;
             RelationDAO relationDAO = new();
             relationDAO.Delete(Staff, CourseRemoveList);
             relationDAO.Insert(Staff, CourseAddList);
