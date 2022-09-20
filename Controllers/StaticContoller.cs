@@ -27,7 +27,6 @@ namespace WebAPI.Controllers
                     Message = e.Message,
                 };
             }
-            return new FailureResponseModel();
         }
     }
 }

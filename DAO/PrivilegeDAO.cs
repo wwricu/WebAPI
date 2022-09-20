@@ -11,38 +11,38 @@ namespace WebAPI.DAO
         {
             db = UtilService.GetDBClient();
             db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(typeof(PrivilegeDAO));
+                        .InitTables(typeof(Privilege));
         }
-        public List<CourseOffering> Query(CourseOffering Course,
-                                          int AssessmentID,
-                                          string PrivilegeName,
-                                          string StudentNumber)
-        {
-            var res = db.Queryable<CourseOffering>();
 
-            if (Course.CourseName != null)
-                res = res.Where(it => it.CourseName.Contains(Course.CourseName));
-            if (Course.Year != null)
-                res = res.Where(it => it.Year == Course.Year);
-            if (Course.Year != null)
-                res = res.Where(it => it.Semester == Course.Semester);
-            if (AssessmentID > 0)
+        public int Insert(Privilege Privilege)
+        {
+            return db.Insertable(Privilege).ExecuteCommand();
+        }
+
+        public bool Update(Privilege Privilege)
+        {
+            return db.Updateable(Privilege)
+                     .IgnoreColumns(ignoreAllNullColumns: true)
+                     .ExecuteCommandHasChange();
+        }
+        public List<Privilege> Query(Privilege Privilege,
+                                     int SysUserID,
+                                     int CourseOfferingID)
+        {
+            var res = db.Queryable<Privilege>();
+            if (Privilege != null && Privilege.PrivilegeName != null)
+                res = res.Where(it => it.PrivilegeName == Privilege.PrivilegeName);
+            if (SysUserID > 0)
             {
-                res = res.Includes(x => x.AssessmentList)
-                         .Where(x => x.AssessmentList
-                                      .Any(z => z.AssessmentID == AssessmentID));
+                res = res.Includes(x => x.StaffList)
+                         .Where(x => x.StaffList
+                         .Any(z => z.SysUserID == SysUserID));
             }
-            if (PrivilegeName != null)
+            if (CourseOfferingID > 0)
             {
-                res = res.Includes(x => x.PrivilegeList)
-                         .Where(x => x.PrivilegeList
-                                      .Any(z => z.PrivilegeName == PrivilegeName));
-            }
-            if (StudentNumber != null)
-            {
-                res = res.Includes(x => x.StudentList)
-                         .Where(x => x.StudentList
-                                      .Any(z => z.UserNumber == StudentNumber));
+                res = res.Includes(x => x.CourseOfferingList)
+                         .Where(x => x.CourseOfferingList
+                         .Any(z => z.CourseOfferingID == CourseOfferingID));
             }
 
             return res.ToList();
