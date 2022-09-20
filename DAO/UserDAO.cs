@@ -19,7 +19,6 @@ namespace WebAPI.DAO
                 IsAutoCloseConnection = true,
                 InitKeyType = InitKeyType.Attribute
             });
-            db.CodeFirst.SetStringDefaultLength(200).InitTables(typeof(SysUser));
         }
 
         public int Insert(SysUser user)

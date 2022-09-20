@@ -1,10 +1,11 @@
 ﻿using SqlSugar;
 using System.Text;
+using WebAPI.DAO;
 using WebAPI.Entity;
 
 namespace WebAPI.Service
 {
-    public class UtilService
+    public class UtilService : IHostedService
     {
         public static bool IsValidEmail(string address)
         {
@@ -28,6 +29,17 @@ namespace WebAPI.Service
                 IsAutoCloseConnection = true,
                 InitKeyType = InitKeyType.Attribute
             });
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            InitDAO initDAO = new();
+            initDAO.InitDatabase();
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            //Cleanup logic here
         }
     }
 }

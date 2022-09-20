@@ -10,8 +10,6 @@ namespace WebAPI.DAO
         public CourseOfferingDAO()
         {
             db = UtilService.GetDBClient();
-            db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(typeof(CourseOffering));
         }
 
         public int Insert(CourseOffering Course)

@@ -7,16 +7,38 @@ using WebAPI.Service;
 
 namespace WebAPI.DAO
 {
-    public class StaticDAO
+    public class InitDAO
     {
         private SqlSugarClient db;
-        public StaticDAO()
+        public InitDAO()
         {
             db = UtilService.GetDBClient();
+        }
+
+        public void InitDatabase()
+        {
+            db.DbMaintenance.CreateDatabase();
+
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(SysUser));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(CourseOffering));
-            db.CodeFirst.SetStringDefaultLength(200).InitTables(typeof(CourseOffering));
-            db.CodeFirst.SetStringDefaultLength(200).InitTables(typeof(Assessment));
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(Assessment));
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(Privilege));
+
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(PrivilegeStaffMapping));
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(PrivilegeOfferingMapping));
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(StudentOfferingMapping));
+
+            if (db.Queryable<CourseOffering>().ToList().Count() == 0)
+            {
+                GenerateStaticData();
+            }
         }
 
         public List<Privilege> QueryPrivilege(Privilege Privilege,

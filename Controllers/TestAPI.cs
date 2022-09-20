@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var StaticDAO = new StaticDAO();
+                var StaticDAO = new InitDAO();
                 StaticDAO.GenerateStaticData();
                 return "success";
             }

@@ -10,8 +10,6 @@ namespace WebAPI.DAO
         public PrivilegeDAO()
         {
             db = UtilService.GetDBClient();
-            db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(typeof(Privilege));
         }
 
         public int Insert(Privilege Privilege)
