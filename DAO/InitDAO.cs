@@ -17,6 +17,7 @@ namespace WebAPI.DAO
 
         public void InitDatabase()
         {
+            Debug.WriteLine("init database");
             db.DbMaintenance.CreateDatabase();
 
             db.CodeFirst.SetStringDefaultLength(200)

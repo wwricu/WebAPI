@@ -53,13 +53,9 @@ namespace WebAPI.DAO
             {
                 res = res.Where(it => it.UserNumber == info.UserNumber);
             }
-            if (info.UserName[0] != null)
+            if (info.UserName != null)
             {
-                res = res.Where(it => it.UserName[0].Contains(info.UserName[0]));
-            }
-            if (info.UserName[1] != null)
-            {
-                res = res.Where(it => it.UserName[1].Contains(info.UserName[1]));
+                res = res.Where(it => it.UserName.Contains(info.UserName));
             }
             if (info.Academic != null)
             {
@@ -86,9 +82,7 @@ namespace WebAPI.DAO
             {
                 res = res.IgnoreColumns(it => new {it.Addresses});
             }
-            if (UserInfo.UserName[0] == null
-             && UserInfo.UserName[1] == null
-             && UserInfo.UserName[2] == null)
+            if (UserInfo.UserName == null)
             {
                 res = res.IgnoreColumns(it => new { it.UserName });
             }

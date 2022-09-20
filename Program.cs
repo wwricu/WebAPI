@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.DAO;
 using WebAPI.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,4 +30,7 @@ app.UseCors(options => options
          .SetIsOriginAllowed(o => true)  // 设置指定的isOriginAllowed为基础策略
          .AllowCredentials());
 app.UseSession();
+
+new InitDAO().InitDatabase();
+
 app.Run();

@@ -29,6 +29,7 @@ namespace WebAPI.Controllers
 
             try
             {
+                Debug.WriteLine(NewUser.UserName);
                 ManageService.AddUser(NewUser);
 
                 return new SuccessResponseModel()
