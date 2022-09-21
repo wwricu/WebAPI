@@ -21,8 +21,25 @@ namespace WebAPI.Service
                                   List<SysUser> StaffRemoveList)
         {
             RelationDAO relationDAO = new();
-            relationDAO.Delete(courseOffering, StaffRemoveList);
-            relationDAO.Insert(courseOffering, StaffAddList);
+            UserDAO userDAO = new();
+            if (StaffRemoveList != null)
+            {
+                for (int i = 0; i < StaffRemoveList.Count; i++)
+                {
+                    StaffRemoveList[i].SysUserID = userDAO.QueryUserByNumber(
+                                                StaffRemoveList[i].UserNumber)[0].SysUserID;
+                }
+                relationDAO.Delete(courseOffering, StaffRemoveList);
+            }
+            if (StaffAddList != null)
+            {
+                for (int i = 0; i < StaffAddList.Count; i++)
+                {
+                    StaffAddList[i].SysUserID = userDAO.QueryUserByNumber(
+                                                StaffAddList[i].UserNumber)[0].SysUserID;
+                }
+                relationDAO.Insert(courseOffering, StaffAddList);
+            }
         }
     }
 }

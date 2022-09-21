@@ -150,6 +150,7 @@ namespace WebAPI.Controllers
         {
             try
             {
+                string msg = "";
                 if (relationModel.User != null
                     && (relationModel.CourseAddList != null
                         || relationModel.CourseRemoveList != null))
@@ -158,6 +159,7 @@ namespace WebAPI.Controllers
                                     relationModel.User,
                                     relationModel.CourseAddList,
                                     relationModel.CourseRemoveList);
+                    Debug.WriteLine("user operation");
                 }
                 if (relationModel.CourseOffering != null
                      && (relationModel.UserAddList != null
@@ -167,11 +169,12 @@ namespace WebAPI.Controllers
                                     relationModel.CourseOffering,
                                     relationModel.UserAddList,
                                     relationModel.UserRemoveList);
+                    Debug.WriteLine("course operation");
                 }
 
                 return new SuccessResponseModel()
                 {
-                    Message = "success",
+                    Message = msg,
                 };
             }
             catch (Exception e)

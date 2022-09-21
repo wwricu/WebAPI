@@ -87,20 +87,32 @@ namespace WebAPI.DAO
             }
             if (info.Academic != null)
             {
+
                 res = res.Where(it => it.Academic == info.Academic);
             }
 
             if (course != null)
             {
-                res = res.Includes(x => x.CourseOfferingList)
-                         .Where(y => y.CourseOfferingList
-                         .Any(z => z.CourseOfferingID
-                              == course.CourseOfferingID));
+                if (info.Permission == 1)
+                {
+                    res = res.Includes(x => x.CourseOfferingList)
+                             .Where(y => y.CourseOfferingList
+                             .Any(z => z.CourseOfferingID
+                                  == course.CourseOfferingID));
+                } else if (info.Permission > 1)
+                {
+                    res = res.Includes(x => x.StaffOfferingList)
+                             .Where(y => y.StaffOfferingList
+                             .Any(z => z.CourseOfferingID
+                                  == course.CourseOfferingID));
+                }
+
             }
+
+            Debug.WriteLine(res.ToList().Count);
 
             return res.IgnoreColumns(it => it.PasswordHash).
                        IgnoreColumns(it => it.SysUserID).
-                       IgnoreColumns(it => it.CourseOfferingList).
                        IgnoreColumns(it => it.Salt).ToList();
         }
 

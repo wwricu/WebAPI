@@ -60,6 +60,7 @@ namespace WebAPI.DAO
             var studentList = new List<StudentOfferingMapping>();
             var staffList = new List<StaffOfferingMapping>();
 
+            if (users == null) return;
             for (int i = 0; i < users.Count; i++)
             {
                 if (users[i].Permission == 1)
@@ -101,6 +102,7 @@ namespace WebAPI.DAO
         public void Delete(CourseOffering courseOffering, List<SysUser> staffs)
         {
             var list = new List<StaffOfferingMapping>();
+            if (staffs == null || staffs.Count == 0) return;
             for (int i = 0; i < staffs.Count; i++)
             {
                 list.Add(new StaffOfferingMapping()
