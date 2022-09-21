@@ -125,7 +125,26 @@ namespace WebAPI.Controllers
         {
 
         }
-
+        [HttpGet]
+        public ResponseModel GetUsersByCourse([FromQuery] CourseOffering course,
+                                              [FromQuery] SysUser user)
+        {
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    obj = ManageService.QueryUsers(user, course),
+                    Message = "success",
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message
+                };
+            }
+        }
         [HttpPost]
         public ResponseModel Relation([FromBody] RelationModel relationModel)
         {

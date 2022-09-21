@@ -20,12 +20,15 @@ namespace WebAPI.Service
             return userDAO.Insert(NewUser);
         }
 
+        public static List<SysUser> QueryUsers(SysUser user, CourseOffering course)
+        {
+            return new UserDAO().QueryUsers(user, course);
+        }
         public static List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
         {
             if (PrivateInfo.Permission <= 0) PrivateInfo.Permission = 1;
             return new UserDAO().QueryUsers(PrivateInfo, 0, 0);
         }
-
         public static bool UpdateUser(SysUser UserInfo)
         {
             return new UserDAO().UpdateUser(UserInfo);

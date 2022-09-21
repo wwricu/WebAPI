@@ -63,11 +63,46 @@ namespace WebAPI.DAO
             }
 
             return res.IgnoreColumns(it => it.PasswordHash).
+                       // IgnoreColumns(it => it.SysUserID).
+                       IgnoreColumns(it => it.CourseOfferingList).
+                       IgnoreColumns(it => it.Salt).ToList();
+        }
+        public List<SysUser> QueryUsers(PrivateInfoModel info,
+                                        CourseOffering course)
+        {
+            var res = db.Queryable<SysUser>().
+                         Where(it => it.Permission == info.Permission);
+
+            if (info.Email != null)
+            {
+                res = res.Where(it => it.Email == info.Email);
+            }
+            if (info.UserNumber != null)
+            {
+                res = res.Where(it => it.UserNumber == info.UserNumber);
+            }
+            if (info.UserName != null)
+            {
+                res = res.Where(it => it.UserName.Contains(info.UserName));
+            }
+            if (info.Academic != null)
+            {
+                res = res.Where(it => it.Academic == info.Academic);
+            }
+
+            if (course != null)
+            {
+                res = res.Includes(x => x.CourseOfferingList)
+                         .Where(y => y.CourseOfferingList
+                         .Any(z => z.CourseOfferingID
+                              == course.CourseOfferingID));
+            }
+
+            return res.IgnoreColumns(it => it.PasswordHash).
                        IgnoreColumns(it => it.SysUserID).
                        IgnoreColumns(it => it.CourseOfferingList).
                        IgnoreColumns(it => it.Salt).ToList();
         }
-
 
         public bool UpdateUser(SysUser UserInfo)
         {
