@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.DAO;
 using WebAPI.Entity;
+using WebAPI.Model;
 
 namespace WebAPI.Service
 {
@@ -13,6 +14,13 @@ namespace WebAPI.Service
         {
             /*return new CourseOfferingDAO().TestQuery();*/
             return new CourseOfferingDAO().Query(Course, user, assessment);
+        }
+        static public List<CourseOffering> QueryMultiple(CourseQueryModel model)
+        {
+            return new CourseOfferingDAO()
+                      .QueryMultiple(model.Years,
+                                     model.Semester,
+                                     model.Names);
         }
     }
 }

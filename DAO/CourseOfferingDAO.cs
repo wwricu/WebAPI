@@ -45,14 +45,35 @@ namespace WebAPI.DAO
 
             return res.ToList();
         }
-        public List<CourseOffering> TestQuery()
+        public List<CourseOffering> QueryMultiple(List<string> years,
+            List<string> semesters, List<string> names)
         {
-            return db.Queryable<CourseOffering>()
-                        .Includes(x => x.StaffList)
-                                 .Where(x => x.StaffList
-                                 .Any(z => z.UserNumber
-                                      == "04014525")).ToList();
+            var exp = Expressionable.Create<CourseOffering>();
 
+            if (years != null)
+            {
+                foreach (string year in years)
+                {
+                    exp.OrIF(year != null, it => it.Year == year);
+                }
+            }
+
+            if (semesters != null)
+            {
+                foreach (string semester in semesters)
+                {
+                    exp.OrIF(semester != null, it => it.Semester == semester);
+                }
+            }
+            if (names != null)
+            {
+                foreach (string name in names)
+                {
+                    exp.OrIF(name != null, it => it.CourseName.Contains(name));
+                }
+            }
+
+            return db.Queryable<CourseOffering>().Where(exp.ToExpression()).ToList();
         }
 
         public List<CourseOffering> Query(CourseOffering Course,

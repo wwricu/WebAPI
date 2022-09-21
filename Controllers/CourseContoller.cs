@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service;
 using WebAPI.Model;
 using System.Diagnostics;
+using Microsoft.AspNet.Identity;
 
 namespace WebAPI.Controllers
 {
@@ -21,6 +22,26 @@ namespace WebAPI.Controllers
                 {
                     Message = "Success",
                     obj = CourseService.Query(Course, user, assessment),
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpPost]
+        public ResponseModel GetMultiple(CourseQueryModel model)
+        {
+            Debug.WriteLine(model.Years.Count);
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    Message = "Success",
+                    obj = CourseService.QueryMultiple(model),
                 };
             }
             catch (Exception e)
