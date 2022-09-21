@@ -26,6 +26,19 @@ namespace WebAPI.DAO
             return db.Insertable(Course).ExecuteCommand();
         }
 
+        public int Delete(CourseOffering Course)
+        {
+            if (db.Queryable<CourseOffering>()
+                  .Where(it => it.CourseName == Course.CourseName)
+                  .Where(it => it.Year == Course.Year)
+                  .Where(it => it.Semester == Course.Semester)
+                  .ToList().Count() != 0)
+            {
+                throw (new Exception("The course offering has existed!"));
+            }
+            return db.Insertable(Course).ExecuteCommand();
+        }
+
         public bool Update(CourseOffering Course)
         {
             return db.Updateable(Course)

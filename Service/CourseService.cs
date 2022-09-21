@@ -8,6 +8,18 @@ namespace WebAPI.Service
 {
     public class CourseService
     {
+        public static void Insert(CourseOffering course)
+        {
+            new CourseOfferingDAO().Insert(course);
+        }
+        public static void Update(CourseOffering course)
+        {
+            new CourseOfferingDAO().Update(course);
+        }
+        public static void Delete(CourseOffering course)
+        {
+            new CourseOfferingDAO().Delete(course);
+        }
         static public List<CourseOffering> Query(CourseOffering Course,
                                                  SysUser user,
                                                  Assessment assessment)

@@ -35,13 +35,69 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel GetMultiple(CourseQueryModel model)
         {
-            Debug.WriteLine(model.Years.Count);
             try
             {
                 return new SuccessResponseModel()
                 {
                     Message = "Success",
                     obj = CourseService.QueryMultiple(model),
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpPost]
+        public ResponseModel New([FromBody] CourseOffering course)
+        {
+            try
+            {
+                CourseService.Insert(course);
+                return new SuccessResponseModel()
+                {
+                    Message = "Success",
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpPost]
+        public ResponseModel Update([FromBody] CourseOffering course)
+        {
+            try
+            {
+                CourseService.Update(course);
+                return new SuccessResponseModel()
+                {
+                    Message = "Success",
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpPost]
+        public ResponseModel Delete([FromBody] CourseOffering course)
+        {
+            try
+            {
+                CourseService.Delete(course);
+                return new SuccessResponseModel()
+                {
+                    Message = "Success",
                 };
             }
             catch (Exception e)
