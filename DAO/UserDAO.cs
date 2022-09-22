@@ -74,7 +74,8 @@ namespace WebAPI.DAO
                        IgnoreColumns(it => it.Salt).ToList();
         }
         public List<SysUser> QueryUsers(PrivateInfoModel info,
-                                        CourseOffering course)
+                                        CourseOffering course,
+                                        bool contain)
         {
             var res = db.Queryable<SysUser>().
                          Where(it => it.Permission == info.Permission);
@@ -99,20 +100,45 @@ namespace WebAPI.DAO
 
             if (course != null)
             {
-                if (info.Permission == 1)
+                if (contain)
                 {
-                    res = res.Includes(x => x.CourseOfferingList)
-                             .Where(y => y.CourseOfferingList
-                             .Any(z => z.CourseOfferingID
-                                  == course.CourseOfferingID));
-                } else if (info.Permission > 1)
-                {
-                    res = res.Includes(x => x.StaffOfferingList)
-                             .Where(y => y.StaffOfferingList
-                             .Any(z => z.CourseOfferingID
-                                  == course.CourseOfferingID));
+                    Debug.WriteLine("contains");
+                    Debug.WriteLine(info.Permission);
+                    if (info.Permission == 1)
+                    {
+                        res = res.Includes(x => x.CourseOfferingList)
+                                 .Where(y => y.CourseOfferingList
+                                 .Any(z => z.CourseOfferingID
+                                      == course.CourseOfferingID));
+                    }
+                    else if (info.Permission > 1)
+                    {
+                        res = res.Includes(x => x.StaffOfferingList)
+                                 .Where(y => y.StaffOfferingList
+                                 .Any(z => z.CourseOfferingID
+                                      == course.CourseOfferingID));
+                    }
                 }
 
+                else
+                {
+                    if (info.Permission == 1)
+                    {
+                        res = res.Includes(x => x.CourseOfferingList)
+                                 .Where(x => x.CourseOfferingList.Count() == 0
+                                          || x.CourseOfferingList
+                                              .Any(z => z.CourseOfferingID
+                                                     != course.CourseOfferingID));
+                    }
+                    else if (info.Permission > 1)
+                    {
+                        res = res.Includes(x => x.StaffOfferingList)
+                                 .Where(x => x.StaffOfferingList.Count() == 0
+                                          || x.StaffOfferingList
+                                              .Any(z => z.CourseOfferingID
+                                                     != course.CourseOfferingID));
+                    }
+                }
             }
 
             Debug.WriteLine(res.ToList().Count);

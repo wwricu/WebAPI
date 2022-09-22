@@ -22,12 +22,17 @@ namespace WebAPI.Service
 
         public static List<SysUser> QueryUsers(SysUser user, CourseOffering course)
         {
-            return new UserDAO().QueryUsers(user, course);
+            return new UserDAO().QueryUsers(user, course, true);
         }
         public static List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
         {
             if (PrivateInfo.Permission <= 0) PrivateInfo.Permission = 1;
             return new UserDAO().QueryUsers(PrivateInfo, 0, 0);
+        }
+        public static List<SysUser> QueryCandidateUsers(PrivateInfoModel user,
+                                                        CourseOffering course)
+        {
+            return new UserDAO().QueryUsers(user, course, false);
         }
         public static bool UpdateUser(SysUser UserInfo)
         {

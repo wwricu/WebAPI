@@ -33,8 +33,8 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         public ResponseModel GetCandidates([FromQuery] CourseOffering Course,
-                                 [FromQuery] SysUser user,
-                                 [FromQuery] Assessment assessment)
+                                           [FromQuery] SysUser user,
+                                           [FromQuery] Assessment assessment)
         {
             try
             {

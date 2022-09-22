@@ -172,7 +172,6 @@ namespace WebAPI.DAO
                                                          != user.UserNumber));
 
                         }
-
                     }
 
                     if (user.UserName != null && contain)
@@ -197,9 +196,10 @@ namespace WebAPI.DAO
                                                       == user.UserNumber));
                         else
                             res = res.Includes(x => x.StudentList)
-                                     .Where(x => x.StudentList
-                                     .Any(z => z.UserNumber
-                                          != user.UserNumber));
+                                     .Where(x => x.StudentList.Count() == 0
+                                              || x.StudentList
+                                                  .Any(z => z.UserNumber
+                                                         != user.UserNumber));
                     }
 
                     if (user.UserName != null && contain)

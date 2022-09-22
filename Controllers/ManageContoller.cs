@@ -82,7 +82,26 @@ namespace WebAPI.Controllers
                 };
             }
         }
-
+        [HttpGet]
+        public ResponseModel GetCandidates([FromQuery] PrivateInfoModel PrivateInfo,
+                                           [FromQuery] CourseOffering course)
+        {
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    Message = "Success",
+                    obj = ManageService.QueryCandidateUsers(PrivateInfo, course),
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
         [HttpPost]
         public ResponseModel UpdateUser(SysUser UserInfo)
         {
