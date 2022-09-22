@@ -119,11 +119,10 @@ namespace WebAPI.Controllers
                 };
             }
         }
-
         [HttpDelete]
-        public void DeleteUsers()
+        public void Delete(string userNumber)
         {
-
+            ManageService.DeleteUser(userNumber);
         }
         [HttpGet]
         public ResponseModel GetUsersByCourse([FromQuery] CourseOffering course,

@@ -142,15 +142,22 @@ namespace WebAPI.DAO
                       .ExecuteCommandHasChange();
         }
 
-        public bool DeleteUser(String UserNumber)
+        public void DeleteUser(String userNumber)
         {
-            SysUser UserInfo = db.Queryable<SysUser>()
-                              .First(it => it.UserNumber == UserNumber);
-            UserInfo.Permission = 0;
 
-            return db.Updateable(UserInfo)
-                        .IgnoreColumns(ignoreAllNullColumns: true)
-                        .ExecuteCommandHasChange();
+            db.DeleteNav<SysUser>(x => x.UserNumber
+                                      == userNumber)
+                            .Include(x => x.CourseOfferingList,
+                                        new DeleteNavOptions()
+                                        {
+                                            ManyToManyIsDeleteA = true
+                                        })
+                            .Include(x => x.StaffOfferingList,
+                                        new DeleteNavOptions()
+                                        {
+                                            ManyToManyIsDeleteA = true
+                                        })
+                            .ExecuteCommand();
         }
     }
 }

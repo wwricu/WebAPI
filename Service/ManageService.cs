@@ -33,5 +33,9 @@ namespace WebAPI.Service
         {
             return new UserDAO().UpdateUser(UserInfo);
         }
+        public static void DeleteUser(string userNumber)
+        {
+            new UserDAO().DeleteUser(userNumber);
+        }
     }
 }
