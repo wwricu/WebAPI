@@ -31,6 +31,27 @@ namespace WebAPI.Controllers
                 };
             }
         }
+        [HttpGet]
+        public ResponseModel GetCandidates([FromQuery] CourseOffering Course,
+                                 [FromQuery] SysUser user,
+                                 [FromQuery] Assessment assessment)
+        {
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    Message = "Success",
+                    obj = CourseService.QueryCandidates(Course, user, assessment),
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
         [HttpPost]
         public ResponseModel GetMultiple(CourseQueryModel model)
         {

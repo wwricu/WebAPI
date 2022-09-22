@@ -41,14 +41,14 @@ namespace WebAPI.DAO
                                                   == course.CourseOfferingID)
                                         .Include(x => x.StudentList,
                                                     new DeleteNavOptions()
-                                        {
-                                            ManyToManyIsDeleteA = true
-                                        })
+                                                    {
+                                                        ManyToManyIsDeleteA = true
+                                                    })
                                         .Include(x => x.StudentList,
                                                     new DeleteNavOptions()
-                                        {
-                                            ManyToManyIsDeleteA = true
-                                        })
+                                                    {
+                                                        ManyToManyIsDeleteA = true
+                                                    })
                                         .ExecuteCommand();
         }
 
@@ -111,14 +111,16 @@ namespace WebAPI.DAO
 
         public List<CourseOffering> Query(CourseOffering Course,
                                           SysUser user,
-                                          Assessment assessment)
+                                          Assessment assessment,
+                                          bool contain)
         {
             var res = db.Queryable<CourseOffering>();
 
             if (Course != null)
             {
-                if (Course.CourseOfferingID != null)
+                if (Course.CourseOfferingID != 0)
                 {
+                    Debug.WriteLine("search course by id");
                     res = res.Where(it => it.CourseOfferingID
                                     == Course.CourseOfferingID);
                 }
@@ -152,14 +154,28 @@ namespace WebAPI.DAO
                 {
                     if (user.UserNumber != null)
                     {
-                        Debug.WriteLine("search course by staff Number");
-                        res = res.Includes(x => x.StaffList)
-                                 .Where(x => x.StaffList
-                                 .Any(z => z.UserNumber
-                                      == user.UserNumber));
+                        if (contain)
+                        {
+                            Debug.WriteLine("contains course by staff Number");
+                            res = res.Includes(x => x.StaffList)
+                                     .Where(x => x.StaffList
+                                     .Any(z => z.UserNumber
+                                          == user.UserNumber));
+                        }
+                        else
+                        {
+                            Debug.WriteLine("not contains course by staff Number");
+                            res = res.Includes(x => x.StaffList)
+                                     .Where(x => x.StaffList.Count() == 0
+                                              || x.StaffList
+                                                  .Any(z => z.UserNumber
+                                                         != user.UserNumber));
+
+                        }
+
                     }
 
-                    if (user.UserName != null)
+                    if (user.UserName != null && contain)
                     {
                         Debug.WriteLine("search course by staff name");
                         res = res.Includes(x => x.StaffList)
@@ -174,13 +190,19 @@ namespace WebAPI.DAO
                     if (user.UserNumber != null)
                     {
                         Debug.WriteLine("search course by student Number");
-                        res = res.Includes(x => x.StudentList)
+                        if (contain)
+                            res = res.Includes(x => x.StudentList)
                                                  .Where(x => x.StudentList
                                                  .Any(z => z.UserNumber
                                                       == user.UserNumber));
+                        else
+                            res = res.Includes(x => x.StudentList)
+                                     .Where(x => x.StudentList
+                                     .Any(z => z.UserNumber
+                                          != user.UserNumber));
                     }
 
-                    if (user.UserName != null)
+                    if (user.UserName != null && contain)
                     {
                         Debug.WriteLine("search course by student name");
                         res = res.Includes(x => x.StudentList)

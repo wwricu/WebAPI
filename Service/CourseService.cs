@@ -24,7 +24,13 @@ namespace WebAPI.Service
                                                  Assessment assessment)
         {
             /*return new CourseOfferingDAO().TestQuery();*/
-            return new CourseOfferingDAO().Query(Course, user, assessment);
+            return new CourseOfferingDAO().Query(Course, user, assessment, true);
+        }
+        static public List<CourseOffering> QueryCandidates(CourseOffering Course,
+                                         SysUser user,
+                                         Assessment assessment)
+        {
+            return new CourseOfferingDAO().Query(Course, user, assessment, false);
         }
         static public List<CourseOffering> QueryMultiple(CourseQueryModel model)
         {
