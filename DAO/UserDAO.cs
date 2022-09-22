@@ -23,6 +23,12 @@ namespace WebAPI.DAO
 
         public int Insert(SysUser user)
         {
+            if (db.Queryable<SysUser>()
+                 .Where(it => it.UserNumber == user.UserNumber)
+                 .Count() != 0)
+            {
+                throw new Exception("The user existed!");
+            }
             int id = db.Insertable(user).ExecuteCommand();
             return id;
         }
