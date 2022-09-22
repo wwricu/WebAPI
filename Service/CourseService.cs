@@ -31,7 +31,7 @@ namespace WebAPI.Service
         {
             return new CourseOfferingDAO()
                       .QueryMultiple(model.Years,
-                                     model.Semester,
+                                     model.Semesters,
                                      model.Names);
         }
     }
