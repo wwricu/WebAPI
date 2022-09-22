@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service;
 using WebAPI.Model;
 using System.Diagnostics;
-using Microsoft.AspNet.Identity;
 
 namespace WebAPI.Controllers
 {

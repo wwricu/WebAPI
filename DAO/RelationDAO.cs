@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using SqlSugar;
+﻿using SqlSugar;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;

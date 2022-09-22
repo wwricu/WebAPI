@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
                 }
             };
         }
-        public ResponseModel Token([FromBody] string token)
+        public ResponseModel Token(string token)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpDelete]
         public void Logout()
         {
             HttpContext.Session.Clear();
