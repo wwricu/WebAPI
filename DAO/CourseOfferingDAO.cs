@@ -26,17 +26,30 @@ namespace WebAPI.DAO
             return db.Insertable(Course).ExecuteCommand();
         }
 
-        public int Delete(CourseOffering Course)
+        public void Delete(CourseOffering course)
         {
-            if (db.Queryable<CourseOffering>()
-                  .Where(it => it.CourseName == Course.CourseName)
-                  .Where(it => it.Year == Course.Year)
-                  .Where(it => it.Semester == Course.Semester)
-                  .ToList().Count() != 0)
+            if (course.CourseOfferingID == 0)
             {
-                throw (new Exception("The course offering has existed!"));
+                course.CourseOfferingID = db.Queryable<CourseOffering>()
+                  .Where(it => it.CourseName == course.CourseName)
+                  .Where(it => it.Year == course.Year)
+                  .Where(it => it.Semester == course.Semester)
+                  .First().CourseOfferingID;
             }
-            return db.Insertable(Course).ExecuteCommand();
+
+            db.DeleteNav<CourseOffering>(x => x.CourseOfferingID
+                                                  == course.CourseOfferingID)
+                                        .Include(x => x.StudentList,
+                                                    new DeleteNavOptions()
+                                        {
+                                            ManyToManyIsDeleteA = true
+                                        })
+                                        .Include(x => x.StudentList,
+                                                    new DeleteNavOptions()
+                                        {
+                                            ManyToManyIsDeleteA = true
+                                        })
+                                        .ExecuteCommand();
         }
 
         public bool Update(CourseOffering Course)
@@ -104,6 +117,11 @@ namespace WebAPI.DAO
 
             if (Course != null)
             {
+                if (Course.CourseOfferingID != null)
+                {
+                    res = res.Where(it => it.CourseOfferingID
+                                    == Course.CourseOfferingID);
+                }
                 if (Course.CourseName != null)
                 {
                     Debug.WriteLine("search course by name");
