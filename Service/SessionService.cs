@@ -14,6 +14,8 @@ namespace WebAPI.Service
                     session.SetString("Email", UserInfo.Email);
                 if (UserInfo.UserNumber != null)
                     session.SetString("UserNumber", UserInfo.UserNumber);
+                if (UserInfo.UserName != null)
+                    session.SetString("UserNumber", UserInfo.UserName);
             }
             catch (Exception ex)
             {
@@ -30,6 +32,7 @@ namespace WebAPI.Service
                 info.Permission = Permission == null ? 0 : (int)Permission;
                 info.Email = session.GetString("Email");
                 info.UserNumber = session.GetString("UserNumber");
+                info.UserName = session.GetString("UserName");
                 return info;
             }
             catch (Exception ex)

@@ -20,7 +20,11 @@ namespace WebAPI.Controllers
             string msg = "Session Success";
 
             if (User.Permission > 0
-                && User.UserNumber == Credential.UserNumber) goto SuccessLogin;
+                && User.UserNumber == Credential.UserNumber)
+            {
+                Debug.WriteLine(User.UserName);
+                goto SuccessLogin;
+            }
             try
             {
                 User = AuthenticationService.Login(Credential.UserNumber, Credential.PasswordHash);
