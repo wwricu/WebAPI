@@ -31,6 +31,11 @@ app.UseCors(options => options
          .AllowCredentials());
 app.UseSession();
 
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapFallbackToFile("/index.html");
+});
 new InitDAO().InitDatabase();
 
 app.Run();
