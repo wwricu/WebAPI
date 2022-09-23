@@ -42,7 +42,7 @@ namespace WebAPI.DAO
         // delete template/instance assessment
         public void Delete(Assessment assessment)
         {
-
+            db.Deleteable(assessment);
         }
     }
 }

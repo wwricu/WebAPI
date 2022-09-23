@@ -50,7 +50,7 @@ namespace WebAPI.Service
         }
         public static void DeleteTemplate(Assessment assessment)
         {
-
+            new AssessmentDAO().Delete(assessment);
         }
     }
 }

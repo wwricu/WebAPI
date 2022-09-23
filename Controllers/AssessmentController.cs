@@ -16,12 +16,11 @@ namespace WebAPI.Controllers
     {
         // New template
         [HttpPost]
-        public ResponseModel New([FromBody] CourseOffering course,
-                                 [FromBody] Assessment assessment)
+        public ResponseModel New()
         {
             try
             {
-                AssessmentService.Insert(course, assessment);
+                // AssessmentService.Insert(course, assessment);
                 return new SuccessResponseModel();
             }
             catch (Exception e)

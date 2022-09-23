@@ -54,7 +54,7 @@ namespace WebAPI.DAO
                              { OneToManyIfExistsNoInsert = true })
                        .ExecuteCommand();
 
-            int CoursesID = db.Queryable<CourseOffering>()
+            /*int CoursesID = db.Queryable<CourseOffering>()
                             .Where(it => it.CourseName == "INFO6090")
                             .Select(it => it.CourseOfferingID)
                             .First();
@@ -82,7 +82,7 @@ namespace WebAPI.DAO
                                          .Where(x => x.CourseOfferingID == CoursesID)
                                          .ToList(); // 6304 Assessments
             Debug.WriteLine(ListAss[0].Name);
-            Debug.WriteLine(ListAss[1].Name);
+            Debug.WriteLine(ListAss[1].Name);*/
         }
 
         private static readonly CourseOffering[] OfferingList =
