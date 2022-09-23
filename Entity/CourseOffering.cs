@@ -27,7 +27,9 @@ namespace WebAPI.Entity
                   nameof(StudentOfferingMapping.CourseOfferingID),
                   nameof(StudentOfferingMapping.SysUserID))]
         public List<SysUser>? StudentList { get; set; }
-
+        /* Assessment templates (default location and time)
+         * will be deleted with CourseOffering
+        */
         [Navigate(NavigateType.OneToMany, nameof(Assessment.AssessmentID))]
         public List<Assessment>? AssessmentList { get; set; }
     }

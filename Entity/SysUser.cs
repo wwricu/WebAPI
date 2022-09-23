@@ -34,6 +34,9 @@ namespace WebAPI.Entity
           nameof(StaffOfferingMapping.SysUserID),
           nameof(StaffOfferingMapping.CourseOfferingID))]
         public List<CourseOffering>? StaffOfferingList { get; set; }
+        // Students' assessment instance, will be deleted with students
+        [Navigate(NavigateType.OneToMany, nameof(Assessment.AssessmentID))]
+        public List<Assessment>? AssessmentList { get; set; }
     }
 
     public class SysUser : PrivateInfoModel
