@@ -27,16 +27,7 @@ namespace WebAPI.Service
             var instanceList = new List<Assessment>();
             foreach (SysUser student in studentList)
             {
-                instanceList.Add(new Assessment()
-                {
-                    StudentID = student.SysUserID,
-                    Name = template.Name,
-                    Type = template.Type,
-                    BeginDate = template.BeginDate,
-                    EndDate = template.EndDate,
-                    Status = "TO DO",
-                    BaseAssessmentID = template.AssessmentID,
-                });
+                instanceList.Add(new Assessment(template, student));
             }
             assessmentDAO.Insert(instanceList);
         }
@@ -44,17 +35,7 @@ namespace WebAPI.Service
         {
             new AssessmentDAO().Insert(new List<Assessment>()
             {
-                new Assessment()
-                {
-                    StudentID = student.SysUserID,
-                    Name = template.Name,
-                    Type = template.Type,
-                    BeginDate = template.BeginDate,
-                    EndDate = template.EndDate,
-                    Status = "TO DO",
-                    BaseAssessmentID = template.AssessmentID,
-                    CourseOfferingID = template.CourseOfferingID,
-                }
+                new Assessment(template, student),
             });
         }
         public static void Update(Assessment assessment)

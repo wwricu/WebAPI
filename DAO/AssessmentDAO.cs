@@ -25,27 +25,20 @@ namespace WebAPI.DAO
             if (assessments != null)
                 db.Deleteable(assessments);
         }
-        // use student to query instances, course to query templates
+        // use student to query instances, no student to query templates
+        // this is to say, templates have StudentID to 0, instances have non-0
         public List<Assessment> Query(Assessment assessment,
                                       SysUser student,
                                       CourseOffering course)
         {
             var res = db.Queryable<Assessment>();
 
-            if (student != null && course != null)
+            if (student != null) // decide instance or template
             {
-                throw new Exception("Internal Error");
+                res = res.Where(it => it.StudentID
+                                   == student.SysUserID);
             }
-
-            else if (student != null && student.Permission == 1) // instance
-            {
-                if (student.SysUserID != 0)
-                {
-                    res = res.Where(it => it.StudentID
-                                       == student.SysUserID);
-                }
-            }
-            else if (course != null && course.CourseOfferingID != 0) // template
+            if (course != null && course.CourseOfferingID != 0)
             {
                 res = res.Where(it => it.CourseOfferingID
                                    == course.CourseOfferingID);

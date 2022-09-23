@@ -4,6 +4,18 @@ namespace WebAPI.Entity
 {
     public class Assessment
     {
+        public Assessment() { } // template
+        public Assessment(Assessment template, SysUser student) // instance
+        {
+            BaseAssessmentID = template.AssessmentID;
+            StudentID = student.SysUserID;
+            CourseOfferingID = template.CourseOfferingID;
+            Name = template.Name;
+            Type = template.Type;
+            BeginDate = template.BeginDate;
+            EndDate = template.EndDate;
+            Status = "TO DO";
+        }
         [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
         public int AssessmentID { get; set; }
         [SugarColumn(ColumnDataType = "varchar(100)")]
