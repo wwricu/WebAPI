@@ -15,9 +15,9 @@ namespace WebAPI.DAO
         {
             db.Insertable(assessments);
         }
-        public void Update(Assessment assessment)
+        public void Update(List<Assessment> assessments)
         {
-            db.Updateable(assessment);
+            db.Updateable(assessments);
         }
         // delete template/instance assessment
         public void Delete(List<Assessment> assessments)

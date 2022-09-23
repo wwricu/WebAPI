@@ -40,7 +40,17 @@ namespace WebAPI.Service
         }
         public static void Update(Assessment assessment)
         {
-            new AssessmentDAO().Update(assessment);
+            var instanceList = new List<Assessment>();
+            if (assessment.BaseAssessmentID != 0)
+            {
+                instanceList.Add(new Assessment()
+                {
+                    AssessmentID = assessment.BaseAssessmentID,
+                });
+            }
+            var AssessmentDAO = new AssessmentDAO();
+            AssessmentDAO.Update(instanceList);
+            AssessmentDAO.Update(new List<Assessment> { assessment });
         }
         public static List<Assessment> QueryTemplates(CourseOffering course)
         {
