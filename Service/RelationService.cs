@@ -6,39 +6,39 @@ namespace WebAPI.Service
 {
     public class RelationService
     {
-        public static void UpdateRelation(SysUser Staff,
+        public static void UpdateRelation(SysUser user,
                                           List<CourseOffering> CourseAddList,
                                           List<CourseOffering> CourseRemoveList)
         {
-            Staff.SysUserID = new UserDAO().QueryUserByNumber(Staff.UserNumber)[0].SysUserID;
+            user.SysUserID = new UserDAO().QueryUserByNumber(user.UserNumber)[0].SysUserID;
             RelationDAO relationDAO = new();
-            relationDAO.Delete(Staff, CourseRemoveList);
-            relationDAO.Insert(Staff, CourseAddList);
+            relationDAO.Delete(user, CourseRemoveList);
+            relationDAO.Insert(user, CourseAddList);
         }
 
         public static void UpdateRelation(CourseOffering courseOffering,
-                                  List<SysUser> StaffAddList,
-                                  List<SysUser> StaffRemoveList)
+                                  List<SysUser> userAddList,
+                                  List<SysUser> userRemoveList)
         {
             RelationDAO relationDAO = new();
             UserDAO userDAO = new();
-            if (StaffRemoveList != null)
+            if (userRemoveList != null)
             {
-                for (int i = 0; i < StaffRemoveList.Count; i++)
+                for (int i = 0; i < userRemoveList.Count; i++)
                 {
-                    StaffRemoveList[i].SysUserID = userDAO.QueryUserByNumber(
-                                                StaffRemoveList[i].UserNumber)[0].SysUserID;
+                    userRemoveList[i].SysUserID = userDAO.QueryUserByNumber(
+                                                userRemoveList[i].UserNumber)[0].SysUserID;
                 }
-                relationDAO.Delete(courseOffering, StaffRemoveList);
+                relationDAO.Delete(courseOffering, userRemoveList);
             }
-            if (StaffAddList != null)
+            if (userAddList != null)
             {
-                for (int i = 0; i < StaffAddList.Count; i++)
+                for (int i = 0; i < userAddList.Count; i++)
                 {
-                    StaffAddList[i].SysUserID = userDAO.QueryUserByNumber(
-                                                StaffAddList[i].UserNumber)[0].SysUserID;
+                    userAddList[i].SysUserID = userDAO.QueryUserByNumber(
+                                                userAddList[i].UserNumber)[0].SysUserID;
                 }
-                relationDAO.Insert(courseOffering, StaffAddList);
+                relationDAO.Insert(courseOffering, userAddList);
             }
         }
     }
