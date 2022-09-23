@@ -41,39 +41,6 @@ namespace WebAPI.DAO
         }
 
         public List<SysUser> QueryUsers(PrivateInfoModel info,
-                                        int PageNumber,
-                                        int PageSize)
-        {
-            var res = db.Queryable<SysUser>().
-                         Where(it => it.Permission == info.Permission);
-            if (PageNumber > 0 && PageSize > 0)
-            {
-                int TotalCount = 0;
-                res.ToPageList(PageNumber, PageSize, ref TotalCount);
-            }
-            if (info.Email != null)
-            {
-                res = res.Where(it => it.Email == info.Email);
-            }
-            if (info.UserNumber != null)
-            {
-                res = res.Where(it => it.UserNumber == info.UserNumber);
-            }
-            if (info.UserName != null)
-            {
-                res = res.Where(it => it.UserName.Contains(info.UserName));
-            }
-            if (info.Academic != null)
-            {
-                res = res.Where(it => it.Academic == info.Academic);
-            }
-
-            return res.IgnoreColumns(it => it.PasswordHash).
-                       // IgnoreColumns(it => it.SysUserID).
-                       IgnoreColumns(it => it.CourseOfferingList).
-                       IgnoreColumns(it => it.Salt).ToList();
-        }
-        public List<SysUser> QueryUsers(PrivateInfoModel info,
                                         CourseOffering course,
                                         bool contain)
         {
@@ -119,7 +86,6 @@ namespace WebAPI.DAO
                                       == course.CourseOfferingID));
                     }
                 }
-
                 else
                 {
                     if (info.Permission == 1)
@@ -143,9 +109,9 @@ namespace WebAPI.DAO
 
             Debug.WriteLine(res.ToList().Count);
 
-            return res.IgnoreColumns(it => it.PasswordHash).
-                       IgnoreColumns(it => it.SysUserID).
-                       IgnoreColumns(it => it.Salt).ToList();
+            return res.IgnoreColumns(it => it.PasswordHash)
+                      .IgnoreColumns(it => it.CourseOfferingList)
+                      .IgnoreColumns(it => it.Salt).ToList();
         }
 
         public bool UpdateUser(SysUser UserInfo)
