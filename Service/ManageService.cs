@@ -41,6 +41,17 @@ namespace WebAPI.Service
         public static void DeleteUser(string userNumber)
         {
             new UserDAO().DeleteUser(userNumber);
+            var user = new SysUser()
+            {
+                UserNumber = userNumber,
+            };
+            // remove related assessment instances
+            var assessmentDAO = new AssessmentDAO();
+            var assessmentInstances = assessmentDAO.Query(
+                                        new Assessment(),
+                                        user,
+                                        new CourseOffering());
+            assessmentDAO.Delete(assessmentInstances);
         }
     }
 }

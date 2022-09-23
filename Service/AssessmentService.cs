@@ -29,6 +29,7 @@ namespace WebAPI.Service
             {
                 instanceList.Add(new Assessment()
                 {
+                    StudentID = student.SysUserID,
                     Name = template.Name,
                     Type = template.Type,
                     BeginDate = template.BeginDate,
@@ -39,18 +40,53 @@ namespace WebAPI.Service
             }
             assessmentDAO.Insert(instanceList);
         }
+        public static void Insert(SysUser student, Assessment template)
+        {
+            new AssessmentDAO().Insert(new List<Assessment>()
+            {
+                new Assessment()
+                {
+                    StudentID = student.SysUserID,
+                    Name = template.Name,
+                    Type = template.Type,
+                    BeginDate = template.BeginDate,
+                    EndDate = template.EndDate,
+                    Status = "TO DO",
+                    BaseAssessmentID = template.AssessmentID,
+                    CourseOfferingID = template.CourseOfferingID,
+                }
+            });
+        }
+        public static void Update(Assessment assessment)
+        {
+            new AssessmentDAO().Update(assessment);
+        }
         public static List<Assessment> QueryTemplates(CourseOffering course)
         {
-            return new List<Assessment>();
+            return new AssessmentDAO().Query(new Assessment(),
+                                             new SysUser(),
+                                             course);
         }
         public static List<Assessment> QueryInstance(SysUser student)
         {
-            var list = new List<Assessment>();
-            return list;
+            return new AssessmentDAO().Query(new Assessment(),
+                                             student,
+                                             new CourseOffering());
         }
-        public static void DeleteTemplate(Assessment assessment)
+        public static void Delete(List<Assessment> assessments)
         {
-            new AssessmentDAO().Delete(assessment);
+            var instanceList = new List<Assessment>();
+            foreach (var assessment in assessments)
+            {
+                if (assessment.BaseAssessmentID != 0)
+                {
+                    instanceList.Add(new Assessment() {
+                        AssessmentID = assessment.BaseAssessmentID,
+                    });
+                }
+            }
+            assessments.AddRange(instanceList);
+            new AssessmentDAO().Delete(assessments);
         }
     }
 }

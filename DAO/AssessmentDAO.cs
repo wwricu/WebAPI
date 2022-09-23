@@ -15,34 +15,67 @@ namespace WebAPI.DAO
         {
             db.Insertable(assessments);
         }
-        public List<Assessment> Query(Assessment template,
+        public void Update(Assessment assessment)
+        {
+            db.Updateable(assessment);
+        }
+        // delete template/instance assessment
+        public void Delete(List<Assessment> assessments)
+        {
+            if (assessments != null)
+                db.Deleteable(assessments);
+        }
+        // use student to query instances, course to query templates
+        public List<Assessment> Query(Assessment assessment,
                                       SysUser student,
                                       CourseOffering course)
         {
+            var res = db.Queryable<Assessment>();
+
             if (student != null && course != null)
             {
                 throw new Exception("Internal Error");
             }
-            else if (student != null) // instance
+
+            else if (student != null && student.Permission == 1) // instance
             {
-                return db.Queryable<Assessment>()
-                         .Where(it => it.StudentID
-                                   == student.SysUserID).ToList();
+                if (student.SysUserID != 0)
+                {
+                    res = res.Where(it => it.StudentID
+                                       == student.SysUserID);
+                }
             }
-            else if (course != null) // template
+            else if (course != null && course.CourseOfferingID != 0) // template
             {
-                return db.Queryable<Assessment>()
-                          .Where(it => it.CourseOfferingID
-                                    == course.CourseOfferingID).ToList();
+                res = res.Where(it => it.CourseOfferingID
+                                   == course.CourseOfferingID);
             }
 
-            return new List<Assessment>();
-        }
+            if (assessment != null)
+            {
+                if (assessment.AssessmentID != 0)
+                {
+                    res = res.Where(it => it.AssessmentID
+                                       == assessment.AssessmentID);
+                }
+                if (assessment.Name != null)
+                {
+                    res = res.Where(it => it.Name
+                                       == assessment.Name);
+                }
+                if (assessment.Type != null)
+                {
+                    res = res.Where(it => it.Type
+                                       == assessment.Type);
+                }
+                if (assessment.EndDate != null)
+                {
+                    res = res.Where(it => it.EndDate
+                                       == assessment.EndDate);
+                }
+            }
 
-        // delete template/instance assessment
-        public void Delete(Assessment assessment)
-        {
-            db.Deleteable(assessment);
+            return res.ToList();
         }
     }
 }
