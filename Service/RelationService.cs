@@ -39,9 +39,6 @@ namespace WebAPI.Service
         {
             RelationDAO relationDAO = new();
             UserDAO userDAO = new();
-            AssessmentDAO assessmentDAO = new();
-
-            var assessmentList = new List<Assessment>();
 
             if (userRemoveList != null)
             {
