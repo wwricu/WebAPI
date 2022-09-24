@@ -67,7 +67,23 @@ namespace WebAPI.Controllers
             }
         }
         [HttpPost]
-        public ResponseModel Update(Assessment assessment)
+        public ResponseModel UpdateTemplate([FromBody] AssessmentTemplate assessment)
+        {
+            try
+            {
+                AssessmentService.Update(assessment);
+                return new SuccessResponseModel();
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpPost]
+        public ResponseModel UpdateInstance([FromBody] AssessmentInstance assessment)
         {
             try
             {

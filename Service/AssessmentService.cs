@@ -39,7 +39,7 @@ namespace WebAPI.Service
         {
             var assessmentDAO = new AssessmentDAO();
 
-            if (assessment.GetType() == typeof(AssessmentTemplate)) {
+            if (assessment is AssessmentTemplate) {
                 var instanceList = assessmentDAO.Query(null, assessment);
                 foreach (var instance in instanceList)
                 {
@@ -52,7 +52,7 @@ namespace WebAPI.Service
                 assessmentDAO.Update(null, instanceList);
             }
 
-            assessmentDAO.Update(assessment, true);
+            assessmentDAO.Update(assessment);
         }
         public static List<AssessmentTemplate> QueryTemplates(CourseOffering course)
         {

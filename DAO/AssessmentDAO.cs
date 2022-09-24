@@ -21,15 +21,15 @@ namespace WebAPI.DAO
             if (instances != null)
                 db.Insertable(instances).ExecuteCommand();
         }
-        public void Update(Assessment assessment, bool template)
+        public void Update(Assessment assessment)
         {
             if (assessment == null) return;
-            if (template)
+            if (assessment is AssessmentTemplate)
             {
                 Debug.WriteLine("update template");
                 db.Updateable<AssessmentTemplate>(assessment).ExecuteCommand();
             }
-            else
+            else if (assessment is AssessmentInstance)
             {
                 Debug.WriteLine("update template");
                 db.Updateable<AssessmentInstance>(assessment).ExecuteCommand();
@@ -46,9 +46,9 @@ namespace WebAPI.DAO
         public void Delete(Assessment assessment)
         {
             if (assessment == null) return;
-            if (assessment.GetType() == typeof(AssessmentTemplate))
+            if (assessment is AssessmentTemplate)
                 db.Deleteable<AssessmentTemplate>(assessment).ExecuteCommand();
-            else if (assessment.GetType() == typeof(AssessmentInstance))
+            else if (assessment is AssessmentInstance)
                 db.Deleteable<AssessmentInstance>(assessment).ExecuteCommand();
         }
         public void Delete(List<AssessmentTemplate>? templates,
