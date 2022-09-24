@@ -60,6 +60,7 @@ namespace WebAPI.Service
         }
         public static List<AssessmentInstance> QueryInstance(SysUser student)
         {
+            student.SysUserID = new UserDAO().QueryUsers(student, null, true)[0].SysUserID;
             return new AssessmentDAO().Query(student, null);
         }
         public static void Delete(List<AssessmentTemplate> templates)

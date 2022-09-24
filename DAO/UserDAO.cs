@@ -44,11 +44,14 @@ namespace WebAPI.DAO
                                         CourseOffering? course,
                                         bool contain)
         {
-            var res = db.Queryable<SysUser>().
-                         Where(it => it.Permission == info.Permission);
+            var res = db.Queryable<SysUser>();
 
             if (info != null)
             {
+                if (info.Permission != 0)
+                {
+                    res = res.Where(it => it.Permission == info.Permission);
+                }
                 if (info.Email != null)
                 {
                     res = res.Where(it => it.Email == info.Email);

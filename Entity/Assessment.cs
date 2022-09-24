@@ -37,6 +37,7 @@ namespace WebAPI.Entity
             EndDate = assessment.EndDate;
             StudentID = student.SysUserID;
             BaseAssessmentID = assessment.AssessmentID;
+            CourseOfferingID = assessment.CourseOfferingID;
             Status = "TO DO";
         }
         public int BaseAssessmentID { get; set; }

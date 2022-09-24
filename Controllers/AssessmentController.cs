@@ -40,15 +40,16 @@ namespace WebAPI.Controllers
         {
             try
             {
-                if (course != null)
+                if (course.CourseOfferingID != 0)
                 {
+                    Debug.WriteLine(course.CourseOfferingID);
                     return new SuccessResponseModel()
                     {
                         obj = AssessmentService.QueryTemplates(course),
                         Message = "Got a course template",
                     };
                 }
-                if (student != null)
+                if (student.UserNumber != null)
                 {
                     return new SuccessResponseModel()
                     {
