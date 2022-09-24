@@ -26,8 +26,7 @@ namespace WebAPI.Service
         }
         public static List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
         {
-            CourseOffering nullCourse = new();
-            return new UserDAO().QueryUsers(PrivateInfo, nullCourse, true);
+            return new UserDAO().QueryUsers(PrivateInfo, null, true);
         }
         public static List<SysUser> QueryCandidateUsers(PrivateInfoModel user,
                                                         CourseOffering course)

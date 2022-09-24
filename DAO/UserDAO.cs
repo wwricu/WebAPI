@@ -40,31 +40,33 @@ namespace WebAPI.DAO
                      .ToList();
         }
 
-        public List<SysUser> QueryUsers(PrivateInfoModel info,
-                                        CourseOffering course,
+        public List<SysUser> QueryUsers(PrivateInfoModel? info,
+                                        CourseOffering? course,
                                         bool contain)
         {
             var res = db.Queryable<SysUser>().
                          Where(it => it.Permission == info.Permission);
 
-            if (info.Email != null)
+            if (info != null)
             {
-                res = res.Where(it => it.Email == info.Email);
-            }
-            if (info.UserNumber != null)
-            {
-                res = res.Where(it => it.UserNumber == info.UserNumber);
-            }
-            if (info.UserName != null)
-            {
-                res = res.Where(it => it.UserName.Contains(info.UserName));
-            }
-            if (info.Academic != null)
-            {
+                if (info.Email != null)
+                {
+                    res = res.Where(it => it.Email == info.Email);
+                }
+                if (info.UserNumber != null)
+                {
+                    res = res.Where(it => it.UserNumber == info.UserNumber);
+                }
+                if (info.UserName != null)
+                {
+                    res = res.Where(it => it.UserName.Contains(info.UserName));
+                }
+                if (info.Academic != null)
+                {
 
-                res = res.Where(it => it.Academic == info.Academic);
+                    res = res.Where(it => it.Academic == info.Academic);
+                }
             }
-
             if (course != null)
             {
                 if (contain)
