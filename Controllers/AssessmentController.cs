@@ -16,30 +16,15 @@ namespace WebAPI.Controllers
     {
         // New template
         [HttpPost]
-        public ResponseModel New(AssessmentModel model)
+        public ResponseModel New([FromBody] AssessmentTemplate template)
         {
             try
             {
-                if (model.CourseOffering != null)
+                AssessmentService.Insert(template);
+                return new SuccessResponseModel()
                 {
-                    AssessmentService.Insert(model.CourseOffering,
-                                             model.Assessment);
-                    return new SuccessResponseModel()
-                    {
-                        Message = "insert a course template",
-                    };
-                }
-                if (model.Student != null)
-                {
-                    AssessmentService.Insert(model.Student,
-                                             model.Assessment);
-                    return new SuccessResponseModel()
-                    {
-                        Message = "insert a course instance",
-                    };
-                }
-                // AssessmentService.Insert(course, assessment);
-                return new SuccessResponseModel();
+                    Message = "insert a course template",
+                };
             }
             catch (Exception e)
             {
@@ -50,24 +35,24 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet]
-        public ResponseModel Get([FromQuery] AssessmentModel model)
+        public ResponseModel Get([FromQuery] CourseOffering course,
+                                 [FromQuery] SysUser student)
         {
             try
             {
-                if (model.CourseOffering != null)
+                if (course != null)
                 {
-
                     return new SuccessResponseModel()
                     {
-                        obj = AssessmentService.QueryTemplates(model.CourseOffering),
+                        obj = AssessmentService.QueryTemplates(course),
                         Message = "Got a course template",
                     };
                 }
-                if (model.Student != null)
+                if (student != null)
                 {
                     return new SuccessResponseModel()
                     {
-                        obj = AssessmentService.QueryInstance(model.Student),
+                        obj = AssessmentService.QueryInstance(student),
                         Message = "Got a course instance",
                     };
                 }
@@ -81,7 +66,7 @@ namespace WebAPI.Controllers
                 };
             }
         }
-        [HttpDelete]
+        [HttpPost]
         public ResponseModel Update(Assessment assessment)
         {
             try
@@ -99,12 +84,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete]
-        public ResponseModel Delete([FromBody] Assessment assessment)
+        public ResponseModel Delete([FromBody] AssessmentTemplate template)
         {
             try
             {
                 AssessmentService.Delete(
-                    new List<Assessment>() { assessment });
+                    new List<AssessmentTemplate>() { template });
                 return new SuccessResponseModel();
             }
             catch (Exception e)

@@ -18,20 +18,7 @@ namespace WebAPI.Service
         public static void Delete(CourseOffering course)
         {
             // all related assessment templates
-            var assessmentTemplates = AssessmentService.QueryTemplates(course);
-            var students = ManageService.QueryUsers(
-                new SysUser() { Permission = 1 }, course);
-            // all related assessment instances
-            var assessmentInstances = new List<Assessment>();
-            foreach (SysUser student in students)
-            {
-                assessmentInstances.AddRange(AssessmentService
-                                            .QueryInstance(student));
-            }
-
-            var assessmentDAO = new AssessmentDAO();
-            assessmentDAO.Delete(assessmentInstances);
-            assessmentDAO.Delete(assessmentTemplates);
+            AssessmentService.Delete(AssessmentService.QueryTemplates(course));
             new CourseOfferingDAO().Delete(course);
         }
         static public List<CourseOffering> Query(CourseOffering Course,

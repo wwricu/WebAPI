@@ -25,7 +25,9 @@ namespace WebAPI.DAO
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(CourseOffering));
             db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(typeof(Assessment));
+                        .InitTables(typeof(AssessmentTemplate));
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(AssessmentInstance));
 
             db.CodeFirst.SetStringDefaultLength(200)
             .InitTables(typeof(StaffOfferingMapping));

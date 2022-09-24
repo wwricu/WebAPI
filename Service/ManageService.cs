@@ -47,11 +47,8 @@ namespace WebAPI.Service
             };
             // remove related assessment instances
             var assessmentDAO = new AssessmentDAO();
-            var assessmentInstances = assessmentDAO.Query(
-                                        new Assessment(),
-                                        user,
-                                        new CourseOffering());
-            assessmentDAO.Delete(assessmentInstances);
+            var assessmentInstances = assessmentDAO.Query(user, null);
+            assessmentDAO.Delete(null, assessmentInstances);
         }
     }
 }

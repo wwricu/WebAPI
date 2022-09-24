@@ -19,7 +19,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 // Configure the HTTP request pipeline.
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapControllers();
 

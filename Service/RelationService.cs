@@ -16,28 +16,21 @@ namespace WebAPI.Service
             relationDAO.Insert(user, CourseAddList);
 
             if (user.Permission != 1) return;
-            
-            var assessmentDAO = new AssessmentDAO();
-            // detach assessments from removed courses
-            var assessmentList = new List<Assessment>();
-            foreach (var course in CourseRemoveList)
+
+            if (CourseRemoveList != null)
             {
-                assessmentList.AddRange(assessmentDAO.Query(
-                    new Assessment(), user, course));
-            }
-            AssessmentService.Delete(assessmentList);
-            // attach assessments from added courses
-            assessmentList.Clear();
-            foreach (var course in CourseAddList)
-            {
-                var templates = assessmentDAO.Query(new Assessment(),
-                    new SysUser(), course);
-                foreach (var template in templates)
+                foreach (var course in CourseRemoveList)
                 {
-                    assessmentList.Add(new Assessment(template, user));
+                    AssessmentService.Detach(course, user);
                 }
             }
-            assessmentDAO.Insert(assessmentList);
+            if (CourseAddList != null)
+            {
+                foreach (var course in CourseAddList)
+                {
+                    AssessmentService.Attach(course, user);
+                }
+            }
         }
 
         public static void UpdateRelation(CourseOffering courseOffering,
@@ -56,36 +49,26 @@ namespace WebAPI.Service
                 {
                     userRemoveList[i] = userDAO.QueryUserByNumber(
                                                 userRemoveList[i].UserNumber)[0];
-                    assessmentList.AddRange(assessmentDAO.Query(
-                                            new Assessment(),
-                                            userRemoveList[i],
-                                            courseOffering));
+                    if (userRemoveList[i].Permission == 1)
+                    {
+                        AssessmentService.Detach(courseOffering, userRemoveList[i]);
+                    }
                 }
-                assessmentDAO.Delete(assessmentList);
                 relationDAO.Delete(courseOffering, userRemoveList);
             }
 
             if (userAddList != null)
             {
-                var templateList = assessmentDAO.Query(new Assessment(),
-                        new SysUser(), courseOffering);
-                assessmentList.Clear();
-
                 for (int i = 0; i < userAddList.Count; i++)
                 {
                     userAddList[i] = userDAO.QueryUserByNumber(
                                                 userAddList[i].UserNumber)[0];
                     if (userAddList[i].Permission == 1)
                     {
-                        foreach (var template in templateList)
-                        {
-                            assessmentList.Add(new Assessment(template, userAddList[i]));
-                        }
-
+                        AssessmentService.Attach(courseOffering, userAddList[i]);
                     }
                 }
                 relationDAO.Insert(courseOffering, userAddList);
-                assessmentDAO.Insert(assessmentList);
             }
         }
     }
