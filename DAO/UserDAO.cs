@@ -66,7 +66,6 @@ namespace WebAPI.DAO
                 }
                 if (info.Academic != null)
                 {
-
                     res = res.Where(it => it.Academic == info.Academic);
                 }
             }

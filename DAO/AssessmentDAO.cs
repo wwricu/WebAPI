@@ -66,7 +66,7 @@ namespace WebAPI.DAO
 
             if (template != null)
             {
-                if (template.AssessmentID != 0)
+                if (template.AssessmentID != null)
                 {
                     res = res.Where(it => it.AssessmentID
                                        == template.AssessmentID);

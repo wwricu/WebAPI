@@ -4,12 +4,14 @@ namespace WebAPI.Entity
 {
     public class Assessment
     {
-        [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
-        public int AssessmentID { get; set; }
+        public Assessment() { }
+        public Assessment(string uuid) { AssessmentID = uuid; }
+        [SugarColumn(IsPrimaryKey = true)]
+        public string? AssessmentID { get; set; }
         [SugarColumn(ColumnDataType = "varchar(100)")]
         public string? Name { get; set; }
         public string? Type { get; set; }
-        public string? Description { get; set; }
+        public string? CourseOfferingName { get; set; }
         public string? BeginDate { get; set; }
         public string? EndDate { get; set; }
         public int CourseOfferingID { get; set; }
@@ -27,20 +29,21 @@ namespace WebAPI.Entity
     public class AssessmentInstance : Assessment
     {
         public AssessmentInstance() { }
-        public AssessmentInstance(AssessmentTemplate assessment,
+        public AssessmentInstance(AssessmentTemplate template,
                                   SysUser student)
         {
-            Name = assessment.Name;
-            Type = assessment.Type;
-            Description = assessment.Description;
-            BeginDate = assessment.BeginDate;
-            EndDate = assessment.EndDate;
+            Name = template.Name;
+            Type = template.Type;
+            CourseOfferingName = template.CourseOfferingName;
+            BeginDate = template.BeginDate;
+            EndDate = template.EndDate;
             StudentID = student.SysUserID;
-            BaseAssessmentID = assessment.AssessmentID;
-            CourseOfferingID = assessment.CourseOfferingID;
+            AssessmentID = Guid.NewGuid().ToString();
+            BaseAssessmentID = template.AssessmentID;
+            CourseOfferingID = template.CourseOfferingID;
             Status = "TO DO";
         }
-        public int BaseAssessmentID { get; set; }
+        public string? BaseAssessmentID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(BaseAssessmentID))]
         public Assessment? BaseAssessment { get; set; }
         public int StudentID { get; set; }

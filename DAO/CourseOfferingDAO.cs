@@ -140,7 +140,7 @@ namespace WebAPI.DAO
                     res = res.Where(it => it.Semester == Course.Semester);
                 }
             }
-            if (assessment != null && assessment.AssessmentID != 0)
+            if (assessment != null && assessment.AssessmentID != null)
             {
                 Debug.WriteLine("search course by assessement");
                 res = res.Includes(x => x.AssessmentList)

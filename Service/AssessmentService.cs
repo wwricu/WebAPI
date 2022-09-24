@@ -1,4 +1,5 @@
-﻿using WebAPI.DAO;
+﻿using System.Diagnostics;
+using WebAPI.DAO;
 using WebAPI.Entity;
 
 namespace WebAPI.Service
@@ -8,17 +9,20 @@ namespace WebAPI.Service
         public static void Insert(AssessmentTemplate template)
         {
             var assessmentDAO = new AssessmentDAO();
+            var course = new CourseOffering() { CourseOfferingID = template.CourseOfferingID};
 
             var studentList = new UserDAO()
                                  .QueryUsers(new SysUser()
                                  {
                                      Permission = 1,
                                  },
-                                 new CourseOffering()
-                                 {
-                                     CourseOfferingID = template.CourseOfferingID
-                                 },
+                                 course,
                                  true);
+            course = new CourseOfferingDAO().Query(course).First();
+
+            template.AssessmentID = Guid.NewGuid().ToString();
+            template.CourseOfferingName = course.CourseName + " "
+                + course.Semester + " " + course.Year;
 
             var instanceList = new List<AssessmentInstance>();
             foreach (SysUser student in studentList)
@@ -28,13 +32,14 @@ namespace WebAPI.Service
             assessmentDAO.Insert(new List<AssessmentTemplate>() {template},
                                                     instanceList);
         }
-        public static void Insert(SysUser student, AssessmentTemplate template)
+        /*public static void Insert(SysUser student, AssessmentTemplate template)
         {
+            template.AssessmentID = Guid.NewGuid().ToString();
             new AssessmentDAO().Insert(null, new List<AssessmentInstance>()
                             {
                                 new AssessmentInstance(template, student),
                             });
-        }
+        }*/
         public static void Update(Assessment assessment)
         {
             var assessmentDAO = new AssessmentDAO();
@@ -60,7 +65,7 @@ namespace WebAPI.Service
         }
         public static List<AssessmentInstance> QueryInstance(SysUser student)
         {
-            student.SysUserID = new UserDAO().QueryUsers(student, null, true)[0].SysUserID;
+            student.SysUserID = new UserDAO().QueryUsers(student, null, true).First().SysUserID;
             return new AssessmentDAO().Query(student, null);
         }
         public static void Delete(List<AssessmentTemplate> templates)
@@ -71,6 +76,12 @@ namespace WebAPI.Service
             foreach (var template in templates)
             {
                 instanceList.AddRange(assessmentDAO.Query(null, template));
+            }
+
+            Debug.WriteLine("delete");
+            foreach(var instance in instanceList)
+            {
+                Debug.WriteLine(instance.Name);
             }
             
             assessmentDAO.Delete(templates, instanceList);
