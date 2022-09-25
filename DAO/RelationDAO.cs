@@ -83,19 +83,40 @@ namespace WebAPI.DAO
             db.Insertable(staffList).ExecuteCommand();
         }
 
-        public void Delete(SysUser Staff, List<CourseOffering> courseOfferings)
+        public void Delete(SysUser user, List<CourseOffering> courseOfferings)
         {
             if (courseOfferings == null || courseOfferings.Count == 0) return;
-            var list = new List<StaffOfferingMapping>();
-            for (int i = 0; i < courseOfferings.Count; i++)
+            var stfList = new List<StaffOfferingMapping>();
+            var stdList = new List<StudentOfferingMapping>();
+
+            foreach (var courseOffering in courseOfferings)
             {
-                list.Add(new StaffOfferingMapping()
+                if (user.Permission == 1)
                 {
-                    SysUserID = Staff.SysUserID,
-                    CourseOfferingID = courseOfferings[i].CourseOfferingID,
-                });
+                    stdList.Add(new StudentOfferingMapping()
+                    {
+                        SysUserID = user.SysUserID,
+                        CourseOfferingID = courseOffering.CourseOfferingID,
+                    });
+                }
+                else
+                {
+                    stfList.Add(new StaffOfferingMapping()
+                    {
+                        SysUserID = user.SysUserID,
+                        CourseOfferingID = courseOffering.CourseOfferingID,
+                    });
+                }
+
             }
-            db.Deleteable<StaffOfferingMapping>(list).ExecuteCommand();
+            if (user.Permission == 1)
+            {
+                db.Deleteable(stdList).ExecuteCommand();
+            }
+            else
+            {
+                db.Deleteable(stdList).ExecuteCommand();
+            }
         }
 
         public void Delete(CourseOffering courseOffering, List<SysUser> users)

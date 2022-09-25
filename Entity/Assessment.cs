@@ -34,13 +34,15 @@ namespace WebAPI.Entity
         {
             Name = template.Name;
             Type = template.Type;
+            CourseOfferingID = template.CourseOfferingID;
             CourseOfferingName = template.CourseOfferingName;
             BeginDate = template.BeginDate;
             EndDate = template.EndDate;
-            StudentID = student.SysUserID;
+            
             AssessmentID = Guid.NewGuid().ToString();
+            LocationID = template.LocationID;
+            StudentID = student.SysUserID;
             BaseAssessmentID = template.AssessmentID;
-            CourseOfferingID = template.CourseOfferingID;
             Status = "TO DO";
         }
         public string? BaseAssessmentID { get; set; }

@@ -10,7 +10,7 @@ namespace WebAPI.Service
                                           List<CourseOffering> CourseAddList,
                                           List<CourseOffering> CourseRemoveList)
         {
-            user = new UserDAO().QueryUserByNumber(user.UserNumber)[0];
+            user = new UserDAO().QueryUserByNumber(user.UserNumber).First();
             RelationDAO relationDAO = new();
             relationDAO.Delete(user, CourseRemoveList);
             relationDAO.Insert(user, CourseAddList);

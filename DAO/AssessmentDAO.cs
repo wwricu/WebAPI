@@ -62,7 +62,8 @@ namespace WebAPI.DAO
         public List<AssessmentTemplate> Query(Assessment? template,
                                               CourseOffering? course)
         {
-            var res = db.Queryable<AssessmentTemplate>();
+            var res = db.Queryable<AssessmentTemplate>()
+                        .Includes(it => it.Location);
 
             if (template != null)
             {
@@ -99,7 +100,8 @@ namespace WebAPI.DAO
         public List<AssessmentInstance> Query(SysUser? student,
                                               Assessment? template)
         {
-            var res = db.Queryable<AssessmentInstance>();
+            var res = db.Queryable<AssessmentInstance>()
+                        .Includes(it => it.Location);
 
             if (template != null)
             {
