@@ -28,65 +28,25 @@ namespace WebAPI.DAO
                         .InitTables(typeof(AssessmentTemplate));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(AssessmentInstance));
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(Location));
 
             db.CodeFirst.SetStringDefaultLength(200)
-            .InitTables(typeof(StaffOfferingMapping));
+                        .InitTables(typeof(StaffOfferingMapping));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(StudentOfferingMapping));
 
             if (db.Queryable<CourseOffering>().ToList().Count() == 0)
             {
-                GenerateStaticData();
+                db.Insertable(OfferingList).ExecuteCommand();
+            }
+            if (db.Queryable<Location>().ToList().Count() == 0)
+            {
+                db.Insertable(LocationList).ExecuteCommand();
             }
         }
 
-        // Generate CourseOffering, Assessment and Location
-        public void GenerateStaticData()
-        {
-            // casacade insert do not insert concrete data but only create relations
-            var result = db.InsertNav(OfferingList[0])
-                           .Include(it => it.AssessmentList,
-                                         new InsertNavOptions()
-                                         {OneToManyIfExistsNoInsert = true})
-                     .ExecuteCommand();
-
-            result = db.InsertNav(OfferingList[1])
-                       .Include(it => it.AssessmentList,
-                             new InsertNavOptions()
-                             { OneToManyIfExistsNoInsert = true })
-                       .ExecuteCommand();
-
-            /*int CoursesID = db.Queryable<CourseOffering>()
-                            .Where(it => it.CourseName == "INFO6090")
-                            .Select(it => it.CourseOfferingID)
-                            .First();
-            AssessmentList1[0].CourseOfferingID = CoursesID;
-            AssessmentList1[1].CourseOfferingID = CoursesID;
-            result = db.InsertNav(new List<Assessment>(AssessmentList1))
-                       .Include(it => it.CourseOffering)
-                       .ExecuteCommand();
-
-            CoursesID = db.Queryable<CourseOffering>()
-                            .Where(it => it.CourseName == "INFT6304")
-                            .Select(it => it.CourseOfferingID)
-                            .First();
-            AssessmentList2[0].CourseOfferingID = CoursesID;
-            AssessmentList2[1].CourseOfferingID = CoursesID;
-            result = db.InsertNav(new List<Assessment>(AssessmentList2))
-                       .Include(it => it.CourseOffering)
-                       .ExecuteCommand();
-
-            List<CourseOffering> List6304 = db.Queryable<CourseOffering>()
-                             .Where(x => x.AssessmentList
-                                       .Any(y => y.CourseOfferingID == CoursesID))
-                             .ToList(); // pick one condition from the AssessmentList
-            List<Assessment> ListAss = db.Queryable<Assessment>()
-                                         .Where(x => x.CourseOfferingID == CoursesID)
-                                         .ToList(); // 6304 Assessments
-            Debug.WriteLine(ListAss[0].Name);
-            Debug.WriteLine(ListAss[1].Name);*/
-        }
-
+        // Generate CourseOffering and Location
         private static readonly CourseOffering[] OfferingList =
         {
             new CourseOffering()
@@ -101,33 +61,58 @@ namespace WebAPI.DAO
                 Year = "2021",
                 Semester = "Trimester 2"
             },
+            new CourseOffering()
+            {
+                CourseName = "SENG6260",
+                Year = "2022",
+                Semester = "Semester 2"
+            },
         };
 
-        private static readonly Assessment[] AssessmentList1 =
+        private static readonly Location[] LocationList =
         {
-            new Assessment()
+            new Location()
             {
-                Name = "INFT6090 Assessment 1",
-                Type = "quiz",
+                Campus = "Online",
+                Building = "Online",
+                Room = "Online"
             },
-            new Assessment()
+            new Location()
             {
-                Name = "INFT6090 Assessment 2",
-                Type = "formal",
+                Campus = "Callaghan",
+                Building = "VG",
+                Room = "01"
             },
-        };
-        private static readonly Assessment[] AssessmentList2 =
-        {
-            new Assessment()
+            new Location()
             {
-                Name = "INFT6304 Assessment 1",
-                Type = "submit",
+                Campus = "Callaghan",
+                Building = "ES",
+                Room = "305"
             },
-            new Assessment()
+            new Location()
             {
-                Name = "INFT6304 Assessment 2",
-                Type = "formal",
+                Campus = "Callaghan",
+                Building = "P",
+                Room = "102"
             },
+            new Location()
+            {
+                Campus = "Callaghan",
+                Building = "Library",
+                Room = "325"
+            },
+            new Location()
+            {
+                Campus = "City",
+                Building = "Library",
+                Room = "202"
+            },
+            new Location()
+            {
+                Campus = "City",
+                Building = "Main Building",
+                Room = "212"
+            }
         };
     }
 }
