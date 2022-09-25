@@ -128,9 +128,7 @@ namespace WebAPI.DAO
             if (staffList.Count > 0)
                 db.Deleteable(staffList).ExecuteCommand();
             if (studentList.Count > 0)
-            {
                 db.Deleteable(studentList).ExecuteCommand();
-            }
         }
     }
 }
