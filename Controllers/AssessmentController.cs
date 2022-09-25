@@ -67,6 +67,25 @@ namespace WebAPI.Controllers
                 };
             }
         }
+        [HttpGet]
+        public ResponseModel Get([FromQuery] Location location)
+        {
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    obj = AssessmentService.GetLocations(location),
+                    Message = "success",
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
         [HttpPost]
         public ResponseModel UpdateTemplate([FromBody] AssessmentTemplate assessment)
         {

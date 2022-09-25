@@ -32,14 +32,10 @@ namespace WebAPI.Service
             assessmentDAO.Insert(new List<AssessmentTemplate>() {template},
                                                     instanceList);
         }
-        /*public static void Insert(SysUser student, AssessmentTemplate template)
+        public static List<Location> GetLocations(Location location)
         {
-            template.AssessmentID = Guid.NewGuid().ToString();
-            new AssessmentDAO().Insert(null, new List<AssessmentInstance>()
-                            {
-                                new AssessmentInstance(template, student),
-                            });
-        }*/
+            return new LocationDAO().Query(location);
+        }
         public static void Update(Assessment assessment)
         {
             var assessmentDAO = new AssessmentDAO();
