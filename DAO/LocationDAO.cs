@@ -33,5 +33,24 @@ namespace WebAPI.DAO
             }
             return res.ToList();
         }
+        public List<Location> QueryCampus()
+        {
+            return db.Queryable<Location>()
+                     .Select(it => new Location { Campus=it.Campus })
+                     .GroupBy(x => new { x.Campus })
+                     .ToList();
+        }
+        public List<Location> QueryBuilding(Location location)
+        {
+            return db.Queryable<Location>()
+                     .Select(it => new Location
+                            {
+                                Campus = it.Campus,
+                                Building = it.Building,
+                            })
+                     .Where(it => it.Campus == location.Campus)
+                     .GroupBy(x => new { x.Campus, x.Building})
+                     .ToList();
+        }
     }
 }
