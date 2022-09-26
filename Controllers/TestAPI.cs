@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service;
 using WebAPI.DAO;
+using WebAPI.Model;
 
 namespace WebAPI.Controllers
 {
@@ -11,15 +12,27 @@ namespace WebAPI.Controllers
     {
         private static readonly TestEntity[] TestReturn = new TestEntity[3];
         [HttpGet]
-        public string Get()
+        public ResponseModel Get()
         {
             try
             {
-                return "success";
+                var mailService = MailService.GetInstance();
+                mailService.SendMail("iswangwr@gmail.com",
+                                    new string[]
+                                    {
+                                        "wang.weiran@icloud.com",
+                                        "weiran.wang@uon.edu.au"
+                                    },
+                                    "Test Subjuect",
+                                    "<h>Test Body</h>");
+                return new SuccessResponseModel();
             }
             catch (Exception e)
             {
-                return e.Message;
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
             }
         }
         [HttpPost]
