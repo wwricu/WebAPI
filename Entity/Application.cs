@@ -5,9 +5,13 @@ namespace WebAPI.Entity
 {
     public class Application
     {
-        public Application(CourseOffering courseOffering)
+        public Application(AssessmentInstance assessment)
         {
             Type = "Formal Exam";
+            Status = "Pending";
+            AssessmentID = assessment.AssessmentID;
+            StudentID = assessment.StudentID;
+            SubmitDate = DateTime.Now.ToString("dd-MM-yyyy");
         }
         [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
         public int ApplicationID { get; set; }
@@ -16,14 +20,12 @@ namespace WebAPI.Entity
         [SugarColumn(ColumnDataType = "varchar(10000)")]
         public string? Documentation { get; set; }
         public string? Descriptipn { get; set; }
-        public DateTime SubmitDate;
-        public int Status { get; set; }
-
+        public string SubmitDate { get; set; }
+        public string Status { get; set; } // Pending, NMI, Approved, Rejected
         public int StudentID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(StudentID))]
         public SysUser? Student { get; set; }
-
-        public int AssessmentID { get; set; }
+        public string? AssessmentID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(AssessmentID))]
         public Assessment? Assessment { get; set; }
     }
