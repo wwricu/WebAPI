@@ -14,8 +14,8 @@ namespace WebAPI.Entity
             Status = "Draft";
             SubmitDate = DateTime.Now.ToString("dd-MM-yyyy");
         }
-        [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
-        public int ApplicationID { get; set; }
+        [SugarColumn(IsPrimaryKey = true)]
+        public long ApplicationID { get; set; }
         [SugarColumn(ColumnDataType = "varchar(100)")]
         public string? Type { get; set; }
         [SugarColumn(ColumnDataType = "varchar(10000)")]

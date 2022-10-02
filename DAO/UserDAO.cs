@@ -40,7 +40,7 @@ namespace WebAPI.DAO
                      .ToList();
         }
 
-        public List<SysUser> QueryUsers(PrivateInfoModel? info,
+        public List<SysUser> QueryUsers(PrivateInfoModel info,
                                         CourseOffering? course,
                                         bool contain)
         {

@@ -109,9 +109,9 @@ namespace WebAPI.DAO
             return res.ToList();
         }
 
-        public List<CourseOffering> Query(CourseOffering Course,
-                                          SysUser user,
-                                          Assessment assessment,
+        public List<CourseOffering> Query(CourseOffering? Course,
+                                          SysUser? user,
+                                          Assessment? assessment,
                                           bool contain)
         {
             var res = db.Queryable<CourseOffering>();

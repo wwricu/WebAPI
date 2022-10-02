@@ -11,9 +11,9 @@ namespace WebAPI.DAO
         {
             db = UtilService.GetDBClient();
         }
-        public void Insert(Application application)
+        public long Insert(Application application)
         {
-            db.Insertable(application).ExecuteCommand();
+            return db.Insertable(application).ExecuteReturnSnowflakeId();
         }
         public void Update(Application application)
         {

@@ -22,9 +22,14 @@ namespace WebAPI.Service
             return Instance;
         }
 
-        public void SendMail(string recipiant, string[] ccList,
+        public void SendMail(string? recipiant, string[]? ccList,
                              string subject, string body)
         {
+            if (recipiant == null)
+            {
+                throw new ArgumentNullException(nameof(recipiant),
+                                                "recipiant is null");
+            }
             var toAddress = new MailAddress(recipiant);
             var message = new MailMessage(AdminAddress, toAddress)
                           {
@@ -32,9 +37,12 @@ namespace WebAPI.Service
                               Body = body
                           };
 
-            foreach (string cc in ccList)
+            if (ccList != null)
             {
-                message.CC.Add(new MailAddress(cc));
+                foreach (string cc in ccList)
+                {
+                    message.CC.Add(new MailAddress(cc));
+                }
             }
 
             var userName = SysConfigModel
