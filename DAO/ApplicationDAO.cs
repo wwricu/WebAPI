@@ -19,6 +19,10 @@ namespace WebAPI.DAO
         {
             db.Updateable(application).ExecuteCommand();
         }
+        public void Delete(Application application)
+        {
+            db.Deleteable(application).ExecuteCommand();
+        }
         public List<Application> Query(Application? application,
                                        SysUser? user,
                                        AssessmentTemplate? template)
