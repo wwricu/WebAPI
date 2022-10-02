@@ -8,10 +8,10 @@ namespace WebAPI.Entity
         public Application() { }
         public Application(AssessmentInstance assessment)
         {
-            AssessmentID = assessment.AssessmentID;
+            InstanceID = assessment.AssessmentID;
             StudentID = assessment.StudentID;
             Type = "Formal Exam";
-            Status = "Pending";
+            Status = "Draft";
             SubmitDate = DateTime.Now.ToString("dd-MM-yyyy");
         }
         [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
@@ -22,7 +22,7 @@ namespace WebAPI.Entity
         public string? Documentation { get; set; }
         public string? Descriptipn { get; set; }
         public string? SubmitDate { get; set; }
-        public string? Status { get; set; } // Pending, NMI, Approved, Rejected
+        public string? Status { get; set; } // Draft, Pending, Approved, Rejected
         public int StudentID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(StudentID))]
         public SysUser? Student { get; set; }
