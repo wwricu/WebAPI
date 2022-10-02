@@ -10,7 +10,14 @@ namespace WebAPI.Service
         public static void Save(Application application)
         {
             application.Status = "Draft";
-            new ApplicationDAO().Insert(application);
+            if (application.ApplicationID == 0)
+            {
+                new ApplicationDAO().Insert(application);
+            }
+            else
+            {
+                new ApplicationDAO().Update(application);
+            }
         }
         public static void Delete(Application application)
         {
