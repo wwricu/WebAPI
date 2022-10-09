@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\ApplicationController.cs" />
     <Compile Remove="Controllers\WeatherForecastController.cs" />
     <Compile Remove="DAO\PrivilegeDAO.cs" />
     <Compile Remove="Entity\Privilege.cs" />

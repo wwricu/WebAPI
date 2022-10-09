@@ -48,5 +48,54 @@ namespace WebAPI.Controllers
         {
             ApplicationService.Delete(application);
         }
+        /* staff controller start */
+        [HttpPost]
+        public ResponseModel ChangeState([FromBody] Application application)
+        {
+            try
+            {
+                ApplicationService.ChangeState(application);
+                return new SuccessResponseModel();
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpPost]
+        public ResponseModel Approve([FromBody] Application application)
+        {
+            try
+            {
+                ApplicationService.Approve(application);
+                return new SuccessResponseModel();
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpPost]
+        public ResponseModel Assign([FromBody] Application application)
+        {
+            try
+            {
+                ApplicationService.Assign(application);
+                return new SuccessResponseModel();
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
     }
 }

@@ -24,7 +24,6 @@ namespace WebAPI.Service
             if (application.Status != "Draft") return;
             new ApplicationDAO().Delete(application);
         }
-        // TODO: return reference number
         public static long Submit(Application application)
         {
             var course = new CourseOfferingDAO()
@@ -77,29 +76,38 @@ namespace WebAPI.Service
         }
         /* Student service end */
         /* Staff service start */
-        public static void Pending(Application application)
+        public static void ChangeState(Application application)
         {
-            application.Status = "Pending";
-            // send mail to student
-        }
-        public static void Reject(Application application)
-        {
-            application.Status = "Reject";
-            // send mail to student
+            new ApplicationDAO().Update(application);
+            MailService.GetInstance().SendMail(application.Student.Email,
+                                   null,
+                                   "Your application "
+                                   + application.ApplicationID
+                                   + " is changed to " + application.Status,
+                                   "");
         }
         public static void Approve(Application application)
         {
-            application.Status = "Approve";
-            // do change to assessment instance
-            // send mail to student
+            new ApplicationDAO().Update(application);
+            new AssessmentDAO().Update(application.AssessmentInstance);
+            MailService.GetInstance().SendMail(application.Student.Email,
+                                   null,
+                                   "Your application "
+                                   + application.ApplicationID
+                                   + " is Approved",
+                                   "");
         }
-        public static void Assign(Application application, SysUser Staff)
+        public static void Assign(Application application)
         {
-            application.Status = "Approve";
-            application.StaffID = Staff.SysUserID;
-            // do change to assessment instance
-            // send mail to staff
+            new ApplicationDAO().Update(application);
+            MailService.GetInstance().SendMail(application.Staff.Email,
+                                   null,
+                                   "Application "
+                                   + application.ApplicationID
+                                   + " is assigned to you.",
+                                   "");
         }
+
         /* Staff service end */
     }
 }
