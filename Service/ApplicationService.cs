@@ -107,7 +107,6 @@ namespace WebAPI.Service
                                    + " is assigned to you.",
                                    "");
         }
-
         /* Staff service end */
     }
 }
