@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using WebAPI.DAO;
 using WebAPI.Entity;
 
@@ -9,6 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(120);//You can set Time   
+});
+builder.Services.AddControllers().AddNewtonsoftJson(opt =>
+{
+    opt.SerializerSettings.ReferenceLoopHandling
+        = ReferenceLoopHandling.Ignore;
+    opt.SerializerSettings.ContractResolver
+        = new CamelCasePropertyNamesContractResolver();
 });
 builder.Services.AddControllers();
 SysConfigModel.Configuration = builder.Configuration;

@@ -1,4 +1,7 @@
-﻿using SqlSugar;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using SqlSugar;
 using System.Security.Principal;
 
 namespace WebAPI.Entity
@@ -13,6 +16,7 @@ namespace WebAPI.Entity
             SubmitDate = DateTime.Now.ToString("dd-MM-yyyy");
         }
         [SugarColumn(IsPrimaryKey = true)]
+        [Newtonsoft.Json.JsonConverter(typeof(ValueToStringConverter))]
         public long ApplicationID { get; set; }
         
         [SugarColumn(IsNullable = true)]

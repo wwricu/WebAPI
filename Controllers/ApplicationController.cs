@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SqlSugar.DistributedSystem.Snowflake;
+using System.Diagnostics;
 using WebAPI.Entity;
 using WebAPI.Model;
 using WebAPI.Service;
@@ -17,6 +19,24 @@ namespace WebAPI.Controllers
                 return new SuccessResponseModel()
                 {
                     obj = ApplicationService.Save(new Application())
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpGet]
+        public ResponseModel Get([FromQuery] Application application)
+        {
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    obj = ApplicationService.Query(application)
                 };
             }
             catch (Exception e)

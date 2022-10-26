@@ -6,6 +6,12 @@ namespace WebAPI.Service
 {
     public class ApplicationService
     {
+        public static List<Application> Query(Application application)
+        {
+            return new ApplicationDAO().Query(application,
+                                              null,
+                                              null);
+        }
         /* Student service start */
         public static long Save(Application application)
         {
