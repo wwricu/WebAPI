@@ -15,9 +15,9 @@ namespace WebAPI.DAO
         {
             return db.Insertable(application).ExecuteReturnSnowflakeId();
         }
-        public void Update(Application application)
+        public long Update(Application application)
         {
-            db.Updateable(application).ExecuteCommand();
+            return db.Updateable(application).ExecuteCommand();
         }
         public void Delete(Application application)
         {
@@ -35,9 +35,9 @@ namespace WebAPI.DAO
                 {
                     res = res.Where(it => it.ApplicationID == application.ApplicationID);
                 }
-                if (application.Type != null)
+                if (application.Reason != null)
                 {
-                    res = res.Where(it => it.Type == application.Type);
+                    res = res.Where(it => it.Reason == application.Reason);
                 }
                 if (application.SubmitDate != null)
                 {
@@ -52,7 +52,7 @@ namespace WebAPI.DAO
             {
                 if (user.Permission == 1)
                 {
-                    res = res.Where(it => it.StudentID == user.SysUserID);
+                    res = res.Where(it => it.StudentNumber == user.UserNumber);
                 }
                 else if (user.Permission == 2)
                 {

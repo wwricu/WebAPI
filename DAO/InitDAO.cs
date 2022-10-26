@@ -30,11 +30,14 @@ namespace WebAPI.DAO
                         .InitTables(typeof(AssessmentInstance));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(Location));
-
+            db.CodeFirst.SetStringDefaultLength(200)
+                        .InitTables(typeof(Application));
+            
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(StaffOfferingMapping));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(StudentOfferingMapping));
+
 
             if (db.Queryable<CourseOffering>().ToList().Count() == 0)
             {

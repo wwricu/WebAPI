@@ -9,26 +9,44 @@ namespace WebAPI.Entity
         public Application(AssessmentInstance assessment)
         {
             InstanceID = assessment.AssessmentID;
-            StudentID = assessment.StudentID;
-            Type = "Formal Exam";
             Status = "Draft";
             SubmitDate = DateTime.Now.ToString("dd-MM-yyyy");
         }
         [SugarColumn(IsPrimaryKey = true)]
         public long ApplicationID { get; set; }
-        [SugarColumn(ColumnDataType = "varchar(100)")]
-        public string? Type { get; set; }
-        [SugarColumn(ColumnDataType = "varchar(10000)")]
-        public string? Documentation { get; set; }
-        public string? Descriptipn { get; set; }
-        public string? SubmitDate { get; set; }
+        
+        [SugarColumn(IsNullable = true)]
+        public string? Reason { get; set; }
+        
+        [SugarColumn(IsNullable = true)]
+        public string? DaysOfImpact { get; set; } // days of impact
+        
+        [SugarColumn(ColumnDataType = "varchar(8000)", IsNullable = true)]
+        public string? CircumstanceDetail { get; set; }
+        
+        [Navigate(NavigateType.OneToMany, nameof(Assessment.AssessmentID))]
+        public List<Document>? DocumentList { get; set; }
+        
+
+        [SugarColumn(IsNullable = true)]
+        public string? Outcome { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public string? OutcomeDetail { get; set; }
+
         public string? Status { get; set; } // Draft, Pending, Approved, Rejected
-        public int StudentID { get; set; }
-        [Navigate(NavigateType.OneToOne, nameof(StudentID))]
+        public string? SubmitDate { get; set; }
+        [SugarColumn(IsNullable = true)]
+        public string? StaffComment { get; set; }
+        
+        [SugarColumn(IsNullable = true)]
+        public string? StudentNumber { get; set; }
+        [Navigate(NavigateType.OneToOne, nameof(StudentNumber))]
         public SysUser? Student { get; set; }
+        [SugarColumn(IsNullable = true)]
         public int StaffID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(StaffID))]
         public SysUser? Staff { get; set; }
+        [SugarColumn(IsNullable = true)]
         public string? InstanceID { get; set; } // instance
         [Navigate(NavigateType.OneToOne, nameof(InstanceID))]
         public AssessmentInstance? AssessmentInstance { get; set; }

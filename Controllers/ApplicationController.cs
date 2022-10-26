@@ -9,8 +9,26 @@ namespace WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class ApplicationController : ControllerBase
     {
+        [HttpGet]
+        public ResponseModel New()
+        {
+            try
+            {
+                return new SuccessResponseModel()
+                {
+                    obj = ApplicationService.Save(new Application())
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
         [HttpPost]
-        public ResponseModel Save([FromBody] Application application)
+        public ResponseModel Update([FromBody] Application application)
         {
             try
             {

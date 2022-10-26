@@ -7,16 +7,17 @@ namespace WebAPI.Service
     public class ApplicationService
     {
         /* Student service start */
-        public static void Save(Application application)
+        public static long Save(Application application)
         {
             application.Status = "Draft";
+            application.SubmitDate = DateTime.Now.ToString();
             if (application.ApplicationID == 0)
             {
-                new ApplicationDAO().Insert(application);
+                return new ApplicationDAO().Insert(application);
             }
             else
             {
-                new ApplicationDAO().Update(application);
+                return new ApplicationDAO().Update(application);
             }
         }
         public static void Delete(Application application)
