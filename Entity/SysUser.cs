@@ -10,7 +10,7 @@ namespace WebAPI.Entity
         public string? UserName { get; set; }
         public string? UserNumber { get; set; }
         public string? Email { get; set; }
-        public int Permission { get; set; }
+        public int Permission { get; set; } //0 1 2 3
         public string? Academic { get; set; }
     }
 

@@ -6,10 +6,10 @@ namespace WebAPI.Service
 {
     public class ApplicationService
     {
-        public static List<Application> Query(Application application)
+        public static List<Application> Query(Application application, SysUser user)
         {
             return new ApplicationDAO().Query(application,
-                                              null,
+                                              user,
                                               null);
         }
         /* Student service start */
@@ -28,7 +28,7 @@ namespace WebAPI.Service
         }
         public static void Delete(Application application)
         {
-            if (application.Status != "Draft") return;
+            // if (application.Status != "Draft") return;
             new ApplicationDAO().Delete(application);
         }
         public static long Submit(Application application)
@@ -58,12 +58,14 @@ namespace WebAPI.Service
                            .First();
             var appDAO = new ApplicationDAO();
             long refNum;
-            
+
+            application = new ApplicationDAO().Query(application, null, null)[0];
             application.Status = "Pending";
             application.StaffID = staff.SysUserID;
 
             // TODO: permission issue to update other's application
             // should be solved in controller
+            application.SubmitDate = DateTime.Now.ToString();
             if (application.ApplicationID != 0)
             {
                 appDAO.Update(application);

@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
             {
                 return new SuccessResponseModel()
                 {
-                    obj = ApplicationService.Save(new Application())
+                    obj = ApplicationService.Save(new Application()).ToString(),
                 };
             }
             catch (Exception e)
@@ -30,13 +30,14 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet]
-        public ResponseModel Get([FromQuery] Application application)
+        public ResponseModel Get([FromQuery] Application application,
+                                 [FromQuery] SysUser user)
         {
             try
             {
                 return new SuccessResponseModel()
                 {
-                    obj = ApplicationService.Query(application)
+                    obj = ApplicationService.Query(application, user)
                 };
             }
             catch (Exception e)
@@ -82,9 +83,19 @@ namespace WebAPI.Controllers
             }
         }
         [HttpDelete]
-        public void Delete([FromBody] Application application)
+        public ResponseModel Delete([FromBody] Application application)
         {
-            ApplicationService.Delete(application);
+            try
+            {
+                ApplicationService.Delete(application);
+                return new SuccessResponseModel();
+            } catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
         }
         /* staff controller start */
         [HttpPost]
