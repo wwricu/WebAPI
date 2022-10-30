@@ -62,6 +62,10 @@ namespace WebAPI.DAO
         {
             var res = db.Queryable<CourseOffering>();
 
+            if (Course.CourseOfferingID != 0)
+            {
+                res = res.Where(it => it.CourseOfferingID == Course.CourseOfferingID);
+            }
             if (Course.CourseName != null)
                 res = res.Where(it => it.CourseName.Contains(Course.CourseName));
             if (Course.Year != null)

@@ -19,7 +19,6 @@ namespace WebAPI.Service
                                  course,
                                  true);
             course = new CourseOfferingDAO().Query(course).First();
-
             template.AssessmentID = Guid.NewGuid().ToString();
             template.CourseOfferingName = course.CourseName + " "
                 + course.Semester + " " + course.Year;
