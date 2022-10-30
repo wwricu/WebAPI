@@ -65,7 +65,6 @@ namespace WebAPI.DAO
                          .Where(x => x.AssessmentInstance
                                       .BaseAssessmentID == template.AssessmentID);
             }
-            
             return res.Includes(it => it.AssessmentInstance)
                       .Includes(it => it.Staff)
                       .ToList();

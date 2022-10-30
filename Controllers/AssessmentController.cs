@@ -35,6 +35,26 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet]
+        public ResponseModel GetInstance([FromQuery] AssessmentInstance instance)
+        {
+            try
+            {
+
+                return new SuccessResponseModel()
+                {
+                    obj = AssessmentService.Query(instance),
+                    Message = "Got a course template",
+                };
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message,
+                };
+            }
+        }
+        [HttpGet]
         public ResponseModel Get([FromQuery] CourseOffering course,
                                  [FromQuery] SysUser student)
         {

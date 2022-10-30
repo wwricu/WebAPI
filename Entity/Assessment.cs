@@ -43,7 +43,7 @@ namespace WebAPI.Entity
             LocationID = template.LocationID;
             StudentID = student.SysUserID;
             BaseAssessmentID = template.AssessmentID;
-            Status = "TO DO";
+            Status = "TO BE COMPLETED"; // TO BECOMPLETE, EXEMPTED, COMPLETED
         }
         public string? BaseAssessmentID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(BaseAssessmentID))]

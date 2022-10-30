@@ -115,5 +115,30 @@ namespace WebAPI.DAO
             }
             return res.ToList();
         }
+        public List<AssessmentInstance> Query(AssessmentInstance instance)
+        {
+            var res = db.Queryable<AssessmentInstance>()
+                        .Includes(it => it.Location);
+
+            if (instance.AssessmentID != null)
+            {
+                res = res.Where(it => it.AssessmentID == instance.AssessmentID);
+            }
+            if (instance.Name != null)
+            {
+                res = res.Where(it => it.Name == instance.Name);
+            }
+            if (instance.CourseOfferingName != null)
+            {
+                res = res.Where(it => it.CourseOfferingName
+                            == instance.CourseOfferingName);
+            }
+            if (instance.CourseOfferingID != 0)
+            {
+                res = res.Where(it => it.CourseOfferingID
+                            == instance.CourseOfferingID);
+            }
+            return res.ToList();
+        }
     }
 }

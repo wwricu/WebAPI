@@ -51,6 +51,10 @@ namespace WebAPI.Service
 
             assessmentDAO.Update(assessment);
         }
+        public static List<AssessmentInstance> Query(AssessmentInstance instance)
+        {
+            return new AssessmentDAO().Query(instance);
+        }
         public static List<AssessmentTemplate> QueryTemplates(CourseOffering course)
         {
             return new AssessmentDAO().Query(null, course);

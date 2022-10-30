@@ -87,18 +87,38 @@ namespace WebAPI.Service
         /* Staff service start */
         public static void ChangeState(Application application)
         {
-            new ApplicationDAO().Update(application);
-            MailService.GetInstance().SendMail(application.Student.Email,
+            var applicationDAO = new ApplicationDAO();
+            var oldApplication = applicationDAO.Query(new Application()
+                    {
+                        ApplicationID = application.ApplicationID,
+                    },
+                    null,null)[0];
+            if (application.Status != null)
+            {
+                oldApplication.Status = application.Status;
+            }
+            if (application.StaffComment != null)
+            {
+                oldApplication.StaffComment = application.StaffComment;
+            }
+            if (application.StaffID != 0)
+            {
+                oldApplication.StaffID = application.StaffID;
+            }
+            applicationDAO.Update(oldApplication);
+            var student = new UserDAO().QueryUserByNumber(oldApplication.StudentNumber)[0];
+            MailService.GetInstance().SendMail(student.Email,
                                    null,
                                    "Your application "
-                                   + application.ApplicationID
-                                   + " is changed to " + application.Status,
+                                   + oldApplication.ApplicationID
+                                   + " is changed to " + oldApplication.Status,
                                    "");
         }
         public static void Approve(Application application)
         {
-            new ApplicationDAO().Update(application);
             new AssessmentDAO().Update(application.AssessmentInstance);
+            application.AssessmentInstance = null;
+            new ApplicationDAO().Update(application);
             MailService.GetInstance().SendMail(application.Student.Email,
                                    null,
                                    "Your application "
