@@ -67,6 +67,7 @@ namespace WebAPI.DAO
             }
             return res.Includes(it => it.AssessmentInstance)
                       .Includes(it => it.Staff)
+                      .Includes(it => it.Student)
                       .ToList();
         }
     }

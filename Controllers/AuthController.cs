@@ -54,6 +54,7 @@ namespace WebAPI.Controllers
         SuccessLogin:
             PublicInfoModel PublicInfo = new PublicInfoModel()
             {
+                SysUserID = User.SysUserID,
                 UserName = User.UserName,
                 UserNumber = User.UserNumber,
                 Email = User.Email,

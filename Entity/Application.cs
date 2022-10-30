@@ -41,10 +41,11 @@ namespace WebAPI.Entity
         public string? SubmitDate { get; set; }
         [SugarColumn(IsNullable = true)]
         public string? StaffComment { get; set; }
-        
         [SugarColumn(IsNullable = true)]
         public string? StudentNumber { get; set; }
-        [Navigate(NavigateType.OneToOne, nameof(StudentNumber))]
+        [SugarColumn(IsNullable = true)]
+        public int StudentID { get; set; }
+        [Navigate(NavigateType.OneToOne, nameof(StudentID))]
         public SysUser? Student { get; set; }
         [SugarColumn(IsNullable = true)]
         public int StaffID { get; set; }

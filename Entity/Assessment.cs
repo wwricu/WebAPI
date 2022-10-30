@@ -13,7 +13,9 @@ namespace WebAPI.Entity
         public string? Type { get; set; }
         public string? CourseOfferingName { get; set; }
         public string? BeginDate { get; set; }
+        public string? BeginTime { get; set; }
         public string? EndDate { get; set; }
+        public string? EndTime { get; set; }
         public int CourseOfferingID { get; set; }
         [Navigate(NavigateType.OneToOne, nameof(CourseOfferingID))]
         public CourseOffering? CourseOffering { get; set; }
@@ -37,8 +39,10 @@ namespace WebAPI.Entity
             CourseOfferingID = template.CourseOfferingID;
             CourseOfferingName = template.CourseOfferingName;
             BeginDate = template.BeginDate;
+            BeginTime = template.BeginTime;
             EndDate = template.EndDate;
-            
+            EndTime = template.EndTime;
+
             AssessmentID = Guid.NewGuid().ToString();
             LocationID = template.LocationID;
             StudentID = student.SysUserID;

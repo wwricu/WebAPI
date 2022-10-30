@@ -6,6 +6,8 @@ namespace WebAPI.Entity
 {
     public class PublicInfoModel
     {
+        [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
+        public int SysUserID { get; set; }
         [SqlSugar.SugarColumn(ColumnDataType = "varchar(4000)")]
         public string? UserName { get; set; }
         public string? UserNumber { get; set; }
@@ -41,8 +43,6 @@ namespace WebAPI.Entity
 
     public class SysUser : PrivateInfoModel
     {
-        [SugarColumn(IsIdentity = true, IsPrimaryKey = true)]
-        public int SysUserID { get; set; }
         public string? PasswordHash { get; set; }
         public string? Salt { get; set; }
     }
