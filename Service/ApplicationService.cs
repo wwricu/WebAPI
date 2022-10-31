@@ -112,7 +112,7 @@ namespace WebAPI.Service
                                    "Your application "
                                    + oldApplication.ApplicationID
                                    + " is changed to " + oldApplication.Status,
-                                   "");
+                                   application.StaffComment);
         }
         public static void Approve(Application application)
         {
