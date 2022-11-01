@@ -167,7 +167,9 @@ namespace WebAPI.Service
             Debug.WriteLine(applications[0].StudentID);
             Debug.WriteLine(sysUserID);
 
-            if (applications != null && applications.Count == 1)
+            if (applicationID != 0
+                && applications != null
+                && applications.Count == 1)
             {
                 return applications[0].StudentID == sysUserID;
             }

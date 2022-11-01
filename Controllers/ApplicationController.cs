@@ -23,7 +23,12 @@ namespace WebAPI.Controllers
             {
                 return new SuccessResponseModel()
                 {
-                    obj = ApplicationService.Save(new Application()).ToString(),
+                    obj = ApplicationService.Save(new Application()
+                    {
+                        StudentID = SessionService
+                                        .GetSessionInfo(HttpContext.Session)
+                                        .SysUserID,
+                    }).ToString(),
                 };
             }
             catch (Exception e)

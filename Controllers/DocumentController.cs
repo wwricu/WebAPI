@@ -28,8 +28,6 @@ namespace WebAPI.Controllers
             try
             {
                 Debug.WriteLine("File controller");
-                Debug.WriteLine(type);
-                Debug.WriteLine(applicationID.ToString());
                 PublicInfoModel userInfo = SessionService.GetSessionInfo(HttpContext.Session);
 
                 if (!ApplicationService
