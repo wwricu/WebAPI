@@ -4,6 +4,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using WebAPI.DAO;
 using WebAPI.Entity;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,9 @@ app.UseCors(options => options
          .AllowAnyHeader()               // 确保策略允许任何标头
          .AllowAnyMethod()               // 确保策略允许任何方法
          .SetIsOriginAllowed(o => true)  // 设置指定的isOriginAllowed为基础策略
-         .AllowCredentials());
+         .AllowCredentials()
+         .WithExposedHeaders("content-disposition")
+         );
 app.UseSession();
 
 app.UseRouting();
