@@ -15,6 +15,11 @@ namespace WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class DocumentController : ControllerBase
     {
+        public DocumentController()
+        {
+            ApplicationService = ApplicationService.GetInstance();
+        }
+        private readonly ApplicationService ApplicationService;
         [HttpPost]
         public ResponseModel Upload([FromForm(Name="file")] List<IFormFile> files,
                                     [FromForm(Name="ApplicationID")] long applicationID,

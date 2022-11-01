@@ -6,34 +6,54 @@ namespace WebAPI.Service
 {
     public class ApplicationService
     {
-        public static List<Application> Query(Application application, SysUser user)
+        private ApplicationService()
         {
-            return new ApplicationDAO().Query(application,
+            UserDAO = new();
+            ApplicationDAO = new();
+            CourseOfferingDAO = new();
+            AssessmentDAO = new();
+        }
+        private static ApplicationService Instance = new();
+        public static ApplicationService GetInstance()
+        {
+            Instance ??= new ApplicationService();
+            return Instance;
+        }
+
+        private readonly UserDAO UserDAO;
+        private readonly ApplicationDAO ApplicationDAO;
+        private readonly CourseOfferingDAO CourseOfferingDAO;
+        private readonly AssessmentDAO AssessmentDAO;
+
+
+        public List<Application> Query(Application application, SysUser user)
+        {
+            return ApplicationDAO.Query(application,
                                               user,
                                               null);
         }
         /* Student service start */
-        public static long Save(Application application)
+        public long Save(Application application)
         {
             application.Status = "Draft";
             application.SubmitDate = DateTime.Now.ToString();
             if (application.ApplicationID == 0)
             {
-                return new ApplicationDAO().Insert(application);
+                return ApplicationDAO.Insert(application);
             }
             else
             {
-                return new ApplicationDAO().Update(application);
+                return ApplicationDAO.Update(application);
             }
         }
-        public static void Delete(Application application)
+        public void Delete(Application application)
         {
             // if (application.Status != "Draft") return;
-            new ApplicationDAO().Delete(application);
+            ApplicationDAO.Delete(application);
         }
-        public static long Submit(Application application)
+        public long Submit(Application application)
         {
-            var course = new CourseOfferingDAO()
+            var course = CourseOfferingDAO
                             .Query(null,
                                    null,
                                    new AssessmentInstance()
@@ -48,7 +68,7 @@ namespace WebAPI.Service
                 throw new Exception("No course find");
             }
 
-            var staff = new UserDAO()
+            var staff = UserDAO
                            .QueryUsers(new SysUser()
                            {
                                Permission = 2,
@@ -56,10 +76,10 @@ namespace WebAPI.Service
                            course,
                            true)
                            .First();
-            var appDAO = new ApplicationDAO();
+            var appDAO = ApplicationDAO;
             long refNum;
 
-            application = new ApplicationDAO().Query(application, null, null)[0];
+            application = ApplicationDAO.Query(application, null, null)[0];
             application.Status = "Pending";
             application.StaffID = staff.SysUserID;
 
@@ -85,10 +105,9 @@ namespace WebAPI.Service
         }
         /* Student service end */
         /* Staff service start */
-        public static void ChangeState(Application application)
+        public void ChangeState(Application application)
         {
-            var applicationDAO = new ApplicationDAO();
-            var oldApplication = applicationDAO.Query(new Application()
+            var oldApplication = ApplicationDAO.Query(new Application()
                     {
                         ApplicationID = application.ApplicationID,
                     },
@@ -105,8 +124,8 @@ namespace WebAPI.Service
             {
                 oldApplication.StaffID = application.StaffID;
             }
-            applicationDAO.Update(oldApplication);
-            var student = new UserDAO().QueryUserByNumber(oldApplication.StudentNumber)[0];
+            ApplicationDAO.Update(oldApplication);
+            var student = UserDAO.QueryUserByNumber(oldApplication.StudentNumber)[0];
             MailService.GetInstance().SendMail(student.Email,
                                    null,
                                    "Your application "
@@ -114,11 +133,11 @@ namespace WebAPI.Service
                                    + " is changed to " + oldApplication.Status,
                                    application.StaffComment);
         }
-        public static void Approve(Application application)
+        public void Approve(Application application)
         {
-            new AssessmentDAO().Update(application.AssessmentInstance);
+            AssessmentDAO.Update(application.AssessmentInstance);
             application.AssessmentInstance = null;
-            new ApplicationDAO().Update(application);
+            ApplicationDAO.Update(application);
             MailService.GetInstance().SendMail(application.Student.Email,
                                    null,
                                    "Your application "
@@ -126,9 +145,9 @@ namespace WebAPI.Service
                                    + " is Approved",
                                    "");
         }
-        public static void Assign(Application application)
+        public void Assign(Application application)
         {
-            new ApplicationDAO().Update(application);
+            ApplicationDAO.Update(application);
             MailService.GetInstance().SendMail(application.Staff.Email,
                                    null,
                                    "Application "
@@ -138,9 +157,9 @@ namespace WebAPI.Service
         }
         /* Staff service end */
 
-        public static bool UserHasPrivilege(int sysUserID, long applicationID)
+        public bool UserHasPrivilege(int sysUserID, long applicationID)
         {
-            var applications = new ApplicationDAO().Query(new Application()
+            var applications = ApplicationDAO.Query(new Application()
             {
                 ApplicationID = applicationID,
             }, null, null);

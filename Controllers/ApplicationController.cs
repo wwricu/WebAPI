@@ -11,6 +11,11 @@ namespace WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class ApplicationController : ControllerBase
     {
+        public ApplicationController()
+        {
+            ApplicationService = ApplicationService.GetInstance();
+        }
+        private readonly ApplicationService ApplicationService;
         [HttpGet]
         public ResponseModel New()
         {
