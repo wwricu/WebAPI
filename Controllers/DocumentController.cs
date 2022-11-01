@@ -47,5 +47,23 @@ namespace WebAPI.Controllers
                 };
             }
         }
+
+        [HttpDelete]
+        public ResponseModel Delete([FromBody] Document document)
+        {
+            try
+            {
+                DocumentService
+                   .GetInstance().DeleteDocument(document.DocumentID);
+                return new SuccessResponseModel();
+            }
+            catch (Exception e)
+            {
+                return new FailureResponseModel()
+                {
+                    Message = e.Message
+                };
+            }
+        }
     }
 }

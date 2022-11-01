@@ -33,7 +33,7 @@ namespace WebAPI.Service
             var uploadPath = UploadRootPath + "\\"
                            + folderName + "\\"
                            + applicationID.ToString() + "\\";
-            if (!Directory.Exists(uploadPath))            　　              
+            if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
             var documents = new List<Document>();
