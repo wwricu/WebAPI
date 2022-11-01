@@ -49,6 +49,25 @@ namespace WebAPI.DAO
             {
                 db.Insertable(LocationList).ExecuteCommand();
             }
+            if (db.Queryable<SysUser>().ToList().Count() == 0)
+            {
+                db.Insertable(new SysUser()
+                {
+                    PasswordHash = "3c273dc7dc7ff4e5a2703fb1a7194f61",
+                    Salt = "e3796ae838835da0b6f6ea37bcf8bcb7",
+                    Addresses = new string[3]
+                    {
+                        "", "", ""
+                    },
+                    Phone = "0493316052",
+                    Birthdate = "18-10-2022",
+                    UserName = "adminName adminSurname",
+                    UserNumber = "a123456",
+                    Email = "wang.wei.ran@outlook.com",
+                    Permission = 3,
+                    Academic = "ADMIN"
+                }).ExecuteCommand();
+            }
         }
 
         // Generate CourseOffering and Location

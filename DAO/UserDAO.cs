@@ -144,11 +144,10 @@ namespace WebAPI.DAO
                       .ExecuteCommandHasChange();
         }
 
-        public void DeleteUser(String userNumber)
+        public void DeleteUser(SysUser sysUser)
         {
-
             db.DeleteNav<SysUser>(x => x.UserNumber
-                                      == userNumber)
+                                      == sysUser.UserNumber)
                             .Include(x => x.CourseOfferingList,
                                         new DeleteNavOptions()
                                         {

@@ -23,9 +23,13 @@ namespace WebAPI.DAO
         {
             db.Deleteable(application).ExecuteCommand();
         }
+        public void Delete(List<Application> applications)
+        {
+            db.Deleteable(applications).ExecuteCommand();
+        }
         public List<Application> Query(Application? application,
                                        SysUser? user,
-                                       AssessmentTemplate? template)
+                                       AssessmentInstance? instance)
         {
             var res = db.Queryable<Application>();
 
@@ -59,11 +63,11 @@ namespace WebAPI.DAO
                     res = res.Where(it => it.StaffID == user.SysUserID);
                 }
             }
-            if (template != null)
+            if (instance != null)
             {
                 res = res.Includes(it => it.AssessmentInstance)
                          .Where(x => x.AssessmentInstance
-                                      .BaseAssessmentID == template.AssessmentID);
+                                      .AssessmentID == instance.AssessmentID);
             }
             return res.Includes(it => it.AssessmentInstance)
                       .Includes(it => it.Staff)

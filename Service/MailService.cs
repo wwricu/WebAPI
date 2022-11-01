@@ -22,7 +22,7 @@ namespace WebAPI.Service
             return Instance;
         }
 
-        public void SendMail(string? recipiant, string[]? ccList,
+        public async Task SendMail(string? recipiant, string[]? ccList,
                              string subject, string body)
         {
             if (recipiant == null)
@@ -61,7 +61,7 @@ namespace WebAPI.Service
                              EnableSsl = true,
                          };
 
-            client.Send(message);
+            new Thread(() => client.Send(message)).Start();
         }
 
     }

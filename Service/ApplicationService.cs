@@ -1,4 +1,5 @@
 ﻿using SqlSugar;
+using System.Diagnostics;
 using WebAPI.DAO;
 using WebAPI.Entity;
 
@@ -96,7 +97,7 @@ namespace WebAPI.Service
                 refNum = appDAO.Insert(application);
             }
 
-            MailService.GetInstance().SendMail(staff.Email,
+            _ = MailService.GetInstance().SendMail(staff.Email,
                                                null,
                                                "New application submitted",
                                                "");
@@ -126,7 +127,7 @@ namespace WebAPI.Service
             }
             ApplicationDAO.Update(oldApplication);
             var student = UserDAO.QueryUserByNumber(oldApplication.StudentNumber)[0];
-            MailService.GetInstance().SendMail(student.Email,
+            _ = MailService.GetInstance().SendMail(student.Email,
                                    null,
                                    "Your application "
                                    + oldApplication.ApplicationID
@@ -138,7 +139,7 @@ namespace WebAPI.Service
             AssessmentDAO.Update(application.AssessmentInstance);
             application.AssessmentInstance = null;
             ApplicationDAO.Update(application);
-            MailService.GetInstance().SendMail(application.Student.Email,
+            _ = MailService.GetInstance().SendMail(application.Student.Email,
                                    null,
                                    "Your application "
                                    + application.ApplicationID
@@ -148,7 +149,7 @@ namespace WebAPI.Service
         public void Assign(Application application)
         {
             ApplicationDAO.Update(application);
-            MailService.GetInstance().SendMail(application.Staff.Email,
+            _ = MailService.GetInstance().SendMail(application.Staff.Email,
                                    null,
                                    "Application "
                                    + application.ApplicationID
@@ -163,6 +164,8 @@ namespace WebAPI.Service
             {
                 ApplicationID = applicationID,
             }, null, null);
+            Debug.WriteLine(applications[0].StudentID);
+            Debug.WriteLine(sysUserID);
 
             if (applications != null && applications.Count == 1)
             {

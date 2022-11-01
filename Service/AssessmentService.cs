@@ -11,6 +11,7 @@ namespace WebAPI.Service
             UserDAO = new();
             CourseOfferingDAO = new();
             AssessmentDAO = new();
+            ApplicationDAO = new();
         }
         private static AssessmentService Instance = new();
         public static AssessmentService GetInstance()
@@ -22,6 +23,8 @@ namespace WebAPI.Service
         private readonly UserDAO UserDAO;
         private readonly CourseOfferingDAO CourseOfferingDAO;
         private readonly AssessmentDAO AssessmentDAO;
+        private readonly ApplicationDAO ApplicationDAO;
+
         public void Insert(AssessmentTemplate template)
         {
             var course = new CourseOffering() { CourseOfferingID = template.CourseOfferingID};
@@ -54,7 +57,9 @@ namespace WebAPI.Service
                 {
                     instance.Name = assessment.Name;
                     instance.Type = assessment.Type;
+                    instance.BeginTime = assessment.BeginTime;
                     instance.BeginDate = assessment.BeginDate;
+                    instance.EndTime = assessment.EndTime;
                     instance.EndDate = assessment.EndDate;
                     instance.Location = assessment.Location;
                 }
@@ -85,12 +90,6 @@ namespace WebAPI.Service
                 instanceList.AddRange(AssessmentDAO.Query(null, template));
             }
 
-            Debug.WriteLine("delete");
-            foreach(var instance in instanceList)
-            {
-                Debug.WriteLine(instance.Name);
-            }
-
             AssessmentDAO.Delete(templates, instanceList);
         }
         public void Attach(CourseOffering course,
@@ -108,16 +107,23 @@ namespace WebAPI.Service
                                   SysUser students)
         {
             var instances = QueryInstance(students);
-            var forDelete = new List<AssessmentInstance>();
+            var forInsDelete = new List<AssessmentInstance>();
+            var forAppDelete = new List<Application>();
 
             foreach (var instance in instances)
             {
                 if (instance.CourseOfferingID == course.CourseOfferingID)
                 {
-                    forDelete.Add(instance);
+                    forInsDelete.Add(instance);
                 }
             }
 
+            foreach (var instance in forInsDelete)
+            {
+                forAppDelete.AddRange(ApplicationDAO.Query(null, null, instance));
+            }
+            ApplicationDAO.Delete(forAppDelete);
+            // Do not delete assessment instances
             AssessmentDAO.Delete(null, instances);
         }
     }

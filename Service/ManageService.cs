@@ -9,6 +9,8 @@ namespace WebAPI.Service
         private ManageService()
         {
             UserDAO = new();
+            AssessmentDAO = new();
+            ApplicationDAO = new();
         }
         private static ManageService Instance = new();
         public static ManageService GetInstance()
@@ -18,7 +20,10 @@ namespace WebAPI.Service
         }
 
         private readonly UserDAO UserDAO;
-        
+        private readonly AssessmentDAO AssessmentDAO;
+        private readonly ApplicationDAO ApplicationDAO;
+
+
         public int AddUser(SysUser NewUser)
         {
             if (NewUser.Permission < 0 || !UtilService.IsValidEmail(NewUser.Email))
@@ -49,17 +54,20 @@ namespace WebAPI.Service
         {
             return UserDAO.UpdateUser(UserInfo);
         }
-        public void DeleteUser(string userNumber)
+        public void DeleteUser(SysUser sysUser)
         {
-            UserDAO.DeleteUser(userNumber);
-            var user = new SysUser()
-            {
-                UserNumber = userNumber,
-            };
+
+            UserDAO.DeleteUser(sysUser);
+
             // remove related assessment instances
-            var assessmentDAO = new AssessmentDAO();
-            var assessmentInstances = assessmentDAO.Query(user, null);
-            assessmentDAO.Delete(null, assessmentInstances);
+            if (sysUser.Permission == 1)
+            {
+                var assessmentInstances = AssessmentDAO.Query(sysUser, null);
+                AssessmentDAO.Delete(null, assessmentInstances);
+
+                var applications = ApplicationDAO.Query(null, sysUser, null);
+                ApplicationDAO.Delete(applications);
+            }
         }
     }
 }
