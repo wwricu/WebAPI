@@ -13,6 +13,14 @@ namespace WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : ControllerBase
     {
+        public ManageController()
+        {
+            ManageService = ManageService.GetInstance();
+            RelationService = RelationService.GetInstance();
+        }
+        private readonly ManageService ManageService;
+        private readonly RelationService RelationService;
+
         [HttpPost]
         public ResponseModel AddUser([FromBody] SysUser NewUser)
         {

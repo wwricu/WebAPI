@@ -10,6 +10,11 @@ namespace WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class CourseController : ControllerBase
     {
+        public CourseController()
+        {
+            CourseService = CourseService.GetInstance();
+        }
+        private readonly CourseService CourseService;
         [HttpGet]
         public ResponseModel Get([FromQuery] CourseOffering Course,
                                  [FromQuery] SysUser user,

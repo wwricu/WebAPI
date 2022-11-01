@@ -7,36 +7,52 @@ namespace WebAPI.Service
 {
     public class CourseService
     {
-        public static void Insert(CourseOffering course)
+        private CourseService()
         {
-            new CourseOfferingDAO().Insert(course);
+            CourseOfferingDAO = new();
+            AssessmentService = AssessmentService.GetInstance();
         }
-        public static void Update(CourseOffering course)
+        private static CourseService Instance = new();
+        public static CourseService GetInstance()
         {
-            new CourseOfferingDAO().Update(course);
+            Instance ??= new CourseService();
+            return Instance;
         }
-        public static void Delete(CourseOffering course)
+
+        private readonly CourseOfferingDAO CourseOfferingDAO;
+        private readonly AssessmentService AssessmentService;
+
+
+        public void Insert(CourseOffering course)
+        {
+            CourseOfferingDAO.Insert(course);
+        }
+        public void Update(CourseOffering course)
+        {
+            CourseOfferingDAO.Update(course);
+        }
+        public void Delete(CourseOffering course)
         {
             // all related assessment templates
             AssessmentService.Delete(AssessmentService.QueryTemplates(course));
-            new CourseOfferingDAO().Delete(course);
+            CourseOfferingDAO.Delete(course);
         }
-        static public List<CourseOffering> Query(CourseOffering Course,
+        public List<CourseOffering> Query(CourseOffering Course,
                                                  SysUser user,
                                                  Assessment assessment)
         {
-            /*return new CourseOfferingDAO().TestQuery();*/
-            return new CourseOfferingDAO().Query(Course, user, assessment, true);
+            /*return CourseOfferingDAO.TestQuery();*/
+            return CourseOfferingDAO.Query(Course, user, assessment, true);
         }
-        static public List<CourseOffering> QueryCandidates(CourseOffering Course,
+        public List<CourseOffering> QueryCandidates(CourseOffering Course,
                                          SysUser user,
                                          Assessment assessment)
         {
-            return new CourseOfferingDAO().Query(Course, user, assessment, false);
+            return CourseOfferingDAO.Query(Course, user, assessment, false);
         }
-        static public List<CourseOffering> QueryMultiple(CourseQueryModel model)
+        public List<CourseOffering> QueryMultiple(CourseQueryModel model)
         {
-            return new CourseOfferingDAO()
+            return CourseOfferingDAO
                       .QueryMultiple(model.Years,
                                      model.Semesters,
                                      model.Names);
