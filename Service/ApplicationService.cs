@@ -137,5 +137,20 @@ namespace WebAPI.Service
                                    "");
         }
         /* Staff service end */
+
+        public static bool UserHasPrivilege(int sysUserID, long applicationID)
+        {
+            var applications = new ApplicationDAO().Query(new Application()
+            {
+                ApplicationID = applicationID,
+            }, null, null);
+
+            if (applications != null && applications.Count == 1)
+            {
+                return applications[0].StudentID == sysUserID;
+            }
+
+            return false;
+        }
     }
 }

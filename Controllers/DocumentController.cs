@@ -20,6 +20,16 @@ namespace WebAPI.Controllers
                 Debug.WriteLine("File controller");
                 Debug.WriteLine(type);
                 Debug.WriteLine(applicationID.ToString());
+                PublicInfoModel userInfo = SessionService.GetSessionInfo(HttpContext.Session);
+
+                if (!ApplicationService
+                        .UserHasPrivilege(userInfo.SysUserID,
+                                          applicationID)) {
+                    return new FailureResponseModel()
+                    {
+                        Message = "not your application!"
+                    };
+                }
 
                 files.ForEach(file =>
                 {
