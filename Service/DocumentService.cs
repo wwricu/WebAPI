@@ -30,8 +30,8 @@ namespace WebAPI.Service
                                  string type)
         {
             // TODO: authorize the application
-            var uploadPath = UploadRootPath + "\\"
-                           + applicationID.ToString() + "\\";
+            var uploadPath = UploadRootPath + "/"
+                           + applicationID.ToString() + "/";
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
