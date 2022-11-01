@@ -9,13 +9,14 @@ namespace WebAPI.Service
         {
             try
             {
+                session.SetInt32("SysUserID", UserInfo.SysUserID);
                 session.SetInt32("Permission", UserInfo.Permission);
                 if (UserInfo.Email != null)
                     session.SetString("Email", UserInfo.Email);
                 if (UserInfo.UserNumber != null)
                     session.SetString("UserNumber", UserInfo.UserNumber);
                 if (UserInfo.UserName != null)
-                    session.SetString("UserNumber", UserInfo.UserName);
+                    session.SetString("UserName", UserInfo.UserName);
             }
             catch (Exception ex)
             {
@@ -25,9 +26,11 @@ namespace WebAPI.Service
 
         public static PublicInfoModel GetSessionInfo(ISession session)
         {
-            PublicInfoModel info = new PublicInfoModel();
+            var info = new PublicInfoModel();
             try
             {
+                var SysUserID = session.GetInt32("SysUserID");
+                info.SysUserID = SysUserID == null ? 0 : (int)SysUserID;
                 var Permission = session.GetInt32("Permission");
                 info.Permission = Permission == null ? 0 : (int)Permission;
                 info.Email = session.GetString("Email");
