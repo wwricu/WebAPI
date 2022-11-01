@@ -40,7 +40,8 @@ namespace WebAPI.Controllers
             }
             try
             {
-                User = AuthenticationService.Login(Credential.UserNumber, Credential.PasswordHash);
+                User = AuthenticationService.GetInstance()
+                    .Login(Credential.UserNumber, Credential.PasswordHash);
                 SessionService.SetSessionInfo(HttpContext.Session, User);
                 msg = "Password success";
             }

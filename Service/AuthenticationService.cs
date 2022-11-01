@@ -6,9 +6,20 @@ namespace WebAPI.Service
 {
     public class AuthenticationService
     {
-        public static SysUser Login(string UserNumber, string Password)
+        private AuthenticationService()
         {
-            UserDAO UserDAO = new UserDAO();
+            UserDAO = new();
+        }
+        private static AuthenticationService Instance = new();
+        public static AuthenticationService GetInstance()
+        {
+            Instance ??= new AuthenticationService();
+            return Instance;
+        }
+        private readonly UserDAO UserDAO;
+
+        public SysUser Login(string UserNumber, string Password)
+        {
             var UserList = UserDAO.QueryUserByNumber(UserNumber);
             if (UserList.Count() == 0)
             {
@@ -38,5 +49,6 @@ namespace WebAPI.Service
                 return false;
             }
         }
+
     }
 }
