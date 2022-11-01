@@ -1,4 +1,6 @@
-﻿using System.Net.Mail;
+﻿using System.Diagnostics;
+using System.Net.Mail;
+using System.Security.Policy;
 using WebAPI.DAO;
 using WebAPI.Entity;
 
@@ -11,7 +13,7 @@ namespace WebAPI.Service
             UploadRootPath = SysConfigModel
                             .Configuration
                             .GetConnectionString("UploadRootPath");
-            ApplicationDAO = new ApplicationDAO();
+            DocumentDAO = new DocumentDAO();
         }
         private static DocumentService Instance = new DocumentService();
         public static DocumentService GetInstance()
@@ -20,15 +22,21 @@ namespace WebAPI.Service
             return Instance;
         }
         private readonly string? UploadRootPath;
-        private ApplicationDAO ApplicationDAO { get; set; }
+        private DocumentDAO DocumentDAO { get; set; }
 
         public void AddDocuments(List<IFormFile> files,
                                  long applicationID,
                                  string type,
                                  string folderName)
         {
-            var uploadPath = UploadRootPath + folderName;
-            // create if not exist
+            // TODO: authorize the application
+            var uploadPath = UploadRootPath + "\\"
+                           + folderName + "\\"
+                           + applicationID.ToString() + "\\";
+            if (!Directory.Exists(uploadPath))            　　              
+                Directory.CreateDirectory(uploadPath);
+
+            var documents = new List<Document>();
             files.ForEach(file =>
             {
                 var doc = new Document()
@@ -54,6 +62,8 @@ namespace WebAPI.Service
                 bw.Close();
                 fs.Close();
             });
+
+            DocumentDAO.Insert(documents);
         }
 
         public void deleteDocument(int documentID)

@@ -32,7 +32,9 @@ namespace WebAPI.DAO
                         .InitTables(typeof(Location));
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(Application));
-            
+            db.CodeFirst.SetStringDefaultLength(1000)
+                        .InitTables(typeof(Document));
+
             db.CodeFirst.SetStringDefaultLength(200)
                         .InitTables(typeof(StaffOfferingMapping));
             db.CodeFirst.SetStringDefaultLength(200)
