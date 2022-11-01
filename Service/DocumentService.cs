@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Diagnostics;
 using System.Net.Mail;
 using System.Security.Policy;
 using WebAPI.DAO;
@@ -26,12 +27,10 @@ namespace WebAPI.Service
 
         public void AddDocuments(List<IFormFile> files,
                                  long applicationID,
-                                 string type,
-                                 string folderName)
+                                 string type)
         {
             // TODO: authorize the application
             var uploadPath = UploadRootPath + "\\"
-                           + folderName + "\\"
                            + applicationID.ToString() + "\\";
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
@@ -54,6 +53,7 @@ namespace WebAPI.Service
                         Url = url
                     });
                 }
+                Debug.WriteLine(url);
                 // save file
                 var stream = file.OpenReadStream();
                 //convert stream to byte[]
@@ -78,6 +78,21 @@ namespace WebAPI.Service
             });
 
             DocumentDAO.Insert(documents);
+        }
+
+        public List<Document> GetDocuments(Document document)
+        {
+            return DocumentDAO.Query(document);
+        }
+
+        public byte[] GetFile(Document document)
+        {
+            var fileStream = new FileStream(document.Url,
+                                            FileMode.Open,
+                                            FileAccess.Read);
+            byte[] bytes = new byte[fileStream.Length];
+            fileStream.Read(bytes, 0, bytes.Length);
+            return bytes;
         }
 
         public void DeleteDocument(int documentID)
