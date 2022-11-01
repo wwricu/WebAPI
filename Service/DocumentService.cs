@@ -39,8 +39,21 @@ namespace WebAPI.Service
             var documents = new List<Document>();
             files.ForEach(file =>
             {
-                var fileName = file.FileName;
                 string url = uploadPath + file.FileName;
+                if (!File.Exists(url)
+                    && DocumentDAO.Query(new Document()
+                                        {
+                                            Url = url
+                                        }).Count != 0)
+                {
+                    documents.Add(new Document()
+                    {
+                        ApplicationID = applicationID,
+                        Type = type,
+                        Title = file.FileName,
+                        Url = url
+                    });
+                }
                 // save file
                 var stream = file.OpenReadStream();
                 //convert stream to byte[]
