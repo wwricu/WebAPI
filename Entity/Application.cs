@@ -28,7 +28,7 @@ namespace WebAPI.Entity
         [SugarColumn(ColumnDataType = "varchar(8000)", IsNullable = true)]
         public string? CircumstanceDetail { get; set; }
         
-        [Navigate(NavigateType.OneToMany, nameof(Assessment.AssessmentID))]
+        [Navigate(NavigateType.OneToMany, nameof(Document.ApplicationID))]
         public List<Document>? DocumentList { get; set; }
         
 
