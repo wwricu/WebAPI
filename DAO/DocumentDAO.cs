@@ -4,9 +4,9 @@ namespace WebAPI.DAO
 {
     public class DocumentDAO : BaseDAO
     {
-        public int Insert(List<Document> documents)
+        public void Insert(List<Document> documents)
         {
-            return db.Insertable(documents).ExecuteCommand();
+            db.Insertable(documents).ExecuteCommand();
         }
         public void Delete(List<Document> documents)
         {

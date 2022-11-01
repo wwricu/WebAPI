@@ -31,13 +31,12 @@ namespace WebAPI.Controllers
                     };
                 }
 
-                files.ForEach(file =>
-                {
-                    Debug.WriteLine(file.FileName);
-                });
                 DocumentService
                     .GetInstance()
-                    .AddDocuments(files, 0, "testType", "testuser");
+                    .AddDocuments(files,
+                                  applicationID,
+                                  type,
+                                  userInfo.UserName);
                 return new SuccessResponseModel();
             }
             catch (Exception e)

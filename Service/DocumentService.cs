@@ -39,13 +39,8 @@ namespace WebAPI.Service
             var documents = new List<Document>();
             files.ForEach(file =>
             {
-                var doc = new Document()
-                {
-                    ApplicationID = applicationID,
-                    Type = type,
-                    Title = file.FileName,
-                };
                 var fileName = file.FileName;
+                string url = uploadPath + file.FileName;
                 // save file
                 var stream = file.OpenReadStream();
                 //convert stream to byte[]
@@ -54,21 +49,33 @@ namespace WebAPI.Service
                 // set stream beginning
                 stream.Seek(0, SeekOrigin.Begin);
                 // write byte[] to file
-                var fs = new FileStream(uploadPath
-                                        + file.FileName,
-                                        FileMode.Create);
+                var fs = new FileStream(url, FileMode.Create);
                 var bw = new BinaryWriter(fs);
                 bw.Write(bytes);
                 bw.Close();
-                fs.Close();
+                fs.Close(); // TODO: use only one instance
+
+                documents.Add(new Document()
+                {
+                    ApplicationID = applicationID,
+                    Type = type,
+                    Title = file.FileName,
+                    Url = url
+                });
             });
 
             DocumentDAO.Insert(documents);
         }
 
-        public void deleteDocument(int documentID)
+        public void DeleteDocument(int documentID)
         {
-
+            DocumentDAO.Delete(new List<Document>()
+            {
+                new Document()
+                {
+                    DocumentID = documentID
+                }
+            });
         }
     }
 }
