@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                AuthenticationService.Authorization(HttpContext.Session, 2);
+                // AuthenticationService.Authorization(HttpContext.Session, 2);
 
                 return new SuccessResponseModel()
                 {
@@ -72,7 +72,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                AuthenticationService.Authorization(HttpContext.Session, 3);
+                AuthenticationService.Authorization(HttpContext.Session, 2);
 
                 return new SuccessResponseModel()
                 {
