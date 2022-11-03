@@ -216,7 +216,10 @@ namespace WebAPI.DAO
                 }
             }
 
-            return res.ToList();
+            return res
+                .Includes(it=>it.StaffList)
+                .Includes(it=>it.StudentList)
+                .ToList();
         }
     }
 }
