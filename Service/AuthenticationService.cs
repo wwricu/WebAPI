@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.Authentication;
 using WebAPI.DAO;
 using WebAPI.Entity;
 
@@ -47,6 +49,24 @@ namespace WebAPI.Service
                 return false;
             }
         }
+        /*
+         @level:
+         0 to allow all user,
+         1 to restrict student and allow staff,
+         2 to restrict staff and ban student,
+         user cannot access level HIGHER than their permission
+         @Obj: objects to handle
+        */
+        public static void Authorization(ISession session, int level)
+        {
+            var currentUser = SessionService.GetSessionInfo(session);
 
+            if (currentUser.Permission == 3 || currentUser.Permission >= level)
+            {
+                return;
+            }
+
+            throw new AuthenticationException("No permission");
+        }
     }
 }
