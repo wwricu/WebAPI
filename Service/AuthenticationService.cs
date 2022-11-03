@@ -8,7 +8,6 @@ namespace WebAPI.Service
     {
         private AuthenticationService()
         {
-            UserDAO = new();
         }
         private static AuthenticationService Instance = new();
         public static AuthenticationService GetInstance()
@@ -16,11 +15,10 @@ namespace WebAPI.Service
             Instance ??= new AuthenticationService();
             return Instance;
         }
-        private readonly UserDAO UserDAO;
 
         public SysUser Login(string UserNumber, string Password)
         {
-            var UserList = UserDAO.QueryUserByNumber(UserNumber);
+            var UserList = new UserDAO().QueryUserByNumber(UserNumber);
             if (UserList.Count() == 0)
             {
                 throw new Exception("NO member found");

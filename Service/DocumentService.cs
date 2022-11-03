@@ -14,7 +14,6 @@ namespace WebAPI.Service
             UploadRootPath = SysConfigModel
                             .Configuration
                             .GetConnectionString("UploadRootPath");
-            DocumentDAO = new DocumentDAO();
         }
         private static DocumentService Instance = new DocumentService();
         public static DocumentService GetInstance()
@@ -23,7 +22,6 @@ namespace WebAPI.Service
             return Instance;
         }
         private readonly string? UploadRootPath;
-        private DocumentDAO DocumentDAO { get; set; }
 
         public void AddDocuments(List<IFormFile> files,
                                  long applicationID,
@@ -34,13 +32,14 @@ namespace WebAPI.Service
                            + applicationID.ToString() + "/";
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
+            var documentDAO = new DocumentDAO();
 
             var documents = new List<Document>();
             files.ForEach(file =>
             {
-                string url = uploadPath + file.FileName;
+                var url = uploadPath + file.FileName;
                 if (!File.Exists(url)
-                    && DocumentDAO.Query(new Document()
+                    && documentDAO.Query(new Document()
                                         {
                                             Url = url
                                         }).Count != 0)
@@ -77,12 +76,12 @@ namespace WebAPI.Service
                 });
             });
 
-            DocumentDAO.Insert(documents);
+            documentDAO.Insert(documents);
         }
 
         public List<Document> GetDocuments(Document document)
         {
-            return DocumentDAO.Query(document);
+            return new DocumentDAO().Query(document);
         }
 
         public byte[] GetFile(Document document)
@@ -97,7 +96,7 @@ namespace WebAPI.Service
 
         public void DeleteDocument(int documentID)
         {
-            DocumentDAO.Delete(new List<Document>()
+            new DocumentDAO().Delete(new List<Document>()
             {
                 new Document()
                 {
