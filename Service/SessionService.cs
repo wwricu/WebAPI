@@ -44,5 +44,17 @@ namespace WebAPI.Service
                 return info;
             }
         }
+
+        public static bool isOwner(ISession session, Application application)
+        {
+            var currentUser = GetSessionInfo(session);
+            if (currentUser.Permission == 3)
+            {
+                return true;
+            }
+            return application.StaffID == currentUser.SysUserID
+                   || application.StudentID == currentUser.SysUserID;
+        }
+
     }
 }
