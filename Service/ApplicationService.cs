@@ -106,6 +106,7 @@ namespace WebAPI.Service
         }
         public static void Approve(Application application)
         {
+            application.Status = "Approved";
             new AssessmentDAO().Update(application.AssessmentInstance);
             application.AssessmentInstance = null; // to avoid nav update
 
@@ -119,6 +120,7 @@ namespace WebAPI.Service
         }
         public static void Assign(Application application)
         {
+            application.Status = "Assigned to CC";
             new ApplicationDAO().Update(application);
             _ = MailService.GetInstance().SendMail(application.Staff!.Email,
                                    null,
