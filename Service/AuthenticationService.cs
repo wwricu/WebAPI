@@ -61,11 +61,14 @@ namespace WebAPI.Service
         {
             var currentUser = SessionService.GetSessionInfo(session);
 
+
             if (currentUser.Permission == 3 || currentUser.Permission >= level)
             {
                 return;
             }
 
+            Debug.WriteLine("Authorization failed");
+            Debug.WriteLine(currentUser.Permission);
             throw new AuthenticationException("No permission");
         }
     }
