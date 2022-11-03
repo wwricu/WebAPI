@@ -38,6 +38,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 return new SuccessResponseModel()
                 {
                     Message = "Success",
@@ -76,6 +78,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 CourseService.Insert(course);
                 return new SuccessResponseModel()
                 {
@@ -95,6 +99,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 CourseService.Update(course);
                 return new SuccessResponseModel()
                 {
@@ -114,6 +120,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 CourseService.Delete(course);
                 return new SuccessResponseModel()
                 {

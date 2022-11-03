@@ -20,6 +20,7 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
                 AssessmentService.Insert(template);
                 return new SuccessResponseModel()
                 {
@@ -39,7 +40,6 @@ namespace WebAPI.Controllers
         {
             try
             {
-
                 return new SuccessResponseModel()
                 {
                     obj = AssessmentService.Query(instance),
@@ -92,6 +92,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 AssessmentService.Update(assessment);
                 return new SuccessResponseModel();
             }
@@ -108,6 +110,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 2);
+
                 AssessmentService.Update(assessment);
                 return new SuccessResponseModel();
             }
@@ -125,6 +129,7 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
                 AssessmentService.Delete(
                     new List<AssessmentTemplate>() { template });
                 return new SuccessResponseModel();
