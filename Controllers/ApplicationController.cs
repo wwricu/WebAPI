@@ -39,7 +39,11 @@ namespace WebAPI.Controllers
         public ResponseModel Get([FromQuery] Application application,
                                  [FromQuery] SysUser user)
         {
-            if (!SessionService.isOwner(HttpContext.Session, application))
+            try
+            {
+                SessionService.isOwner(HttpContext.Session, application);
+            }
+            catch
             {
                 var currentUser = SessionService.GetSessionInfo(HttpContext.Session);
                 if (currentUser.Permission == 1)
@@ -52,6 +56,7 @@ namespace WebAPI.Controllers
                     application.StaffID = currentUser.SysUserID;
                 }
             }
+
             try
             {
                 return new SuccessResponseModel()
@@ -70,12 +75,9 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel Update([FromBody] Application application)
         {
-            if (!SessionService.isOwner(HttpContext.Session, application))
-            {
-                return new FailureResponseModel("not your application");
-            }
             try
             {
+                SessionService.isOwner(HttpContext.Session, application);
                 ApplicationService.Save(application);
                 return new SuccessResponseModel();
             }
@@ -90,12 +92,10 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel Submit([FromBody] Application application)
         {
-            if (!SessionService.isOwner(HttpContext.Session, application))
-            {
-                return new FailureResponseModel("not your application");
-            }
             try
             {
+
+                SessionService.isOwner(HttpContext.Session, application);
                 return new SuccessResponseModel()
                 {
                     obj = ApplicationService.Submit(application)
@@ -112,12 +112,9 @@ namespace WebAPI.Controllers
         [HttpDelete]
         public ResponseModel Delete([FromBody] Application application)
         {
-            if (!SessionService.isOwner(HttpContext.Session, application))
-            {
-                return new FailureResponseModel("not your application");
-            }
             try
             {
+                SessionService.isOwner(HttpContext.Session, application);
                 ApplicationService.Delete(application);
                 return new SuccessResponseModel();
             } catch (Exception e)
@@ -132,13 +129,11 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel ChangeState([FromBody] Application application)
         {
-            AuthenticationService.Authorization(HttpContext.Session, 2);
-            if (!SessionService.isOwner(HttpContext.Session, application))
-            {
-                return new FailureResponseModel("not your application");
-            }
+
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 2);
+                SessionService.isOwner(HttpContext.Session, application);
                 ApplicationService.ChangeState(application);
                 return new SuccessResponseModel();
             }
@@ -153,13 +148,10 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel Approve([FromBody] Application application)
         {
-            AuthenticationService.Authorization(HttpContext.Session, 2);
-            if (!SessionService.isOwner(HttpContext.Session, application))
-            {
-                return new FailureResponseModel("not your application");
-            }
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 2);
+                SessionService.isOwner(HttpContext.Session, application);
                 ApplicationService.Approve(application);
                 return new SuccessResponseModel();
             }
@@ -174,13 +166,12 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel Assign([FromBody] Application application)
         {
-            AuthenticationService.Authorization(HttpContext.Session, 2);
-            if (!SessionService.isOwner(HttpContext.Session, application))
-            {
-                return new FailureResponseModel("not your application");
-            }
+
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 2);
+                SessionService.isOwner(HttpContext.Session, application);
+                
                 ApplicationService.Assign(application);
                 return new SuccessResponseModel();
             }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Authentication;
 using WebAPI.Entity;
 
 namespace WebAPI.Service
@@ -45,16 +46,17 @@ namespace WebAPI.Service
             }
         }
 
-        public static bool isOwner(ISession session, Application application)
+        public static void isOwner(ISession session, Application application)
         {
             var currentUser = GetSessionInfo(session);
-            if (currentUser.Permission == 3)
+            if (currentUser.Permission == 3
+                || application.StaffID == currentUser.SysUserID
+                || application.StudentID == currentUser.SysUserID)
             {
-                return true;
+                return;
             }
-            return application.StaffID == currentUser.SysUserID
-                   || application.StudentID == currentUser.SysUserID;
-        }
 
+            throw new AuthenticationException("Not your Application");
+        }
     }
 }
