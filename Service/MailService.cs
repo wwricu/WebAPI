@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting.Server;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Hosting.Server;
 using System.Net;
 using System.Net.Mail;
 using WebAPI.Entity;
@@ -61,7 +62,18 @@ namespace WebAPI.Service
                              EnableSsl = true,
                          };
 
-            new Thread(() => client.Send(message)).Start();
+            new Thread(() =>
+            {
+                try
+                {
+                    client.Send(message);
+                }
+                catch
+                {
+                    Debug.WriteLine("failed to send a mail");
+
+                }
+            }).Start();
         }
 
     }
