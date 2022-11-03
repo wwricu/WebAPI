@@ -18,14 +18,9 @@ namespace WebAPI.Service
         {
             application.Status = "Draft";
             application.SubmitDate = DateTime.Now.ToString();
-            if (application.ApplicationID == 0)
-            {
-                return new ApplicationDAO().Insert(application);
-            }
-            else
-            {
-                return new ApplicationDAO().Update(application);
-            }
+            return application.ApplicationID == 0 ?
+                new ApplicationDAO().Insert(application) :
+                new ApplicationDAO().Update(application);
         }
         public static void Delete(Application application)
         {
@@ -49,20 +44,13 @@ namespace WebAPI.Service
                 throw new Exception("No course find");
             }
 
-            var staff = new UserDAO()
-                           .QueryUsers(new SysUser()
-                           {
-                               Permission = 2,
-                           },
-                           course,
-                           true)
-                           .First();
+            var studentService = ManageService.findStudentService();
             var appDAO = new ApplicationDAO();
             long refNum;
 
             application = new ApplicationDAO().Query(application, null, null)[0];
             application.Status = "Pending";
-            application.StaffID = staff.SysUserID;
+            application.StaffID = studentService.SysUserID;
 
             // TODO: permission issue to update other's application
             // should be solved in controller
@@ -77,7 +65,7 @@ namespace WebAPI.Service
                 refNum = appDAO.Insert(application);
             }
 
-            _ = MailService.GetInstance().SendMail(staff.Email,
+            _ = MailService.GetInstance().SendMail(studentService.Email,
                                                null,
                                                "New application submitted",
                                                "");
@@ -119,10 +107,10 @@ namespace WebAPI.Service
         public static void Approve(Application application)
         {
             new AssessmentDAO().Update(application.AssessmentInstance);
-            application.AssessmentInstance = null;
+            application.AssessmentInstance = null; // to avoid nav update
 
             new ApplicationDAO().Update(application);
-            _ = MailService.GetInstance().SendMail(application.Student.Email,
+            _ = MailService.GetInstance().SendMail(application.Student!.Email,
                                    null,
                                    "Your application "
                                    + application.ApplicationID
@@ -131,9 +119,8 @@ namespace WebAPI.Service
         }
         public static void Assign(Application application)
         {
-
             new ApplicationDAO().Update(application);
-            _ = MailService.GetInstance().SendMail(application.Staff.Email,
+            _ = MailService.GetInstance().SendMail(application.Staff!.Email,
                                    null,
                                    "Application "
                                    + application.ApplicationID

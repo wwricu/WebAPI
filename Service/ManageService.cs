@@ -42,17 +42,24 @@ namespace WebAPI.Service
             new UserDAO().DeleteUser(sysUser);
 
             // remove related assessment instances
-            if (sysUser.Permission == 1)
-            {
-                var assessmentDAO = new AssessmentDAO();
-                var applicationDAO = new ApplicationDAO();
+            if (sysUser.Permission != 1) return;
+            
+            var assessmentDAO = new AssessmentDAO();
+            var applicationDAO = new ApplicationDAO();
                 
-                var assessmentInstances = assessmentDAO.Query(sysUser, null);
-                assessmentDAO.Delete(null, assessmentInstances);
+            var assessmentInstances = assessmentDAO.Query(sysUser, null);
+            assessmentDAO.Delete(null, assessmentInstances);
 
-                var applications = applicationDAO.Query(null, sysUser, null);
-                applicationDAO.Delete(applications);
-            }
+            var applications = applicationDAO.Query(null, sysUser, null);
+            applicationDAO.Delete(applications);
+        }
+        public static SysUser findStudentService()
+        {
+            return new UserDAO()
+                .QueryUsers(new PrivateInfoModel()
+                {
+                    Permission = 3
+                }, null, true)[0];
         }
     }
 }
