@@ -6,25 +6,7 @@ namespace WebAPI.Service
 {
     public class ManageService
     {
-        private ManageService()
-        {
-            UserDAO = new();
-            AssessmentDAO = new();
-            ApplicationDAO = new();
-        }
-        private static ManageService Instance = new();
-        public static ManageService GetInstance()
-        {
-            Instance ??= new ManageService();
-            return Instance;
-        }
-
-        private readonly UserDAO UserDAO;
-        private readonly AssessmentDAO AssessmentDAO;
-        private readonly ApplicationDAO ApplicationDAO;
-
-
-        public int AddUser(SysUser NewUser)
+        public static int AddUser(SysUser NewUser)
         {
             if (NewUser.Permission < 0 || !UtilService.IsValidEmail(NewUser.Email))
             {
@@ -34,39 +16,42 @@ namespace WebAPI.Service
             NewUser.Salt = SecurityService.GenerateSalt();
             NewUser.PasswordHash = SecurityService.GetMD5Hash(NewUser.Salt + NewUser.PasswordHash);
 
-            return UserDAO.Insert(NewUser);
+            return new UserDAO().Insert(NewUser);
         }
 
-        public List<SysUser> QueryUsers(SysUser user, CourseOffering course)
+        public static List<SysUser> QueryUsers(SysUser user, CourseOffering course)
         {
-            return UserDAO.QueryUsers(user, course, true);
+            return new UserDAO().QueryUsers(user, course, true);
         }
-        public List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
+        public static List<SysUser> QueryUsers(PrivateInfoModel PrivateInfo)
         {
-            return UserDAO.QueryUsers(PrivateInfo, null, true);
+            return new UserDAO().QueryUsers(PrivateInfo, null, true);
         }
-        public List<SysUser> QueryCandidateUsers(PrivateInfoModel user,
+        public static List<SysUser> QueryCandidateUsers(PrivateInfoModel user,
                                                         CourseOffering course)
         {
-            return UserDAO.QueryUsers(user, course, false);
+            return new UserDAO().QueryUsers(user, course, false);
         }
-        public bool UpdateUser(SysUser UserInfo)
+        public static bool UpdateUser(SysUser UserInfo)
         {
-            return UserDAO.UpdateUser(UserInfo);
+            return new UserDAO().UpdateUser(UserInfo);
         }
-        public void DeleteUser(SysUser sysUser)
+        public static void DeleteUser(SysUser sysUser)
         {
 
-            UserDAO.DeleteUser(sysUser);
+            new UserDAO().DeleteUser(sysUser);
 
             // remove related assessment instances
             if (sysUser.Permission == 1)
             {
-                var assessmentInstances = AssessmentDAO.Query(sysUser, null);
-                AssessmentDAO.Delete(null, assessmentInstances);
+                var assessmentDAO = new AssessmentDAO();
+                var applicationDAO = new ApplicationDAO();
+                
+                var assessmentInstances = assessmentDAO.Query(sysUser, null);
+                assessmentDAO.Delete(null, assessmentInstances);
 
-                var applications = ApplicationDAO.Query(null, sysUser, null);
-                ApplicationDAO.Delete(applications);
+                var applications = applicationDAO.Query(null, sysUser, null);
+                applicationDAO.Delete(applications);
             }
         }
     }

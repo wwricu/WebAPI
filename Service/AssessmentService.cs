@@ -6,37 +6,20 @@ namespace WebAPI.Service
 {
     public class AssessmentService
     {
-        private AssessmentService()
-        {
-            UserDAO = new();
-            CourseOfferingDAO = new();
-            AssessmentDAO = new();
-            ApplicationDAO = new();
-        }
-        private static AssessmentService Instance = new();
-        public static AssessmentService GetInstance()
-        {
-            Instance ??= new AssessmentService();
-            return Instance;
-        }
 
-        private readonly UserDAO UserDAO;
-        private readonly CourseOfferingDAO CourseOfferingDAO;
-        private readonly AssessmentDAO AssessmentDAO;
-        private readonly ApplicationDAO ApplicationDAO;
-
-        public void Insert(AssessmentTemplate template)
+        public static void Insert(AssessmentTemplate template)
         {
+            var assessmentDAO = new AssessmentDAO();
             var course = new CourseOffering() { CourseOfferingID = template.CourseOfferingID};
 
-            var studentList = UserDAO
+            var studentList = new UserDAO()
                                  .QueryUsers(new SysUser()
                                  {
                                      Permission = 1,
                                  },
                                  course,
                                  true);
-            course = CourseOfferingDAO.Query(course).First();
+            course = new CourseOfferingDAO().Query(course).First();
             template.AssessmentID = Guid.NewGuid().ToString();
             template.CourseOfferingName = course.CourseName + " "
                 + course.Semester + " " + course.Year;
@@ -46,13 +29,15 @@ namespace WebAPI.Service
             {
                 instanceList.Add(new AssessmentInstance(template, student));
             }
-            AssessmentDAO.Insert(new List<AssessmentTemplate>() {template},
+            assessmentDAO.Insert(new List<AssessmentTemplate>() {template},
                                                     instanceList);
         }
-        public void Update(Assessment assessment)
+        public static void Update(Assessment assessment)
         {
+            var assessmentDAO = new AssessmentDAO();
+
             if (assessment is AssessmentTemplate) {
-                var instanceList = AssessmentDAO.Query(null, assessment);
+                var instanceList = assessmentDAO.Query(null, assessment);
                 foreach (var instance in instanceList)
                 {
                     instance.Name = assessment.Name;
@@ -63,36 +48,37 @@ namespace WebAPI.Service
                     instance.EndDate = assessment.EndDate;
                     instance.Location = assessment.Location;
                 }
-                AssessmentDAO.Update(null, instanceList);
+                assessmentDAO.Update(null, instanceList);
             }
 
-            AssessmentDAO.Update(assessment);
+            assessmentDAO.Update(assessment);
         }
-        public List<AssessmentInstance> Query(AssessmentInstance instance)
+        public static List<AssessmentInstance> Query(AssessmentInstance instance)
         {
-            return AssessmentDAO.Query(instance);
+            return new AssessmentDAO().Query(instance);
         }
-        public List<AssessmentTemplate> QueryTemplates(CourseOffering course)
+        public static List<AssessmentTemplate> QueryTemplates(CourseOffering course)
         {
-            return AssessmentDAO.Query(null, course);
+            return new AssessmentDAO().Query(null, course);
         }
-        public List<AssessmentInstance> QueryInstance(SysUser student)
+        public static List<AssessmentInstance> QueryInstance(SysUser student)
         {
-            student.SysUserID = UserDAO.QueryUsers(student, null, true).First().SysUserID;
-            return AssessmentDAO.Query(student, null);
+            student.SysUserID = new UserDAO().QueryUsers(student, null, true).First().SysUserID;
+            return new AssessmentDAO().Query(student, null);
         }
-        public void Delete(List<AssessmentTemplate> templates)
+        public static void Delete(List<AssessmentTemplate> templates)
         {
+            var assessmentDAO = new AssessmentDAO();
             var instanceList = new List<AssessmentInstance>();
             
             foreach (var template in templates)
             {
-                instanceList.AddRange(AssessmentDAO.Query(null, template));
+                instanceList.AddRange(assessmentDAO.Query(null, template));
             }
 
-            AssessmentDAO.Delete(templates, instanceList);
+            assessmentDAO.Delete(templates, instanceList);
         }
-        public void Attach(CourseOffering course,
+        public static void Attach(CourseOffering course,
                                   SysUser student)
         {
             var instances = new List<AssessmentInstance>();
@@ -101,9 +87,9 @@ namespace WebAPI.Service
             {
                 instances.Add(new AssessmentInstance(template, student));
             }
-            AssessmentDAO.Insert(null, instances);
+            new AssessmentDAO().Insert(null, instances);
         }
-        public void Detach(CourseOffering course,
+        public static void Detach(CourseOffering course,
                                   SysUser students)
         {
             var instances = QueryInstance(students);
@@ -118,13 +104,14 @@ namespace WebAPI.Service
                 }
             }
 
+            var applicationDAO = new ApplicationDAO();
             foreach (var instance in forInsDelete)
             {
-                forAppDelete.AddRange(ApplicationDAO.Query(null, null, instance));
+                forAppDelete.AddRange(applicationDAO.Query(null, null, instance));
             }
-            ApplicationDAO.Delete(forAppDelete);
+            applicationDAO.Delete(forAppDelete);
             // Do not delete assessment instances
-            AssessmentDAO.Delete(null, instances);
+            new AssessmentDAO().Delete(null, instances);
         }
     }
 }

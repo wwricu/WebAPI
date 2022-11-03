@@ -14,11 +14,6 @@ namespace WebAPI.Controllers
     [Route("[controller]/[action]")]
     public class AssessmentController : ControllerBase
     {
-        public AssessmentController()
-        {
-            AssessmentService = AssessmentService.GetInstance();
-        }
-        private readonly AssessmentService AssessmentService;
         // New template
         [HttpPost]
         public ResponseModel New([FromBody] AssessmentTemplate template)
