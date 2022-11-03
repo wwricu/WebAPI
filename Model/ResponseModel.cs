@@ -20,6 +20,11 @@
         {
             Status = "failure";
         }
+        public FailureResponseModel(string message)
+        {
+            Status = "failure";
+            Message = message;
+        }
     }
 
 }
