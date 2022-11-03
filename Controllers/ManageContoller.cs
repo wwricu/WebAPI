@@ -16,19 +16,11 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel AddUser([FromBody] SysUser NewUser)
         {
-            // authorization
-            /*if (NewUser.Permission < 0
-                || !AuthenticationService
-                   .AuthorizationLevel(HttpContext.Session, NewUser))
-            {
-                return new FailureResponseModel()
-                {
-                    Message = "invalid permission",
-                };
-            }*/
 
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 ManageService.AddUser(NewUser);
 
                 return new SuccessResponseModel()
@@ -56,17 +48,10 @@ namespace WebAPI.Controllers
         [HttpGet]
         public ResponseModel GetUsers([FromQuery] PrivateInfoModel PrivateInfo)
         {
-            int Permission = 3;// SessionService.GetSessionInfo(HttpContext.Session).Permission;
-            if (Permission < PrivateInfo.Permission || Permission < 0)
-            {
-                return new FailureResponseModel()
-                {
-                    Message = "NO PERMISSION",
-                };
-            }
-
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 2);
+
                 return new SuccessResponseModel()
                 {
                     Message = "Success",
@@ -87,6 +72,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 return new SuccessResponseModel()
                 {
                     Message = "Success",
@@ -104,18 +91,10 @@ namespace WebAPI.Controllers
         [HttpPost]
         public ResponseModel UpdateUser(SysUser UserInfo)
         {
-            /*if (UserInfo.Permission < 0
-                || !AuthenticationService.
-                   AuthorizationLevel(HttpContext.Session, UserInfo))
-            {
-                return new FailureResponseModel()
-                {
-                    Message = "invalid permission",
-                };
-            }*/
-
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 var cur = SessionService.GetSessionInfo(HttpContext.Session);
                 if (UserInfo.PasswordHash != null
                     && cur.UserNumber != UserInfo.UserNumber
@@ -140,6 +119,7 @@ namespace WebAPI.Controllers
         [HttpDelete]
         public void Delete([FromBody] SysUser sysUser)
         {
+            if (SessionService.GetSessionInfo(HttpContext.Session).Permission < 3) return;
             ManageService.DeleteUser(sysUser);
         }
         [HttpGet]
@@ -148,6 +128,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 2);
+
                 return new SuccessResponseModel()
                 {
                     obj = ManageService.QueryUsers(user, course),
@@ -167,6 +149,8 @@ namespace WebAPI.Controllers
         {
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 3);
+
                 string msg = "";
                 if (relationModel.User != null
                     && (relationModel.CourseAddList != null
