@@ -48,6 +48,10 @@ namespace WebAPI.DAO
 
             if (info != null)
             {
+                if (info.SysUserID != 0)
+                {
+                    res = res.Where(it => it.SysUserID == info.SysUserID);
+                }
                 if (info.Permission != 0)
                 {
                     res = res.Where(it => it.Permission == info.Permission);

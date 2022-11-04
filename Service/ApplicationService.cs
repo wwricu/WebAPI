@@ -121,8 +121,14 @@ namespace WebAPI.Service
         public static void Assign(Application application)
         {
             application.Status = "Assigned to CC";
+            var staff = new UserDAO().QueryUsers(new PrivateInfoModel()
+            {
+                SysUserID = application.StaffID
+            },null, true)[0];
             new ApplicationDAO().Update(application);
-            _ = MailService.GetInstance().SendMail(application.Staff!.Email,
+            Debug.WriteLine(staff.Email);
+            Debug.WriteLine(staff.SysUserID);
+            _ = MailService.GetInstance().SendMail(staff!.Email,
                                    null,
                                    "Application "
                                    + application.ApplicationID
