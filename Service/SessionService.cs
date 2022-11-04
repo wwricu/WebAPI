@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Security.Authentication;
+using WebAPI.DAO;
 using WebAPI.Entity;
 
 namespace WebAPI.Service
@@ -49,12 +50,26 @@ namespace WebAPI.Service
         public static void isOwner(ISession session, Application application)
         {
             var currentUser = GetSessionInfo(session);
+
+            if (application.ApplicationID != 0)
+            {
+                application = new ApplicationDAO().Query(new Application()
+                {
+                    ApplicationID = application.ApplicationID,
+                }, null, null)[0];
+            }
+
             if (currentUser.Permission == 3
-                || application.StaffID == currentUser.SysUserID
-                || application.StudentID == currentUser.SysUserID)
+                || currentUser.Permission == 2 && application.StaffID == currentUser.SysUserID
+                || currentUser.Permission == 1 && application.StudentID == currentUser.SysUserID)
             {
                 return;
             }
+
+            Debug.WriteLine("not a owner"); // TODO
+            Debug.WriteLine(currentUser.SysUserID);
+            Debug.WriteLine(application.StaffID);
+            Debug.WriteLine(application.StudentID);
 
             throw new AuthenticationException("Not your Application");
         }
