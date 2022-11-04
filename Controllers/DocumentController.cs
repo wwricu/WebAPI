@@ -22,17 +22,10 @@ namespace WebAPI.Controllers
         {
             try
             {
-                Debug.WriteLine("File controller");
-                PublicInfoModel userInfo = SessionService.GetSessionInfo(HttpContext.Session);
-
-                if (!ApplicationService
-                        .UserHasPrivilege(userInfo.SysUserID,
-                                          applicationID)) {
-                    return new FailureResponseModel()
-                    {
-                        Message = "not your application!"
-                    };
-                }
+                SessionService.isOwner(HttpContext.Session, new Entity.Application()
+                {
+                    ApplicationID = applicationID
+                });
 
                 DocumentService
                     .GetInstance()
