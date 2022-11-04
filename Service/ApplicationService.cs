@@ -7,10 +7,10 @@ namespace WebAPI.Service
 {
     public class ApplicationService
     {
-        public static List<Application> Query(Application application, SysUser user)
+        public static List<Application> Query(Application application)
         {
             return new ApplicationDAO().Query(application,
-                                              user,
+                                              null,
                                               null);
         }
         /* Student service start */

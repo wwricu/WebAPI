@@ -36,8 +36,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet]
-        public ResponseModel Get([FromQuery] Application application,
-                                 [FromQuery] SysUser user)
+        public ResponseModel Get([FromQuery] Application application)
         {
             try
             {
@@ -49,19 +48,22 @@ namespace WebAPI.Controllers
                 if (currentUser.Permission == 1)
                 {
                     application.StudentID = currentUser.SysUserID;
-                    user.Permission = 1;
                 }
                 else if (currentUser.Permission == 2)
                 {
                     application.StaffID = currentUser.SysUserID;
                 }
             }
+            Debug.WriteLine("controller");
+            Debug.WriteLine(application.StaffID);
+            Debug.WriteLine(application.StudentID);
 
             try
             {
+                AuthenticationService.Authorization(HttpContext.Session, 1);
                 return new SuccessResponseModel()
                 {
-                    obj = ApplicationService.Query(application, user)
+                    obj = ApplicationService.Query(application)
                 };
             }
             catch (Exception e)
