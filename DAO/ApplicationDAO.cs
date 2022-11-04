@@ -51,16 +51,13 @@ namespace WebAPI.DAO
                 {
                     res = res.Where(it => it.Status == application.Status);
                 }
-            }
-            if (user != null && user.SysUserID != 0 )
-            {
-                if (user.Permission == 1)
+                if (application.StudentID != 0)
                 {
-                    res = res.Where(it => it.StudentNumber == user.UserNumber);
+                    res = res.Where(it => it.StudentID == application.StudentID);
                 }
-                else if (user.Permission == 2)
+                if (application.StaffID != 0)
                 {
-                    res = res.Where(it => it.StaffID == user.SysUserID);
+                    res = res.Where(it => it.StaffID == application.StaffID);
                 }
             }
             if (instance != null)
