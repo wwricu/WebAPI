@@ -1,4 +1,11 @@
-﻿using System.Diagnostics;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Weiran Wang
+  Date   : 26/09/2022
+******************************************/
+
+using System.Diagnostics;
 using Microsoft.AspNetCore.Hosting.Server;
 using System.Net;
 using System.Net.Mail;

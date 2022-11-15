@@ -1,4 +1,11 @@
-﻿using SqlSugar;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Weiran Wang
+  Date   : 23/09/2022
+******************************************/
+
+using SqlSugar;
 using System.Diagnostics;
 using WebAPI.Entity;
 using WebAPI.Service;

@@ -1,4 +1,11 @@
-﻿using System.Diagnostics;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Weiran Wang
+  Date   : 16/09/2022
+******************************************/
+
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.Authentication;
 using WebAPI.DAO;

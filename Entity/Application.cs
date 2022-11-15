@@ -1,4 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Jiaming Ta
+  Date   : 15/09/2022
+******************************************/
+
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using SqlSugar;

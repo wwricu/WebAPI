@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Jiaming Ta
+  Date   : 15/09/2022
+******************************************/
+
+using Microsoft.AspNetCore.Identity;
 using SqlSugar;
 using System.ComponentModel.DataAnnotations;
 

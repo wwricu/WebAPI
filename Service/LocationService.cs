@@ -1,4 +1,11 @@
-﻿using WebAPI.DAO;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Weiran Wang
+  Date   : 26/09/2022
+******************************************/
+
+using WebAPI.DAO;
 using WebAPI.Entity;
 
 namespace WebAPI.Service

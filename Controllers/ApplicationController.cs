@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Chenrui Zhang
+  Date   : 17/09/2022
+******************************************/
+
+using Microsoft.AspNetCore.Mvc;
 using SqlSugar.DistributedSystem.Snowflake;
 using System.Diagnostics;
 using System.Security.Authentication;

@@ -1,4 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Weiran Wang
+  Date   : 01/11/2022
+******************************************/
+
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Diagnostics;
 using System.Net.Mail;
 using System.Security.Policy;

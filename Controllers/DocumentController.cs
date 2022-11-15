@@ -1,4 +1,11 @@
-﻿using K4os.Hash.xxHash;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Chenrui Zhang
+  Date   : 01/11/2022
+******************************************/
+
+using K4os.Hash.xxHash;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.IO;

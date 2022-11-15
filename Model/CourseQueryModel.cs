@@ -1,4 +1,11 @@
-﻿namespace WebAPI.Model
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Weiran Wang
+  Date   : 21/09/2022
+******************************************/
+
+namespace WebAPI.Model
 {
     public class CourseQueryModel
     {

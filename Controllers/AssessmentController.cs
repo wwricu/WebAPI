@@ -1,4 +1,11 @@
-﻿using WebAPI.Entity;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Chenrui Zhang
+  Date   : 23/09/2022
+******************************************/
+
+using WebAPI.Entity;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service;
 using System.Dynamic;

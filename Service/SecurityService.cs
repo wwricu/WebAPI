@@ -1,4 +1,11 @@
-﻿using JWT.Algorithms;
+﻿/******************************************
+  2022 Trimester 3 INFT6900 Final Project
+  Team   : Four Square
+  Author : Weiran Wang
+  Date   : 16/09/2022
+******************************************/
+
+using JWT.Algorithms;
 using JWT.Serializers;
 using JWT;
 using System.Security.Cryptography;
